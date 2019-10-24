@@ -1,17 +1,15 @@
 package com.wsb.customview.fragment
 
 import android.animation.AnimatorSet
-import android.animation.Keyframe
 import android.animation.ObjectAnimator
-import android.animation.PropertyValuesHolder
 import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.support.v4.view.animation.LinearOutSlowInInterpolator
 import android.view.View
-import android.view.ViewPropertyAnimator
 import android.widget.Button
 import android.widget.EditText
 import com.wsb.customview.R
 import com.wsb.customview.view.AcceleratorView
+import com.wsb.customview.view.CircleProgress
 import com.wsb.customview.view.ProgressView
 import java.util.concurrent.TimeUnit
 
@@ -48,8 +46,6 @@ class ProgressFragment : BaseFragment() {
 //                animate().alpha(0F).scaleX(0F).scaleY(0F)
             }
 
-
-
             postDelayed(
                     {
                         prov.animate().alpha(1F).scaleX(1F).scaleY(1F)
@@ -59,7 +55,6 @@ class ProgressFragment : BaseFragment() {
                             duration = TimeUnit.SECONDS.toMillis(1)
                             start()
                         }
-
 
                         AnimatorSet().run {
                             playTogether(

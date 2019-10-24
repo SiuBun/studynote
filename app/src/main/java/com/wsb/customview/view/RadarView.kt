@@ -71,7 +71,12 @@ class RadarView @JvmOverloads constructor(context: Context, attributeSet: Attrib
     private var rotateAngle = 0.0
 
 
-    internal var data: Map<String,Float> = mutableMapOf("经济" to 0.8F,"伤害" to 0.6F,"走位" to 0.78F)
+    internal var data: Map<String,Float> = mutableMapOf("经济" to 0.8F,"伤害" to 0.6F,"走位" to 0.78F).also {
+        it["助攻"] = 0.5F
+        it["团战"] = 0.8F
+        it["承受伤害"] = 0.2F
+    }
+
         set(value) {
             value.takeUnless { it.isNullOrEmpty() }?.run {
                 field = this

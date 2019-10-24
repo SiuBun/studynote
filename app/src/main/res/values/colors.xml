@@ -3,4 +3,15 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="aoyun_blue">#0193DE</color>
+    <color name="heart_red_src">#FF7777</color>
+    <color name="aoyun_black">#201A1A</color>
+    <color name="heart_red_bg">#FF4444</color>
+    <color name="aoyun_red">#DC251F</color>
+
+
+    <color name="colorF">#FFFFFFFF</color>
+    <color name="colorF0">#00FFFFFF</color>
+    <color name="colorC">#CCCCCC</color>
 </resources>

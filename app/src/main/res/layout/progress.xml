@@ -1,44 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <android.support.constraint.ConstraintLayout
+    android:orientation="vertical"
+    >
+    <include layout="@layout/layout_head_set_value"
+        />
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="120dp">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
 
-        <EditText
-            android:id="@+id/et_value"
+        <RelativeLayout
             android:layout_width="match_parent"
-            app:layout_constraintHorizontal_weight="1"
-            android:layout_height="50dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:hint="请设置目标值"
-            android:paddingLeft="5dp"
-            android:inputType="number"
-            />
-        <Button
-            android:id="@+id/btn_execute"
-            android:text="更改设置"
-            app:layout_constraintRight_toRightOf="@id/et_value"
-            app:layout_constraintBaseline_toBaselineOf="@id/et_value"
-            android:layout_width="120dp"
-            android:layout_height="50dp"/>
-    </android.support.constraint.ConstraintLayout>
+            android:layout_height="match_parent">
 
-    <com.wsb.customview.view.ProgressView
-        android:id="@+id/prov"
-        android:layout_centerInParent="true"
-        android:layout_width="200dp"
-        android:layout_height="200dp"/>
+            <com.wsb.customview.view.ProgressView
+                android:id="@+id/prov"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_centerHorizontal="true"
+                />
 
-    <com.wsb.customview.view.AcceleratorView
-        android:id="@+id/acv"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/prov"
-        android:layout_width="200dp"
-        android:layout_height="200dp"/>
-</RelativeLayout>
+            <com.wsb.customview.view.AcceleratorView
+                android:id="@+id/acv"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_below="@id/prov"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+
+</LinearLayout>

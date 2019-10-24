@@ -15,10 +15,12 @@ class PracticeFragment :BaseFragment(){
 
     private var pageList: MutableList<Fragment> = mutableListOf<Fragment>().apply {
         add(RaDarFragment())
+        add(HeartFragment())
         add(ProgressFragment())
+        add(TextMeasureFragment())
     }
 
-    private var pageName: Array<String> = arrayOf("radar","progress")
+    private var pageName: Array<String> = arrayOf("radar","heart","progress","textmeasure")
 
     private lateinit var tabLayout:TabLayout
     private lateinit var vp:ViewPager
