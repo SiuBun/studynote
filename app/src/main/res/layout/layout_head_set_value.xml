@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     tools:showIn="@layout/progress">
 
-    <EditText
+    <com.wsb.customview.view.practice.MaterialEditText
         android:id="@+id/et_value"
         android:layout_width="match_parent"
         app:layout_constraintHorizontal_weight="1"

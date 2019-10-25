@@ -9,8 +9,8 @@ import android.view.View;
 import com.wsb.customview.fragment.CameraFragment;
 import com.wsb.customview.fragment.CanvasFragment;
 import com.wsb.customview.fragment.MatrixFragment;
-import com.wsb.customview.fragment.PaintFragment;
-import com.wsb.customview.fragment.PracticeFragment;
+import com.wsb.customview.fragment.paint.PaintFragment;
+import com.wsb.customview.fragment.practice.PracticeFragment;
 
 public class MainActivity extends AppCompatActivity {
 

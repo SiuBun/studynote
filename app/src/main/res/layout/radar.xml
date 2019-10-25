@@ -25,7 +25,7 @@
             android:layout_width="120dp"
             android:layout_height="60dp"/>
     </LinearLayout>
-    <com.wsb.customview.view.RadarView
+    <com.wsb.customview.view.practice.RadarView
         android:id="@+id/radar"
         android:layout_gravity="center"
         android:layout_width="300dp"

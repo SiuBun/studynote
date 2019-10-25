@@ -16,14 +16,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.wsb.customview.view.ProgressView
+            <com.wsb.customview.view.practice.ProgressView
                 android:id="@+id/prov"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_centerHorizontal="true"
                 />
 
-            <com.wsb.customview.view.AcceleratorView
+            <com.wsb.customview.view.practice.AcceleratorView
                 android:id="@+id/acv"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
