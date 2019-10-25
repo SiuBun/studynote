@@ -1,26 +1,29 @@
 package com.wsb.customview.fragment
 
-import android.graphics.Color
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
-import android.view.Gravity
 import android.view.View
-import android.widget.TextView
-import com.wsb.customview.PageModel
 import com.wsb.customview.R
 
 class PracticeFragment :BaseFragment(){
 
     private var pageList: MutableList<Fragment> = mutableListOf<Fragment>().apply {
+        add(MaterialFragment())
+        add(TextMeasureFragment())
+        add(ProgressFragment())
         add(RaDarFragment())
         add(HeartFragment())
-        add(ProgressFragment())
-        add(TextMeasureFragment())
     }
 
-    private var pageName: Array<String> = arrayOf("radar","heart","progress","textmeasure")
+    private var pageName: Array<String> = arrayOf(
+            "materialedit",
+            "textmeasure",
+            "progress",
+            "radar",
+            "heart"
+    )
 
     private lateinit var tabLayout:TabLayout
     private lateinit var vp:ViewPager

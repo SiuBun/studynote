@@ -9,7 +9,6 @@ import android.widget.Button
 import android.widget.EditText
 import com.wsb.customview.R
 import com.wsb.customview.view.AcceleratorView
-import com.wsb.customview.view.CircleProgress
 import com.wsb.customview.view.ProgressView
 import java.util.concurrent.TimeUnit
 
