@@ -21,9 +21,11 @@ class WrapTextView @JvmOverloads constructor(
         textSize = DrawUtils.dip2px(20F)
     }
 
-    private var normalPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
+    private var normalPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textSize = DrawUtils.dip2px(20F)
     }
+
+    private var fontMetrics: Paint.FontMetrics = normalPaint.fontMetrics
 
     private val imageWidth = DrawUtils.dip2px(150F)
     private val imageOffset = DrawUtils.dip2px(70F)
@@ -51,9 +53,27 @@ class WrapTextView @JvmOverloads constructor(
 
 
             val breakText = normalPaint.breakText(textContent, true, width.toFloat(), cutArray)
-            drawText(textContent,0,breakText,0F, normalPaint.fontSpacing,normalPaint)
+            drawText(textContent, 0, breakText, 0F, normalPaint.fontSpacing, normalPaint)
 
+            val fontSpacing = normalPaint.fontSpacing
+            var verticalOffset = fontSpacing
+            var start = 0
 
+            while (start < textContent.length) {
+                val textTop = verticalOffset + fontMetrics.top
+                val textBottom = verticalOffset + fontMetrics.bottom
+
+                val realWidth = if ((textBottom > imageOffset && textBottom < imageOffset + bitmap.height) || (textTop > imageOffset && textTop < imageOffset + bitmap.height))
+                    width - imageWidth
+                else
+                    width.toFloat()
+
+                val count = normalPaint.breakText(textContent, start, textContent.length, true, realWidth, cutArray)
+                drawText(textContent, start, start + count, 0F, verticalOffset, normalPaint)
+                verticalOffset += fontSpacing
+                start += count
+
+            }
 
         }
     }
