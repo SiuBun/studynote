@@ -16,6 +16,7 @@ class CameraFragment :BaseFragment(){
     private var pageList: MutableList<PageModel> = mutableListOf<PageModel>().apply {
         add(PageModel(R.layout.rotate_x,"rotateX",R.layout.camera))
         add(PageModel(R.layout.rotate_x_fix,"rotateX_Fix",R.layout.camera))
+        add(PageModel(R.layout.flipboard,"flipboard",R.layout.initial))
     }
 
     private lateinit var tabLayout:TabLayout
