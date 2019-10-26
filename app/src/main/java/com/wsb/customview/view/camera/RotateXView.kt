@@ -14,8 +14,8 @@ class RotateXView @JvmOverloads constructor(context: Context, attributeSet: Attr
         val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.maps)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-        var point1 = Point(200, 200)
-        var point2 = Point(600, 200)
+        var point1 = Point(100, 100)
+        var point2 = Point(300, 200)
         val bitmapWidth = bitmap.width
         val bitmapHeight = bitmap.height
         val center1X = point1.x + bitmapWidth / 2
@@ -29,9 +29,11 @@ class RotateXView @JvmOverloads constructor(context: Context, attributeSet: Attr
             Camera().apply {
                 save()
                 //旋转 Camera 的三维空间
-                rotateX(30f)
+                rotateX(20f)
+//                it.translate(center1X.toFloat(),center1Y.toFloat())
                 // 把旋转投影到 Canvas
                 applyToCanvas(it)
+//                it.translate(-center1X.toFloat(),-center1Y.toFloat())
                 restore()
             }
 
@@ -43,9 +45,11 @@ class RotateXView @JvmOverloads constructor(context: Context, attributeSet: Attr
             Camera().apply {
                 save()
                 //旋转 Camera 的三维空间
-                rotateY(30f)
+                rotateY(20f)
+//                it.translate(center1X.toFloat(),center1Y.toFloat())
                 // 把旋转投影到 Canvas
                 applyToCanvas(it)
+//                it.translate(-center1X.toFloat(),-center1Y.toFloat())
                 restore()
             }
 
