@@ -14,6 +14,8 @@ class PracticeFragment : BaseFragment(){
         add(CameraIntensifyFragment())
         add(TextMeasureFragment())
         add(ProgressFragment())
+        add(PieFragment())
+        add(DashFragment())
         add(RaDarFragment())
         add(HeartFragment())
     }
@@ -22,6 +24,8 @@ class PracticeFragment : BaseFragment(){
             "camera",
             "textmeasure",
             "progress",
+            "pie",
+            "dash",
             "radar",
             "heart"
     )

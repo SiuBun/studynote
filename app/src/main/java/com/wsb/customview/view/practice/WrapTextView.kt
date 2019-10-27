@@ -15,17 +15,17 @@ class WrapTextView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     private var textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
-        textSize = DrawUtils.dip2px(20F)
+        textSize = DrawUtils.dp2px(20F)
     }
 
     private var normalPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        textSize = DrawUtils.dip2px(20F)
+        textSize = DrawUtils.dp2px(20F)
     }
 
     private var fontMetrics: Paint.FontMetrics = normalPaint.fontMetrics
 
-    private val imageWidth = DrawUtils.dip2px(150F)
-    private val imageOffset = DrawUtils.dip2px(70F)
+    private val imageWidth = DrawUtils.dp2px(150F)
+    private val imageOffset = DrawUtils.dp2px(70F)
 
     private var bitmap: Bitmap = DrawUtils.getAvatar(resources, imageWidth)
 

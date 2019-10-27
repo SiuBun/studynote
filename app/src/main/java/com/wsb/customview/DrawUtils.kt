@@ -8,7 +8,7 @@ import android.util.TypedValue
 
 object DrawUtils {
     @JvmStatic
-    fun dip2px(context: Context, dipValue: Float): Float {
+    fun dp2px(context: Context, dipValue: Float): Float {
         val scale = context.resources.displayMetrics.density
         return dipValue * scale + 0.5f
     }
@@ -20,7 +20,7 @@ object DrawUtils {
     }
 
     @JvmStatic
-    fun dip2px(dipValue: Float): Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipValue, Resources.getSystem().displayMetrics)
+    fun dp2px(dipValue: Float): Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipValue, Resources.getSystem().displayMetrics)
 
     @JvmStatic
     fun getAvatar(resources: Resources,width: Float): Bitmap {

@@ -64,7 +64,7 @@ class ProgressView @JvmOverloads constructor(context: Context, attributeSet: Att
 
     private var bodyPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
-        strokeWidth = DrawUtils.dip2px(context, 20F)
+        strokeWidth = DrawUtils.dp2px( 20F)
         strokeCap = Paint.Cap.BUTT
 
     }

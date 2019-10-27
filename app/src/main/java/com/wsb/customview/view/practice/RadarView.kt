@@ -256,7 +256,7 @@ class RadarView @JvmOverloads constructor(context: Context, attributeSet: Attrib
             isAntiAlias = true
             color = mainColor
             style = Paint.Style.FILL
-            strokeWidth = DrawUtils.dip2px(context, 1F)
+            strokeWidth = DrawUtils.dp2px( 1F)
 //        strokeJoin = Paint.Join.ROUND
         }
 
@@ -265,7 +265,7 @@ class RadarView @JvmOverloads constructor(context: Context, attributeSet: Attrib
             color = valueColor
             style = Paint.Style.STROKE
 //            alpha = 50
-            strokeWidth = DrawUtils.dip2px(context, 2F)
+            strokeWidth = DrawUtils.dp2px( 2F)
         }
 
         textPaint = Paint().apply {
@@ -278,7 +278,7 @@ class RadarView @JvmOverloads constructor(context: Context, attributeSet: Attrib
         linePaint = Paint().apply {
             isAntiAlias = true
             style = Paint.Style.STROKE
-            strokeWidth = DrawUtils.dip2px(context, .5F)
+            strokeWidth = DrawUtils.dp2px( .5F)
             color = lineColor
         }
     }
@@ -287,7 +287,7 @@ class RadarView @JvmOverloads constructor(context: Context, attributeSet: Attrib
      * 确定当前控件宽度高度,以此确定绘制的圆心
      * */
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        radius = DrawUtils.dip2px(context,80F)
+        radius = DrawUtils.dp2px(80F)
         viewWidth = w
         viewHeight = h
 //        Log.d(MainActivity.TAG, "控件宽度$viewWidth")

@@ -72,12 +72,12 @@ public class HeartWaveView extends View {
 
         textBottomPaint = new TextPaint();
         textBottomPaint.setTextAlign(Paint.Align.CENTER);
-        textBottomPaint.setTextSize(DrawUtils.dip2px(30));
+        textBottomPaint.setTextSize(DrawUtils.dp2px(30));
         textBottomPaint.setColor(getResources().getColor(R.color.colorC));
 
         textTopPaint = new TextPaint();
         textTopPaint.setTextAlign(Paint.Align.CENTER);
-        textTopPaint.setTextSize(DrawUtils.dip2px(30));
+        textTopPaint.setTextSize(DrawUtils.dp2px(30));
         textTopPaint.setColor(getResources().getColor(R.color.colorF));
 
         mMainPath = new Path();
@@ -219,18 +219,18 @@ public class HeartWaveView extends View {
      */
     private void initHeartPath(Path path) {
         List<PointF> pointList = new ArrayList<>();
-        pointList.add(new PointF(0, DrawUtils.dip2px(-38)));
-        pointList.add(new PointF(DrawUtils.dip2px(50), DrawUtils.dip2px(-103)));
-        pointList.add(new PointF(DrawUtils.dip2px(112), DrawUtils.dip2px(-61)));
-        pointList.add(new PointF(DrawUtils.dip2px(112), DrawUtils.dip2px(-12)));
-        pointList.add(new PointF(DrawUtils.dip2px(112), DrawUtils.dip2px(37)));
-        pointList.add(new PointF(DrawUtils.dip2px(51), DrawUtils.dip2px(90)));
-        pointList.add(new PointF(0, DrawUtils.dip2px(129)));
-        pointList.add(new PointF(DrawUtils.dip2px(-51), DrawUtils.dip2px(90)));
-        pointList.add(new PointF(DrawUtils.dip2px(-112), DrawUtils.dip2px(37)));
-        pointList.add(new PointF(DrawUtils.dip2px(-112), DrawUtils.dip2px(-12)));
-        pointList.add(new PointF(DrawUtils.dip2px(-112), DrawUtils.dip2px(-61)));
-        pointList.add(new PointF(DrawUtils.dip2px(-50), DrawUtils.dip2px(-103)));
+        pointList.add(new PointF(0, DrawUtils.dp2px(-38)));
+        pointList.add(new PointF(DrawUtils.dp2px(50), DrawUtils.dp2px(-103)));
+        pointList.add(new PointF(DrawUtils.dp2px(112), DrawUtils.dp2px(-61)));
+        pointList.add(new PointF(DrawUtils.dp2px(112), DrawUtils.dp2px(-12)));
+        pointList.add(new PointF(DrawUtils.dp2px(112), DrawUtils.dp2px(37)));
+        pointList.add(new PointF(DrawUtils.dp2px(51), DrawUtils.dp2px(90)));
+        pointList.add(new PointF(0, DrawUtils.dp2px(129)));
+        pointList.add(new PointF(DrawUtils.dp2px(-51), DrawUtils.dp2px(90)));
+        pointList.add(new PointF(DrawUtils.dp2px(-112), DrawUtils.dp2px(37)));
+        pointList.add(new PointF(DrawUtils.dp2px(-112), DrawUtils.dp2px(-12)));
+        pointList.add(new PointF(DrawUtils.dp2px(-112), DrawUtils.dp2px(-61)));
+        pointList.add(new PointF(DrawUtils.dp2px(-50), DrawUtils.dp2px(-103)));
 
         path.reset();
         for (int i = 0; i < 4; i++) {

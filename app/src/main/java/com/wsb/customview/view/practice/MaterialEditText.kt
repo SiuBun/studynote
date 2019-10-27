@@ -16,12 +16,12 @@ import java.util.concurrent.TimeUnit
 
 class MaterialEditText(context: Context?, attrs: AttributeSet?) : AppCompatEditText(context, attrs) {
 
-    private val textSizeValue = DrawUtils.dip2px(14F)
-    private val textMarginValue = DrawUtils.dip2px(8F)
+    private val textSizeValue = DrawUtils.dp2px(14F)
+    private val textMarginValue = DrawUtils.dp2px(8F)
 
-    private val offsetLeftValue = DrawUtils.dip2px(4F)
-    private val offsetVerticalValue = DrawUtils.dip2px(38F)
-    private val offsetExtraValue = DrawUtils.dip2px(16F)
+    private val offsetLeftValue = DrawUtils.dp2px(4F)
+    private val offsetVerticalValue = DrawUtils.dp2px(38F)
+    private val offsetExtraValue = DrawUtils.dp2px(16F)
 
 
     var showFraction: Float = 0F

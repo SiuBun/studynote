@@ -21,13 +21,13 @@ class CircleProgress @JvmOverloads constructor(
 
     private var bodyPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
-        strokeWidth = DrawUtils.dip2px(10F)
+        strokeWidth = DrawUtils.dp2px(10F)
         strokeCap = Paint.Cap.ROUND
     }
 
     private var valuePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
-        textSize = DrawUtils.dip2px(40F)
+        textSize = DrawUtils.dp2px(40F)
         textAlign = Paint.Align.LEFT
         color = Color.parseColor("#F5DEB3")
     }
