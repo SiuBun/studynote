@@ -19,7 +19,13 @@ class FlodImageView @JvmOverloads constructor(
     private val bitmap = DrawUtils.getAvatar(resources, IMAGE_WIDTH)
     private var centerX = IMAGE_OFFSET+bitmap.width/2
     private var centerY = IMAGE_OFFSET+bitmap.height/2
-    var degress = 0F
+    var canvasDegress = 0F
+    set(value) {
+        field = value
+        invalidate()
+    }
+
+    var cameraXDegress = 0F
     set(value) {
         field = value
         invalidate()
@@ -29,7 +35,6 @@ class FlodImageView @JvmOverloads constructor(
     private var canmera = Camera()
 
     init {
-        canmera.rotateX(30F)
         canmera.setLocation(0F,0F,DrawUtils.getZForCamara())
     }
 
@@ -37,15 +42,14 @@ class FlodImageView @JvmOverloads constructor(
         super.onDraw(canvas)
         canvas?.run {
             drawColor(Color.parseColor("#e7e7e7"))
-
             save()
             canmera.apply {
 //            canvas搭配camera移动时候考虑逆向移动。常理说应该是往让图像左上偏移再右下移回来，但是代码里思路应该反过来，让画布先往右下，再往左上来实现
                 this@run.translate(centerX,centerY)
-                this@run.rotate(-degress)
+                this@run.rotate(-canvasDegress)
 //                clip同理,想法是先裁画布再翻camera，所以要先翻后裁
                 clipRect((-IMAGE_WIDTH/2) -CLIP_OFFSET, (-IMAGE_WIDTH/2) -CLIP_OFFSET, (IMAGE_WIDTH/2) +CLIP_OFFSET, 0F)
-                this@run.rotate(degress)
+                this@run.rotate(canvasDegress)
                 this@run.translate(-centerX,-centerY)
             }
             drawBitmap(bitmap,IMAGE_OFFSET,IMAGE_OFFSET,paint)
@@ -55,11 +59,14 @@ class FlodImageView @JvmOverloads constructor(
             canmera.apply {
 //            canvas搭配camera移动时候考虑逆向移动。常理说应该是往左上偏移再右下移回来，但是代码里思路应该反过来.
                 this@run.translate(centerX,centerY)
-                this@run.rotate(-degress)
+                this@run.rotate(-canvasDegress)
+                save()
+                rotateX(cameraXDegress)
                 applyToCanvas(this@run)
+                restore()
 //                clip同理,想法是先裁再翻，所以要先翻后裁
                 clipRect((-IMAGE_WIDTH/2) -CLIP_OFFSET,0F, (IMAGE_WIDTH/2) +CLIP_OFFSET, (IMAGE_WIDTH/2) +CLIP_OFFSET)
-                this@run.rotate(degress)
+                this@run.rotate(canvasDegress)
                 this@run.translate(-centerX,-centerY)
             }
             drawBitmap(bitmap,IMAGE_OFFSET,IMAGE_OFFSET,paint)
