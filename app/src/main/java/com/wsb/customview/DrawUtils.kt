@@ -8,6 +8,7 @@ import android.util.TypedValue
 
 object DrawUtils {
     @JvmStatic
+    @Deprecated("新版本上因为上下文移除显得这个方法比较多余", ReplaceWith("fun dp2px(dipValue: Float): Float"),DeprecationLevel.WARNING)
     fun dp2px(context: Context, dipValue: Float): Float {
         val scale = context.resources.displayMetrics.density
         return dipValue * scale + 0.5f
@@ -34,6 +35,8 @@ object DrawUtils {
         }
         return BitmapFactory.decodeResource(resources, R.drawable.batman, options)
     }
+
+    fun getZForCamara(): Float = -4*Resources.getSystem().displayMetrics.density
 
 
 }
