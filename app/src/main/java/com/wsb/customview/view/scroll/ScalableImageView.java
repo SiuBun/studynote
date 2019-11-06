@@ -7,14 +7,14 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.OverScroller;
 
-import com.wsb.customview.DrawUtils;
+import com.wsb.customview.utils.DrawUtils;
+
 
 public class ScalableImageView extends View implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, Runnable {
     private static final float IMAGE_WIDTH = DrawUtils.dp2px(300);

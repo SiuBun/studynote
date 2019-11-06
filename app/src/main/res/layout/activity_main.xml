@@ -1,58 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/llt_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/llt_container"
     android:orientation="vertical"
     tools:context=".MainActivity">
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center"
-        >
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
         <Button
             android:id="@+id/btn_paint"
             android:layout_width="80dp"
             android:layout_height="40dp"
             android:clickable="true"
             android:focusable="true"
+            android:onClick="paintPage"
             android:text="paint"
             android:textAllCaps="false"
-            android:onClick="paintPage"
-            />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btn_canvas"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <Button
             android:id="@+id/btn_canvas"
             android:layout_width="80dp"
             android:layout_height="40dp"
             android:clickable="true"
             android:focusable="true"
+            android:onClick="canvasPage"
             android:text="canvas"
             android:textAllCaps="false"
-            android:onClick="canvasPage"
-            />
+            app:layout_constraintLeft_toRightOf="@id/btn_paint"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_paint" />
+
         <Button
             android:id="@+id/btn_matrix"
             android:layout_width="80dp"
             android:layout_height="40dp"
             android:clickable="true"
             android:focusable="true"
+            android:onClick="matrixPage"
             android:text="matrix"
             android:textAllCaps="false"
-            android:onClick="matrixPage"
-            />
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btn_camera"
+            app:layout_constraintTop_toBottomOf="@id/btn_paint" />
+
         <Button
             android:id="@+id/btn_camera"
             android:layout_width="80dp"
             android:layout_height="40dp"
             android:clickable="true"
             android:focusable="true"
+            android:onClick="cameraPage"
             android:text="camera"
             android:textAllCaps="false"
-            android:onClick="cameraPage"
-            />
+            app:layout_constraintLeft_toRightOf="@id/btn_matrix"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_matrix" />
 
         <Button
             android:id="@+id/btn_practice"
@@ -60,20 +72,26 @@
             android:layout_height="40dp"
             android:clickable="true"
             android:focusable="true"
+            android:onClick="practicePage"
             android:text="practice"
             android:textAllCaps="false"
-            android:onClick="practicePage"
-            />
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btn_homework"
+            app:layout_constraintTop_toBottomOf="@id/btn_matrix" />
+
         <Button
             android:id="@+id/btn_homework"
             android:layout_width="80dp"
             android:layout_height="40dp"
             android:clickable="true"
             android:focusable="true"
+            android:onClick="homeworkPage"
             android:text="homework"
             android:textAllCaps="false"
-            android:onClick="homeworkPage"
-            />
+            app:layout_constraintLeft_toRightOf="@id/btn_practice"
+            app:layout_constraintRight_toLeftOf="@id/btn_scroll_demo"
+            app:layout_constraintTop_toTopOf="@id/btn_practice" />
 
         <Button
             android:id="@+id/btn_scroll_demo"
@@ -81,9 +99,11 @@
             android:layout_height="40dp"
             android:clickable="true"
             android:focusable="true"
+            android:onClick="scrollPage"
             android:text="scroll"
             android:textAllCaps="false"
-            android:onClick="scrollPage"
-            />
-    </LinearLayout>
+            app:layout_constraintLeft_toRightOf="@id/btn_homework"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_practice" />
+    </android.support.constraint.ConstraintLayout>
 </FrameLayout>
