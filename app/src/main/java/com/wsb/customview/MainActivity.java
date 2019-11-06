@@ -8,10 +8,10 @@ import android.view.View;
 
 import com.wsb.customview.fragment.CameraFragment;
 import com.wsb.customview.fragment.CanvasFragment;
+import com.wsb.customview.fragment.HomeWorkFragment;
 import com.wsb.customview.fragment.MatrixFragment;
 import com.wsb.customview.fragment.paint.PaintFragment;
 import com.wsb.customview.fragment.practice.PracticeFragment;
-import com.wsb.customview.fragment.practice.ScalaImageFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,8 +52,12 @@ public class MainActivity extends AppCompatActivity {
         getCommit(PracticeFragment.newInstance());
     }
 
+    public void homeworkPage(View view) {
+        Log.d("custom","homeworkPage");
+        getCommit(HomeWorkFragment.newInstance());
+    }
+
     public void scrollPage(View view) {
         Log.d("custom","scrollPage");
-        getCommit(ScalaImageFragment.newInstance());
     }
 }
