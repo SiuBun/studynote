@@ -10,7 +10,7 @@ import android.support.v4.view.animation.LinearOutSlowInInterpolator
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
-import com.wsb.customview.DrawUtils
+import com.wsb.customview.utils.DrawUtils
 import com.wsb.customview.MainActivity
 import java.util.concurrent.TimeUnit
 

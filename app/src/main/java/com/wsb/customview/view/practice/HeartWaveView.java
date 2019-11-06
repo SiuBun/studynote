@@ -18,7 +18,7 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
-import com.wsb.customview.DrawUtils;
+import com.wsb.customview.utils.DrawUtils;
 import com.wsb.customview.R;
 
 import java.util.ArrayList;

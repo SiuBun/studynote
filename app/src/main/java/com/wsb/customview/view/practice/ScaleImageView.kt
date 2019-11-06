@@ -1,0 +1,226 @@
+package com.wsb.customview.view.practice
+
+import android.animation.ObjectAnimator
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.support.v4.view.GestureDetectorCompat
+import android.support.v4.view.ViewCompat
+import android.util.AttributeSet
+import android.view.GestureDetector
+import android.view.MotionEvent
+import android.view.View
+import android.widget.OverScroller
+import com.wsb.customview.utils.DrawUtils
+import com.wsb.customview.utils.LogUtils
+import com.wsb.customview.view.state.ScaleStateManager
+import java.util.concurrent.TimeUnit
+import kotlin.math.max
+import kotlin.math.min
+
+/**
+ * 支持放大缩小的图片控件
+ *
+ * @author wsb
+ * */
+class ScaleImageView @JvmOverloads constructor(
+        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr), GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, ScaleStateManager.ScrollCallback, Runnable {
+
+    /**
+     * 准备加载的图片
+     * */
+    private var bitmap: Bitmap = DrawUtils.getAvatar(resources, DrawUtils.dp2px(150F))
+
+    /**
+     * 画笔对象
+     * */
+    private var paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    /**
+     * 图片居中所需要的X轴偏移量
+     * */
+    private var canvasOffsetX: Float = 0F
+
+    /**
+     * 图片居中所需要的Y轴偏移量
+     * */
+    private var canvasOffsetY: Float = 0F
+
+    /**
+     * 图片放大至边距触屏所应该放大的倍数
+     * */
+    private var scaleAmountMax: Float = 0F
+
+
+    /**
+     * 图片缩小回原型所应该缩小的倍数
+     * */
+    private var scaleAmountMin: Float = 0F
+
+    /**
+     * 缩放进度
+     * */
+    private var scaleFraction: Float = 0F
+        set(value) {
+            field = value
+            invalidate()
+        }
+
+    /**
+     * 手势处理对象
+     * */
+    private val gestureDetectorCompat: GestureDetectorCompat = GestureDetectorCompat(context, this)
+
+    private var scroll: OverScroller = OverScroller(context)
+
+    /**
+     * 放大动画
+     * */
+    private var scaleAnimator: ObjectAnimator = ObjectAnimator.ofFloat(this, "scaleFraction", 0F, 1F).apply {
+        duration = TimeUnit.MILLISECONDS.toMillis(200)
+    }
+
+    /**
+     * 滑动处理对象
+     * */
+    private val scaleStateManager: ScaleStateManager = ScaleStateManager(this)
+
+
+    /**
+     * 当前X轴滑动距离
+     * */
+    private var scrollOffsetX: Float = 0F
+
+    /**
+     * 当前Y轴滑动距离
+     * */
+    private var scrollOffsetY: Float = 0F
+
+
+    /**
+     * 放大后X轴滑动距离
+     * */
+    private var maxScrollOffsetX: Float = 0F
+
+    /**
+     * 放大后Y轴滑动距离
+     * */
+    private var maxScrollOffsetY: Float = 0F
+
+    companion object {
+        const val OVER_SCALE_FACTOR = 1.5f
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        if (scaleAnimator.isRunning) {
+            scaleAnimator.cancel()
+        }
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+
+        canvasOffsetX = (width - bitmap.width).toFloat() / 2
+        canvasOffsetY = (height - bitmap.height).toFloat() / 2
+
+//        当图片为窄图的时候,放大倍数应该是以屏幕宽度和图片宽度的比例,反之扁图放大倍数应该是屏幕高度和图片高度的比例,可以乘以放大系数增强放大效果
+        scaleAmountMax = (if (DrawUtils.narrowBitmap(bitmap)) width / bitmap.width else height / bitmap.height) * OVER_SCALE_FACTOR
+
+//        当图片为窄图时候,缩小的倍数应该是屏幕高度除以图片高度,扁图应该是屏幕宽度除以图片宽度
+        scaleAmountMin = (if (DrawUtils.narrowBitmap(bitmap)) height / bitmap.height else width / bitmap.width).toFloat()
+
+        maxScrollOffsetX = (bitmap.width * scaleAmountMax - width) / 2
+        maxScrollOffsetY = (bitmap.height * scaleAmountMax - height) / 2
+    }
+
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+        canvas?.run {
+            save()
+            translate(scrollOffsetX, scrollOffsetY)
+            val scale = (scaleAmountMin + (scaleAmountMax - scaleAmountMin) * scaleFraction)
+                    .also { LogUtils.d("放大倍数为$it") }
+            scale(scale, scale, (width / 2).toFloat(), (height / 2).toFloat())
+            drawBitmap(bitmap, canvasOffsetX, canvasOffsetY, paint)
+            restore()
+        }
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        return gestureDetectorCompat.onTouchEvent(event)
+    }
+
+    override fun onShowPress(e: MotionEvent?) {
+    }
+
+    override fun onSingleTapUp(e: MotionEvent?): Boolean {
+        return false
+    }
+
+    override fun onDown(e: MotionEvent?): Boolean = true
+
+    override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
+        scaleStateManager.onViewFling(velocityX, velocityY)
+        return false
+    }
+
+    override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
+        scaleStateManager.onScroll(distanceX, distanceY)
+        return false
+    }
+
+    override fun onLongPress(e: MotionEvent?) {
+    }
+
+    override fun onDoubleTap(e: MotionEvent?): Boolean {
+        e?.run {
+            scaleStateManager.onViewDoubleTap(scaleAnimator)
+            scaleStateManager.changeState()
+        }
+        return false
+    }
+
+    override fun onDoubleTapEvent(e: MotionEvent?): Boolean {
+        return false
+    }
+
+    override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
+        return false
+    }
+
+    override fun scrollImage(offsetX: Float, offsetY: Float) {
+        this.scrollOffsetX -= offsetX
+        scrollOffsetX = max(min(scrollOffsetX, maxScrollOffsetX), -maxScrollOffsetX)
+
+        this.scrollOffsetY -= offsetY
+        scrollOffsetY = max(min(scrollOffsetY, maxScrollOffsetY), -maxScrollOffsetY)
+
+        invalidate()
+    }
+
+    override fun onViewFling(velocityX: Float, velocityY: Float) {
+        scroll.fling(scrollOffsetX.toInt(), scrollOffsetY.toInt(), velocityX.toInt(), velocityY.toInt()
+                ,-maxScrollOffsetX.toInt(), maxScrollOffsetX.toInt(), -maxScrollOffsetY.toInt(), maxScrollOffsetY.toInt()
+                ,DrawUtils.dp2px(40F).toInt(), DrawUtils.dp2px(40F).toInt()
+        )
+
+        ViewCompat.postOnAnimation(this,this)
+    }
+
+    override fun run() {
+        scrollRefresh()
+    }
+
+    private fun scrollRefresh() {
+        val computeScrollOffset = scroll.computeScrollOffset()
+        if (computeScrollOffset) {
+            scrollOffsetX = scroll.currX.toFloat()
+            scrollOffsetY = scroll.currY.toFloat()
+            invalidate()
+            postOnAnimation(this)
+        }
+    }
+}

@@ -11,7 +11,7 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.animation.AnticipateInterpolator
-import com.wsb.customview.DrawUtils
+import com.wsb.customview.utils.DrawUtils
 import java.util.concurrent.TimeUnit
 
 class MaterialEditText(context: Context?, attrs: AttributeSet?) : AppCompatEditText(context, attrs) {

@@ -11,6 +11,7 @@ import com.wsb.customview.fragment.CanvasFragment;
 import com.wsb.customview.fragment.MatrixFragment;
 import com.wsb.customview.fragment.paint.PaintFragment;
 import com.wsb.customview.fragment.practice.PracticeFragment;
+import com.wsb.customview.fragment.practice.ScalaImageFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,5 +50,10 @@ public class MainActivity extends AppCompatActivity {
     public void practicePage(View view) {
         Log.d("custom","matrixPage");
         getCommit(PracticeFragment.newInstance());
+    }
+
+    public void scrollPage(View view) {
+        Log.d("custom","scrollPage");
+        getCommit(ScalaImageFragment.newInstance());
     }
 }

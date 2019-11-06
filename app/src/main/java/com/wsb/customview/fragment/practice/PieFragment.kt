@@ -2,7 +2,7 @@ package com.wsb.customview.fragment.practice
 
 import android.view.View
 import com.wsb.customview.view.practice.PieView
-import com.wsb.customview.DrawUtils
+import com.wsb.customview.utils.DrawUtils
 import com.wsb.customview.R
 import com.wsb.customview.fragment.BaseFragment
 

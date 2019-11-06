@@ -7,8 +7,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import com.wsb.customview.DrawUtils
-import com.wsb.customview.R
+import com.wsb.customview.utils.DrawUtils
 
 class FlodImageView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -16,7 +15,7 @@ class FlodImageView @JvmOverloads constructor(
     private var IMAGE_WIDTH = DrawUtils.dp2px(200F)
     private var IMAGE_OFFSET = DrawUtils.dp2px(50F)
     private var CLIP_OFFSET = DrawUtils.dp2px(50F)
-    private val bitmap = DrawUtils.getAvatar(resources, IMAGE_WIDTH)
+    private val bitmap = DrawUtils.getAvatar(resources = resources, width = IMAGE_WIDTH)
     private var centerX = IMAGE_OFFSET+bitmap.width/2
     private var centerY = IMAGE_OFFSET+bitmap.height/2
     var canvasDegress = 0F
@@ -35,7 +34,7 @@ class FlodImageView @JvmOverloads constructor(
     private var canmera = Camera()
 
     init {
-        canmera.setLocation(0F,0F,DrawUtils.getZForCamara())
+        canmera.setLocation(0F,0F, DrawUtils.getZForCamara())
     }
 
     override fun onDraw(canvas: Canvas?) {

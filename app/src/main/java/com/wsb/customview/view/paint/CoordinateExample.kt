@@ -5,7 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import com.wsb.customview.DrawUtils
+import com.wsb.customview.utils.DrawUtils
 import com.wsb.customview.R
 import kotlin.math.cos
 import kotlin.math.sin

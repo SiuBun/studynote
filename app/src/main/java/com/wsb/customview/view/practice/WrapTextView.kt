@@ -8,7 +8,7 @@ import android.graphics.Paint
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
-import com.wsb.customview.DrawUtils
+import com.wsb.customview.utils.DrawUtils
 
 class WrapTextView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0

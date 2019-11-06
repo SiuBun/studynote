@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ScaleImageViewAttr">
+        <attr name="img_content" format="reference"/>
+        <attr name="img_origin_width" format="dimension"/>
+    </declare-styleable>
+</resources>

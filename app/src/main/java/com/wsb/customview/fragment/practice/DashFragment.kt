@@ -3,7 +3,7 @@ package com.wsb.customview.fragment.practice
 import android.animation.ObjectAnimator
 import android.view.View
 import com.wsb.customview.view.practice.DashBoardView
-import com.wsb.customview.DrawUtils
+import com.wsb.customview.utils.DrawUtils
 import com.wsb.customview.R
 import com.wsb.customview.fragment.BaseFragment
 

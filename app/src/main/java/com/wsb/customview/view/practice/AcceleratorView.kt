@@ -9,7 +9,7 @@ import android.graphics.Paint
 import android.graphics.SweepGradient
 import android.util.AttributeSet
 import android.view.View
-import com.wsb.customview.DrawUtils
+import com.wsb.customview.utils.DrawUtils
 import android.animation.Keyframe
 import android.support.v4.view.animation.FastOutSlowInInterpolator
 import java.util.concurrent.TimeUnit

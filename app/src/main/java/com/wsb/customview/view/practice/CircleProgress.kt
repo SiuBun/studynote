@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-import com.wsb.customview.DrawUtils
+import com.wsb.customview.utils.DrawUtils
 import kotlin.math.min
 
 class CircleProgress @JvmOverloads constructor(
