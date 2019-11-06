@@ -1,5 +1,6 @@
 package com.wsb.customview.view.practice
 
+import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Bitmap
@@ -14,7 +15,8 @@ import android.view.View
 import android.widget.OverScroller
 import com.wsb.customview.utils.DrawUtils
 import com.wsb.customview.utils.LogUtils
-import com.wsb.customview.view.state.ScaleStateManager
+import com.wsb.customview.view.scroll.scalable.state.ScaleStateManager
+import com.wsb.customview.view.scroll.scalable.state.ScrollCallback
 import java.util.concurrent.TimeUnit
 import kotlin.math.max
 import kotlin.math.min
@@ -26,7 +28,7 @@ import kotlin.math.min
  * */
 class ScaleImageView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : View(context, attrs, defStyleAttr), GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, ScaleStateManager.ScrollCallback, Runnable {
+) : View(context, attrs, defStyleAttr), GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, ScrollCallback, Runnable {
 
     /**
      * 准备加载的图片
@@ -81,6 +83,7 @@ class ScaleImageView @JvmOverloads constructor(
     private var scaleAnimator: ObjectAnimator = ObjectAnimator.ofFloat(this, "scaleFraction", 0F, 1F).apply {
         duration = TimeUnit.MILLISECONDS.toMillis(200)
     }
+
 
     /**
      * 滑动处理对象
@@ -140,10 +143,10 @@ class ScaleImageView @JvmOverloads constructor(
         super.onDraw(canvas)
         canvas?.run {
             save()
-            translate(scrollOffsetX, scrollOffsetY)
+            translate(scrollOffsetX*scaleFraction, scrollOffsetY*scaleFraction)
             val scale = (scaleAmountMin + (scaleAmountMax - scaleAmountMin) * scaleFraction)
                     .also { LogUtils.d("放大倍数为$it") }
-            scale(scale, scale, (width / 2).toFloat(), (height / 2).toFloat())
+            scale(scale, scale, (width / 2F), (height / 2F))
             drawBitmap(bitmap, canvasOffsetX, canvasOffsetY, paint)
             restore()
         }
@@ -177,7 +180,7 @@ class ScaleImageView @JvmOverloads constructor(
 
     override fun onDoubleTap(e: MotionEvent?): Boolean {
         e?.run {
-            scaleStateManager.onViewDoubleTap(scaleAnimator)
+            scaleStateManager.onViewDoubleTap(scaleAnimator, this)
             scaleStateManager.changeState()
         }
         return false
@@ -193,21 +196,23 @@ class ScaleImageView @JvmOverloads constructor(
 
     override fun scrollImage(offsetX: Float, offsetY: Float) {
         this.scrollOffsetX -= offsetX
-        scrollOffsetX = max(min(scrollOffsetX, maxScrollOffsetX), -maxScrollOffsetX)
-
         this.scrollOffsetY -= offsetY
-        scrollOffsetY = max(min(scrollOffsetY, maxScrollOffsetY), -maxScrollOffsetY)
-
+        fixOffset()
         invalidate()
+    }
+
+    private fun fixOffset() {
+        scrollOffsetX = max(min(scrollOffsetX, maxScrollOffsetX), -maxScrollOffsetX)
+        scrollOffsetY = max(min(scrollOffsetY, maxScrollOffsetY), -maxScrollOffsetY)
     }
 
     override fun onViewFling(velocityX: Float, velocityY: Float) {
         scroll.fling(scrollOffsetX.toInt(), scrollOffsetY.toInt(), velocityX.toInt(), velocityY.toInt()
-                ,-maxScrollOffsetX.toInt(), maxScrollOffsetX.toInt(), -maxScrollOffsetY.toInt(), maxScrollOffsetY.toInt()
-                ,DrawUtils.dp2px(40F).toInt(), DrawUtils.dp2px(40F).toInt()
+                , -maxScrollOffsetX.toInt(), maxScrollOffsetX.toInt(), -maxScrollOffsetY.toInt(), maxScrollOffsetY.toInt()
+                , DrawUtils.dp2px(40F).toInt(), DrawUtils.dp2px(40F).toInt()
         )
 
-        ViewCompat.postOnAnimation(this,this)
+        ViewCompat.postOnAnimation(this, this)
     }
 
     override fun run() {
@@ -222,5 +227,11 @@ class ScaleImageView @JvmOverloads constructor(
             invalidate()
             postOnAnimation(this)
         }
+    }
+
+    override fun onViewDoubleTapFromSmall(motionEvent: MotionEvent) {
+        scrollOffsetX = (motionEvent.x - (width / 2F)) * (1 - scaleAmountMax / scaleAmountMin)
+        scrollOffsetY = (motionEvent.y - (height / 2F)) * (1 - scaleAmountMax / scaleAmountMin)
+        fixOffset()
     }
 }
