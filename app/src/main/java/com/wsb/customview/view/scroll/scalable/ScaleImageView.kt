@@ -1,6 +1,5 @@
-package com.wsb.customview.view.practice
+package com.wsb.customview.view.scroll.scalable
 
-import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Bitmap
