@@ -12,7 +12,7 @@ import com.wsb.customview.utils.LogUtils
 import kotlin.math.max
 import kotlin.math.min
 
-class MultiTouchMove @JvmOverloads constructor(
+class MultiTouchMoveRelay @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 

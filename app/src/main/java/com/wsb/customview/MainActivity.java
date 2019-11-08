@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.wsb.customview.fragment.CameraFragment;
 import com.wsb.customview.fragment.CanvasFragment;
-import com.wsb.customview.fragment.HomeWorkFragment;
+import com.wsb.customview.fragment.MultiTouchFragment;
 import com.wsb.customview.fragment.MatrixFragment;
 import com.wsb.customview.fragment.paint.PaintFragment;
 import com.wsb.customview.fragment.practice.PracticeFragment;
@@ -53,9 +53,9 @@ public class MainActivity extends AppCompatActivity {
         getCommit(PracticeFragment.newInstance());
     }
 
-    public void homeworkPage(View view) {
-        Log.d("custom","homeworkPage");
-        getCommit(HomeWorkFragment.newInstance());
+    public void multitouch(View view) {
+        Log.d("custom","multitouch");
+        getCommit(MultiTouchFragment.newInstance());
     }
 
     public void scrollPage(View view) {

@@ -3,7 +3,7 @@ package com.wsb.customview.fragment
 import android.view.View
 import com.wsb.customview.R
 
-class HomeWorkFragment :BaseFragment(){
+class MultiTouchFragment :BaseFragment(){
     override fun initView(v: View?) {
     }
 
@@ -11,7 +11,7 @@ class HomeWorkFragment :BaseFragment(){
 
     companion object{
         @JvmStatic
-        fun newInstance(): HomeWorkFragment = HomeWorkFragment()
+        fun newInstance(): MultiTouchFragment = MultiTouchFragment()
 
     }
 }
