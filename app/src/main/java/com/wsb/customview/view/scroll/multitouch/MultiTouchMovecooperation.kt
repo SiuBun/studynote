@@ -44,45 +44,42 @@ class MultiTouchMovecooperation @JvmOverloads constructor(
             var sumX = 0f
             var sumY = 0f
 
+            var pointerCount = pointerCount
+            val pointerUp = MotionEvent.ACTION_POINTER_UP == actionMasked
 
+            for (index in 0 until pointerCount) {
+//                抬起时候的手指不计入本次计算的内容
+                if (!pointerUp || index != actionIndex) {
+                    sumX += getX(index)
+                    sumY += getY(index)
+                }
+            }
+
+//            某个手指抬起的时候应该把计算剩下的手指,而不是把当前总手指数算入
+            if (pointerUp) {
+                pointerCount--
+            }
+
+            val cooperatePointX = sumX / pointerCount
+            val cooperatePointY = sumY / pointerCount
+            LogUtils.d("协调点为$cooperatePointX 和$cooperatePointY")
 
             when (actionMasked) {
-                MotionEvent.ACTION_DOWN -> {
+                MotionEvent.ACTION_DOWN,
+                MotionEvent.ACTION_POINTER_DOWN,
+                MotionEvent.ACTION_POINTER_UP -> {
+                    LogUtils.d("当前接收到的针点下标为$actionIndex")
 //                    指定由第0个针点为处理对象
-                    onPointerIdChange(0)
+                    onPointerIdChange(cooperatePointX, cooperatePointY)
                 }
 
                 MotionEvent.ACTION_MOVE -> {
 //                    接收被指定处理的针点id的坐标变化
-                    val pointerIndex = findPointerIndex(executePointerId)
-                    imageOffsetX = getX(pointerIndex) - downX + initOffsetX
-                    imageOffsetY = getY(pointerIndex) - downY + initOffsetY
+                    imageOffsetX = cooperatePointX - downX + initOffsetX
+                    imageOffsetY = cooperatePointY - downY + initOffsetY
 
-                    fixOffset()
+//                    fixOffset()
                     invalidate()
-                }
-
-                MotionEvent.ACTION_POINTER_DOWN -> {
-                    onPointerIdChange(
-                            actionIndex.also {LogUtils.d("当前接收到的针点下标为$it")}
-                    )
-                }
-
-                MotionEvent.ACTION_POINTER_UP -> {
-//                    抬起针点可能是双指中的一指,也可能是三指中随便一指.0,1,2
-                    if (actionIndex == findPointerIndex(executePointerId)) {
-                        LogUtils.d("抬起针点为现处理移动的针点")
-                        val newIndex: Int = if (actionIndex == pointerCount - 1) {
-//                            如果抬起针点为双指的其中一个,此时count数仍包括该针点,那么要取-2位的针点下标来处理后续事情
-                            pointerCount - 2
-                        } else {
-//                            如果抬起针点为列表其中一个,那么要取其前一位的针点
-                            pointerCount - 1
-                        }
-                        onPointerIdChange(newIndex)
-                    }
-
-                    LogUtils.d("现指针列表个数为$pointerCount")
                 }
 
                 else -> {
@@ -97,6 +94,16 @@ class MultiTouchMovecooperation @JvmOverloads constructor(
         // 记录用于在图片做偏移时候考虑偏移的量
         downX = getX(pointerIndex)
         downY = getY(pointerIndex)
+
+        // 赋值用于第二次点击时候,位移在之前已经偏移的量基础上位移
+        initOffsetX = imageOffsetX
+        initOffsetY = imageOffsetY
+    }
+
+    private fun onPointerIdChange(cooperatePointX: Float, cooperatePointY: Float) {
+        // 记录用于在图片做偏移时候考虑偏移的量
+        downX = cooperatePointX
+        downY = cooperatePointY
 
         // 赋值用于第二次点击时候,位移在之前已经偏移的量基础上位移
         initOffsetX = imageOffsetX
