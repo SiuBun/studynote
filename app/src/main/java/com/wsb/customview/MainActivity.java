@@ -13,6 +13,10 @@ import com.wsb.customview.fragment.MatrixFragment;
 import com.wsb.customview.fragment.paint.PaintFragment;
 import com.wsb.customview.fragment.practice.PracticeFragment;
 import com.wsb.customview.fragment.practice.ScalaImageFragment;
+import com.wsb.customview.view.floating.FloatButton;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,10 +26,29 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        TimerTask timerTask = new TimerTask() {
+
+            @Override
+            public void run() {
+                runOnUiThread(
+                        () -> FloatButton
+                                .attach(MainActivity.this, code -> {
+                                })
+                                .setMsgVisible(true)
+                                .setCommunityVisible(true)
+                                .setCustomerVisible(false)
+                                .setAnnouncementVisible(false)
+                                .show()
+                );
+            }
+        };
+        new Timer().schedule(timerTask, 1000);
     }
 
     public void paintPage(View view) {
-        Log.d(TAG,"paintPage");
+        Log.d(TAG, "paintPage");
         getCommit(PaintFragment.newInstance());
     }
 
@@ -34,32 +57,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void canvasPage(View view) {
-        Log.d("custom","canvasPage");
+        Log.d("custom", "canvasPage");
         getCommit(CanvasFragment.newInstance());
     }
 
     public void cameraPage(View view) {
-        Log.d("custom","cameraPage");
+        Log.d("custom", "cameraPage");
         getCommit(CameraFragment.newInstance());
     }
 
     public void matrixPage(View view) {
-        Log.d("custom","matrixPage");
+        Log.d("custom", "matrixPage");
         getCommit(MatrixFragment.newInstance());
     }
 
     public void practicePage(View view) {
-        Log.d("custom","matrixPage");
+        Log.d("custom", "matrixPage");
         getCommit(PracticeFragment.newInstance());
     }
 
     public void multitouch(View view) {
-        Log.d("custom","multitouch");
+        Log.d("custom", "multitouch");
         getCommit(MultiTouchFragment.newInstance());
     }
 
     public void scrollPage(View view) {
-        Log.d("custom","scrollPage");
+        Log.d("custom", "scrollPage");
         getCommit(ScalaImageFragment.newInstance());
     }
 }
