@@ -1,10 +1,10 @@
 package com.wsb.customview.view.floating;
 
-import android.animation.LayoutTransition;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.support.annotation.NonNull;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -15,8 +15,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wsb.customview.R;
+import com.wsb.customview.utils.DrawUtils;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * 悬浮窗辅助类
@@ -24,6 +28,36 @@ import org.jetbrains.annotations.NotNull;
  * @author wsb
  */
 class FloatingSupport {
+    /**
+     * 图片宽高
+     */
+    static final float LOGO_SIZE = DrawUtils.dp2px(45F);
+
+    /**
+     * ICON宽高
+     */
+    static final float ICON_SIZE = DrawUtils.dp2px(20F);
+
+    /**
+     * ICON间距
+     */
+    static final float MARGIN = DrawUtils.dp2px(10F);
+
+    /**
+     * 文字大小
+     */
+    static final float TEXT_SIZE = DrawUtils.dp2px(10F);
+
+    static final int SCREEN_HALF = 2;
+
+    static final float DRAG_MIN_PX = 3;
+
+    static final String ACCOUNT_ITEM = "AccountItem";
+    static final String MSG_ITEM = "MsgItem";
+    static final String COMMUNITY_ITEM = "CommunityItem";
+    static final String CUSTOMER_ITEM = "CustomerItem";
+    static final String ANNOUNCEMENT_ITEM = "AnnouncementItem";
+    static final String HIDE_ITEM = "HideItem";
 
     /**
      * 创建菜单项根容器
@@ -56,7 +90,7 @@ class FloatingSupport {
     /**
      * 初始化窗口管理器和窗口参数
      */
-    static WindowManager.LayoutParams initWindowLayoutParams(boolean rightLayoutType) {
+    static WindowManager.LayoutParams createWindowLayoutParams() {
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
@@ -64,11 +98,6 @@ class FloatingSupport {
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
-        // 调整为靠左显示
-        layoutParams.gravity = (rightLayoutType ? Gravity.END : Gravity.START) | Gravity.TOP;
-        // 以屏幕左上角为原点，设置x、y初始值，相对于gravity
-        layoutParams.x = 0;
-        layoutParams.y = Resources.getSystem().getDisplayMetrics().heightPixels / 2;
         // 设置悬浮窗口长宽数据
         layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
@@ -76,6 +105,16 @@ class FloatingSupport {
         return layoutParams;
     }
 
+    static WindowManager.LayoutParams wrapperWindowLayoutParams(boolean rightLayout, WindowManager.LayoutParams layoutParams) {
+        // 调整为靠左显示
+        layoutParams.x = (int) (
+                rightLayout ?
+                        Resources.getSystem().getDisplayMetrics().widthPixels - LOGO_SIZE :
+                        0);
+        layoutParams.y = (int) ((Resources.getSystem().getDisplayMetrics().heightPixels - LOGO_SIZE) / 2);
+        layoutParams.gravity = Gravity.START | Gravity.TOP;
+        return layoutParams;
+    }
 
     /**
      * 获取菜单项文字说明
@@ -129,5 +168,27 @@ class FloatingSupport {
         menuItem.setLayoutParams(menuParams);
         menuItem.setOrientation(LinearLayout.VERTICAL);
         return menuItem;
+    }
+
+    static boolean rightOfScreen(float locationX) {
+        return locationX > (Resources.getSystem().getDisplayMetrics().widthPixels - FloatingSupport.LOGO_SIZE) / SCREEN_HALF;
+    }
+
+
+    /**
+     * 确定好菜单按钮基础排序
+     * <p>
+     * 需要调整顺序改变该方法即可
+     */
+    static ArrayList<String> sortMenu() {
+        ArrayList<String> list = new ArrayList<>(6);
+        list.add(FloatingSupport.ACCOUNT_ITEM);
+        list.add(FloatingSupport.MSG_ITEM);
+        list.add(FloatingSupport.COMMUNITY_ITEM);
+        list.add(FloatingSupport.CUSTOMER_ITEM);
+        list.add(FloatingSupport.ANNOUNCEMENT_ITEM);
+        list.add(FloatingSupport.HIDE_ITEM);
+
+        return list;
     }
 }
