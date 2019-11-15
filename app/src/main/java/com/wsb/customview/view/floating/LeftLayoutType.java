@@ -2,6 +2,7 @@ package com.wsb.customview.view.floating;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -11,31 +12,38 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 右侧布局类型
+ * 悬浮窗默认布局类型,左
  *
  * @author wsb
  */
-public class RightLayoutType extends LeftLayoutType {
-    RightLayoutType(LayoutTypeCallback typeCallback) {
-        super(typeCallback);
+public class LeftLayoutType implements LayoutType {
+    private LayoutTypeCallback mTypeCallback;
+
+    LeftLayoutType(LayoutTypeCallback typeCallback) {
+        mTypeCallback = typeCallback;
     }
 
     @Override
     public boolean getTypeBoolean() {
-        return true;
+        return false;
     }
 
     @Override
     public void addMenuItem(ViewGroup group, List<String> list, Map<String, ViewGroup> map) {
-        for (int index = list.size() - 1; index >= 0; index--) {
+        for (int index = 0; index < list.size(); index++) {
             addViewByName(group, map.get(list.get(index)));
         }
     }
 
     @Override
     public void stuffWindowContent(ViewGroup group, ViewGroup menuContainer, ImageView logo) {
-        group.addView(menuContainer);
         group.addView(logo);
+        group.addView(menuContainer);
+    }
+
+    @Override
+    public void onConfigurationChanged(WindowManager.LayoutParams layoutParams) {
+        getTypeCallback().layoutTypeOnParamsChanged(editWindowsLayoutParams(layoutParams));
     }
 
     @Override
@@ -54,17 +62,34 @@ public class RightLayoutType extends LeftLayoutType {
 
         float m = FloatingSupport.LOGO_SIZE / 3 * 2;
 
-
-            // 右侧
-        layoutParams.x = (int) (Resources.getSystem().getDisplayMetrics().widthPixels - FloatingSupport.LOGO_SIZE + m);
-            logoLayoutParams.setMargins(0, 0, (int) -m, 0);
-        logo.setLayoutParams(logoLayoutParams);
-
+        // 左侧
+        if (logoLayoutParams.leftMargin >= 0) {
+            logoLayoutParams.setMargins((int) -m, 0, 0, 0);
+            logo.setLayoutParams(logoLayoutParams);
+        }
 
         layoutParams.alpha = 0.7f;
         getTypeCallback().layoutTypeOnParamsChanged(layoutParams);
+    }
 
+    @Override
+    public void resetSize(WindowManager.LayoutParams layoutParams, ImageView logo) {
+        LinearLayout.LayoutParams logoLayoutParams = (LinearLayout.LayoutParams) logo.getLayoutParams();
+        logoLayoutParams.width = (int) FloatingSupport.LOGO_SIZE;
+        logoLayoutParams.setMargins(0, 0, 0, 0);
+        logo.setLayoutParams(logoLayoutParams);
 
+        layoutParams.alpha = 1f;
+        getTypeCallback().layoutTypeOnParamsChanged(editWindowsLayoutParams(layoutParams));
+    }
 
+    void addViewByName(ViewGroup group, View itemView) {
+        if (null != itemView) {
+            group.addView(itemView);
+        }
+    }
+
+    LayoutTypeCallback getTypeCallback() {
+        return mTypeCallback;
     }
 }

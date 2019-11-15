@@ -45,7 +45,7 @@ interface LayoutType {
     /**
      * 屏幕旋转时响应回调
      * */
-    void onConfigurationChanged();
+    void onConfigurationChanged(WindowManager.LayoutParams layoutParams);
 
     /**
      * 编辑该布局类型下的悬浮窗布局参数
@@ -66,6 +66,11 @@ interface LayoutType {
     LinearLayout buildMenuItemContainer(Context context, int margin);
 
 
+    void hideHalfSize(WindowManager.LayoutParams layoutParams, ImageView logo);
+
+    void resetSize(WindowManager.LayoutParams layoutParams, ImageView logo);
+
+
     /**
      * 布局类型操作回调
      *
@@ -75,8 +80,9 @@ interface LayoutType {
 
         /**
          * 屏幕旋转时候回调
-         * */
-        void layoutTypeOnConfigChanged();
+         *
+         * @param layoutParams*/
+        void layoutTypeOnParamsChanged(WindowManager.LayoutParams layoutParams);
     }
 
 }
