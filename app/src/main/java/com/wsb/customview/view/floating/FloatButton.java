@@ -1,5 +1,7 @@
 package com.wsb.customview.view.floating;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -17,6 +19,8 @@ import android.widget.LinearLayout;
 import com.wsb.customview.R;
 import com.wsb.customview.utils.LogUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimerTask;
@@ -30,7 +34,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class FloatButton extends FrameLayout implements FloatingUiCallback,
         NormalTouchMode.ClickTouchCallback,
-        DragTouchMode.DragTouchCallback {
+        DragTouchMode.DragTouchCallback, LayoutType.LayoutTypeCallback {
 
     static final String TAG = "FloatButton";
 
@@ -47,6 +51,13 @@ public class FloatButton extends FrameLayout implements FloatingUiCallback,
      */
     LinearLayout mMenuContainer;
 
+    private DefaultLayoutType mLeftLayoutType = new DefaultLayoutType(this);
+    private RightLayoutType mRightLayoutType = new RightLayoutType(this);
+    /**
+     * 当前悬浮窗布局类型(左右)
+     */
+    private LayoutType mWindowLayoutType = mLeftLayoutType;
+
     /**
      * 是否右边,默认在左侧
      */
@@ -56,8 +67,6 @@ public class FloatButton extends FrameLayout implements FloatingUiCallback,
      * 展开状态,默认收起菜单项
      */
     private boolean mExpanded = false;
-
-    private int mScreenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
 
     /**
      * 开始触摸的起点,相距屏幕,x和y
@@ -128,8 +137,7 @@ public class FloatButton extends FrameLayout implements FloatingUiCallback,
 
         mFloatEventListener = listener;
 
-        mWindowLayoutParams = FloatingSupport.createWindowLayoutParams();
-        FloatingSupport.wrapperWindowLayoutParams(mRightLayout, mWindowLayoutParams);
+        mWindowLayoutParams = mWindowLayoutType.editWindowsLayoutParams(FloatingSupport.createWindowLayoutParams());
 
         // 创建悬浮控件内容
         mWindowContentView = createWindowContentView(context);
@@ -200,8 +208,10 @@ public class FloatButton extends FrameLayout implements FloatingUiCallback,
     }
 
     public void setWindowLayoutParams(WindowManager.LayoutParams layoutParams) {
-        this.mWindowLayoutParams = layoutParams;
-        getWindowService(getContext()).updateViewLayout(mWindowContentView, mWindowLayoutParams);
+        if (null != mWindowContentView && null != layoutParams) {
+            this.mWindowLayoutParams = layoutParams;
+            getWindowService(getContext()).updateViewLayout(mWindowContentView, mWindowLayoutParams);
+        }
     }
 
     /**
@@ -211,11 +221,7 @@ public class FloatButton extends FrameLayout implements FloatingUiCallback,
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         // 主要调整悬浮按钮在右侧的情况
-        if (mWindowContentView != null && mRightLayout) {
-            mScreenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
-            mWindowLayoutParams.x = mScreenWidth;
-            setWindowLayoutParams(mWindowLayoutParams);
-        }
+        mWindowLayoutType.onConfigurationChanged();
     }
 
     @Override
@@ -234,9 +240,10 @@ public class FloatButton extends FrameLayout implements FloatingUiCallback,
 
             float m = FloatingSupport.LOGO_SIZE / 3 * 2;
 
+
             if (mRightLayout) {
                 // 右侧
-                mWindowLayoutParams.x = (int) (mScreenWidth - FloatingSupport.LOGO_SIZE + m);
+                mWindowLayoutParams.x = (int) (Resources.getSystem().getDisplayMetrics().widthPixels - FloatingSupport.LOGO_SIZE + m);
                 logoLayoutParams.setMargins(0, 0, (int) -m, 0);
                 mIvLogo.setLayoutParams(logoLayoutParams);
 
@@ -262,7 +269,7 @@ public class FloatButton extends FrameLayout implements FloatingUiCallback,
 
             if (mRightLayout) {
                 // 右侧
-                mWindowLayoutParams.x = (int) (mScreenWidth - FloatingSupport.LOGO_SIZE);
+                mWindowLayoutParams.x = (int) (Resources.getSystem().getDisplayMetrics().widthPixels - FloatingSupport.LOGO_SIZE);
             } else {
                 // 左侧
                 mWindowLayoutParams.x = 0;
@@ -327,11 +334,9 @@ public class FloatButton extends FrameLayout implements FloatingUiCallback,
         // 菜单容器
         mMenuContainer = FloatingSupport.buildMenuContainer(getContext());
 
-        addMenuItem(mMenuContainer, mRightLayout);
+        mWindowLayoutType.addMenuItem(mMenuContainer, mMenuList, mMenuItemMap);
 
-        // 先添加菜单容器，再添加Logo，这样Logo在帧布局顶层
-        windowContent.addView(mRightLayout ? mMenuContainer : mIvLogo);
-        windowContent.addView(mRightLayout ? mIvLogo : mMenuContainer);
+        mWindowLayoutType.stuffWindowContent(windowContent, mMenuContainer, mIvLogo);
 
         windowContent.getBackground().setAlpha(0);
         windowContent.setVisibility(GONE);
@@ -339,31 +344,6 @@ public class FloatButton extends FrameLayout implements FloatingUiCallback,
         return windowContent;
     }
 
-
-    /**
-     * 添加菜单item到菜单容器中
-     *
-     * @param linearLayout    菜单容器
-     * @param layoutRightType 是否右边布局,true代表右手布局,倒序添加
-     */
-    private void addMenuItem(LinearLayout linearLayout, boolean layoutRightType) {
-        if (layoutRightType) {
-            for (int index = mMenuList.size() - 1; index >= 0; index--) {
-                addViewByName(linearLayout, mMenuList.get(index));
-            }
-        } else {
-            for (int index = 0; index < mMenuList.size(); index++) {
-                addViewByName(linearLayout, mMenuList.get(index));
-            }
-        }
-    }
-
-    private void addViewByName(LinearLayout linearLayout, String itemName) {
-        ViewGroup viewGroup = mMenuItemMap.get(itemName);
-        if (null != viewGroup) {
-            linearLayout.addView(viewGroup);
-        }
-    }
 
     /**
      * 创建悬浮按钮Logo，并设置拖放、点击展开或收起菜单的监听器
@@ -415,16 +395,15 @@ public class FloatButton extends FrameLayout implements FloatingUiCallback,
      * @param context 上下文
      */
     private HashMap<String, ViewGroup> stuffMenuItems(@NonNull Context context) {
-        HashMap<String, ViewGroup> menuitemMap = new HashMap<>(6);
-        menuitemMap.put(FloatingSupport.ACCOUNT_ITEM, setMenuItemContent(context, "account", R.drawable.floating_account, 0));
-        LinearLayout msgLayout = setMenuItemContent(context, "msg", R.drawable.floating_msg, 1, true);
-        menuitemMap.put(FloatingSupport.MSG_ITEM, msgLayout);
-        menuitemMap.put(FloatingSupport.COMMUNITY_ITEM, setMenuItemContent(context, "community", R.drawable.floating_community, 2));
-        menuitemMap.put(FloatingSupport.CUSTOMER_ITEM, setMenuItemContent(context, "customer", R.drawable.floating_customer, 3));
-        menuitemMap.put(FloatingSupport.ANNOUNCEMENT_ITEM, setMenuItemContent(context, "bulletin", R.drawable.floating_bulletin, 4));
-        menuitemMap.put(FloatingSupport.HIDE_ITEM, setMenuItemContent(context, "hide", R.drawable.floating_hide, -1));
+        HashMap<String, ViewGroup> map = new HashMap<>(6);
+        map.put(FloatingSupport.ACCOUNT_ITEM, setMenuItemContent(context, "account", R.drawable.floating_account, 0));
+        map.put(FloatingSupport.MSG_ITEM, setMenuItemContent(context, "msg", R.drawable.floating_msg, 1, true));
+        map.put(FloatingSupport.COMMUNITY_ITEM, setMenuItemContent(context, "community", R.drawable.floating_community, 2));
+        map.put(FloatingSupport.CUSTOMER_ITEM, setMenuItemContent(context, "customer", R.drawable.floating_customer, 3));
+        map.put(FloatingSupport.ANNOUNCEMENT_ITEM, setMenuItemContent(context, "bulletin", R.drawable.floating_bulletin, 4));
+        map.put(FloatingSupport.HIDE_ITEM, setMenuItemContent(context, "hide", R.drawable.floating_hide, -1));
 
-        return menuitemMap;
+        return map;
     }
 
     /**
@@ -436,7 +415,7 @@ public class FloatButton extends FrameLayout implements FloatingUiCallback,
      * @param useMsgView    是否使用带消息提示的控件
      */
     private LinearLayout createMenuItem(Context context, String text, @DrawableRes int drawableResId, boolean useMsgView) {
-        LinearLayout menuItem = FloatingSupport.buildMenuItemContainer(context, (int) FloatingSupport.MARGIN, mRightLayout);
+        LinearLayout menuItem = mWindowLayoutType.buildMenuItemContainer(context, (int) FloatingSupport.MARGIN);
         menuItem.addView(FloatingSupport.getMenuItemIcon(context, drawableResId, (int) FloatingSupport.ICON_SIZE, useMsgView), 0);
         menuItem.addView(FloatingSupport.getMenuItemDesc(context, text, FloatingSupport.TEXT_SIZE), 1);
         return menuItem;
@@ -449,7 +428,7 @@ public class FloatButton extends FrameLayout implements FloatingUiCallback,
         checkVisible();
         checkSort();
         mWindowContentView.setVisibility(VISIBLE);
-//        startCountdownTask();
+        startCountdownTask();
     }
 
     /**
@@ -463,7 +442,7 @@ public class FloatButton extends FrameLayout implements FloatingUiCallback,
      * 销毁时候移除任务队列,移除按钮布局
      */
     private void destory() {
-//        cancelCountdownTask();
+        cancelCountdownTask();
         removeTimerTaskExecutor();
         getWindowService(getContext()).removeView(mWindowContentView);
     }
@@ -522,6 +501,8 @@ public class FloatButton extends FrameLayout implements FloatingUiCallback,
 
     @Override
     public void onActionDownWhenClickMode(MotionEvent event) {
+        cancelCountdownTask();
+        resetSize();
         mTouchDownX = event.getRawX();
         mTouchDownY = event.getRawY();
         xOriginalLayoutParams = mWindowLayoutParams.x;
@@ -543,19 +524,47 @@ public class FloatButton extends FrameLayout implements FloatingUiCallback,
     @Override
     public void onActionUpWhenDragMode(MotionEvent event) {
         LogUtils.d("当前抬起点在xy轴坐标分别为" + mWindowLayoutParams.x + "," + mWindowLayoutParams.y);
-        scrollToBorderByPoint(FloatingSupport.rightOfScreen(mWindowLayoutParams.x));
+        if (FloatingSupport.rightSiteOfScreen(mWindowLayoutParams.x)) {
+            if (mWindowLayoutType instanceof DefaultLayoutType) {
+                mWindowLayoutType = mRightLayoutType;
+            }
+        } else {
+            if (mWindowLayoutType instanceof RightLayoutType) {
+                mWindowLayoutType = mLeftLayoutType;
+            }
+        }
+
+        scrollToBorderByPoint();
     }
 
-    private void scrollToBorderByPoint(boolean rightLayout) {
-        WindowManager.LayoutParams layoutParams = FloatingSupport.wrapperWindowLayoutParams(
-                rightLayout, FloatingSupport.createWindowLayoutParams()
+    private void scrollToBorderByPoint() {
+        ObjectAnimator windowLayoutParamsAnimator = FloatingSupport.getWindowLayoutParamsAnimator(
+                FloatButton.this,
+                mWindowLayoutType.getTypeBoolean(),
+                mWindowLayoutParams,
+                getAnimatorEndLayoutParams()
         );
-        layoutParams.y = mWindowLayoutParams.y;
+        windowLayoutParamsAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                startCountdownTask();
+            }
+        });
+        windowLayoutParamsAnimator.start();
+    }
 
-        ObjectAnimator
-                .ofObject(FloatButton.this, "windowLayoutParams", new WindowLayoutEvaluator(rightLayout), mWindowLayoutParams, layoutParams)
-                .setDuration(200)
-                .start();
+    @NotNull
+    private WindowManager.LayoutParams getAnimatorEndLayoutParams() {
+        WindowManager.LayoutParams layoutParams = mWindowLayoutType.editWindowsLayoutParams(FloatingSupport.createWindowLayoutParams());
+        layoutParams.y = mWindowLayoutParams.y;
+        return layoutParams;
+    }
+
+
+    @Override
+    public void layoutTypeOnConfigChanged() {
+        setWindowLayoutParams(mWindowLayoutType.editWindowsLayoutParams(mWindowLayoutParams));
     }
 
     /**

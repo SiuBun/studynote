@@ -10,12 +10,10 @@ import android.view.WindowManager;
  */
 class WindowLayoutEvaluator implements TypeEvaluator<WindowManager.LayoutParams> {
     private final WindowManager.LayoutParams mLayoutParams;
-    private boolean mRightOfScreen;
 
     WindowLayoutEvaluator(boolean rightOfScreen) {
-        mRightOfScreen = rightOfScreen;
         WindowManager.LayoutParams windowLayoutParams = FloatingSupport.createWindowLayoutParams();
-        mLayoutParams = FloatingSupport.wrapperWindowLayoutParams(mRightOfScreen, windowLayoutParams);
+        mLayoutParams = FloatingSupport.wrapperWindowLayoutParams(rightOfScreen, windowLayoutParams);
     }
 
     @Override

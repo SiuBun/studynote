@@ -1,10 +1,10 @@
 package com.wsb.customview.view.floating;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
-import android.support.annotation.NonNull;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -20,7 +20,6 @@ import com.wsb.customview.utils.DrawUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * 悬浮窗辅助类
@@ -65,7 +64,6 @@ class FloatingSupport {
     static LinearLayout buildMenuContainer(Context context) {
         LinearLayout menuContainer = new LinearLayout(context);
         menuContainer.setOrientation(LinearLayout.HORIZONTAL);
-        menuContainer.setBackgroundColor(Color.parseColor("#7700FF00"));
         LinearLayout.LayoutParams menuContainerLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         menuContainer.setLayoutParams(menuContainerLayoutParams);
         menuContainer.setVisibility(View.GONE);
@@ -89,6 +87,8 @@ class FloatingSupport {
 
     /**
      * 初始化窗口管理器和窗口参数
+     *
+     * @return 默认的悬浮窗布局参数
      */
     static WindowManager.LayoutParams createWindowLayoutParams() {
 
@@ -102,6 +102,9 @@ class FloatingSupport {
         layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
+        layoutParams.y = (int) ((Resources.getSystem().getDisplayMetrics().heightPixels - LOGO_SIZE) / 2);
+        layoutParams.gravity = Gravity.START | Gravity.TOP;
+
         return layoutParams;
     }
 
@@ -111,8 +114,7 @@ class FloatingSupport {
                 rightLayout ?
                         Resources.getSystem().getDisplayMetrics().widthPixels - LOGO_SIZE :
                         0);
-        layoutParams.y = (int) ((Resources.getSystem().getDisplayMetrics().heightPixels - LOGO_SIZE) / 2);
-        layoutParams.gravity = Gravity.START | Gravity.TOP;
+
         return layoutParams;
     }
 
@@ -170,8 +172,11 @@ class FloatingSupport {
         return menuItem;
     }
 
-    static boolean rightOfScreen(float locationX) {
-        return locationX > (Resources.getSystem().getDisplayMetrics().widthPixels - FloatingSupport.LOGO_SIZE) / SCREEN_HALF;
+    /**
+     * 当前X轴上的值是否在屏幕右侧
+     * */
+    static boolean rightSiteOfScreen(float locationX) {
+        return locationX > (Resources.getSystem().getDisplayMetrics().widthPixels - LOGO_SIZE) / SCREEN_HALF;
     }
 
 
@@ -182,13 +187,19 @@ class FloatingSupport {
      */
     static ArrayList<String> sortMenu() {
         ArrayList<String> list = new ArrayList<>(6);
-        list.add(FloatingSupport.ACCOUNT_ITEM);
-        list.add(FloatingSupport.MSG_ITEM);
-        list.add(FloatingSupport.COMMUNITY_ITEM);
-        list.add(FloatingSupport.CUSTOMER_ITEM);
-        list.add(FloatingSupport.ANNOUNCEMENT_ITEM);
-        list.add(FloatingSupport.HIDE_ITEM);
+        list.add(ACCOUNT_ITEM);
+        list.add(MSG_ITEM);
+        list.add(COMMUNITY_ITEM);
+        list.add(CUSTOMER_ITEM);
+        list.add(ANNOUNCEMENT_ITEM);
+        list.add(HIDE_ITEM);
 
         return list;
+    }
+
+    static ObjectAnimator getWindowLayoutParamsAnimator(View target,boolean rLayoutType, WindowManager.LayoutParams startLpValue, WindowManager.LayoutParams stopLpValue) {
+        return ObjectAnimator
+                .ofObject(target, "windowLayoutParams", new WindowLayoutEvaluator(rLayoutType), startLpValue, stopLpValue)
+                .setDuration(200);
     }
 }
