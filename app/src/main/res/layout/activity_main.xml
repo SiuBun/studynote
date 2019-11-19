@@ -114,5 +114,15 @@
             app:layout_constraintLeft_toRightOf="@id/btn_scroll_demo"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/btn_practice" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/batman_logo"
+            android:tooltipText="悬浮窗展示"
+            android:onClick="floatingShow"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>
