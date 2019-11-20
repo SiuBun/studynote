@@ -32,7 +32,7 @@ class ScaleImageView @JvmOverloads constructor(
     /**
      * 准备加载的图片
      * */
-    private var bitmap: Bitmap = DrawUtils.getAvatar(resources, DrawUtils.dp2px(150F))
+    private var bitmap: Bitmap = DrawUtils.getBitmap(resources, DrawUtils.dp2px(150F))
 
     /**
      * 画笔对象

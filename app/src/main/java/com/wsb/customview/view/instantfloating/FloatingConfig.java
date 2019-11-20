@@ -36,7 +36,6 @@ class FloatingConfig {
         public void onAnimationEnd(Animator animation) {
             super.onAnimationEnd(animation);
             mDisplayState = mReadyState;
-            LogUtils.d("DisplayAnimationEnd->"+getDisplayState());
         }
 
         @Override

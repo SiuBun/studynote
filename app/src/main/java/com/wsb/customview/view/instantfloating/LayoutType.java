@@ -1,11 +1,18 @@
 package com.wsb.customview.view.instantfloating;
 
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.res.Resources;
+import android.util.SparseArray;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+import com.wsb.customview.utils.DrawUtils;
 
 /**
  * 悬浮窗布局枚举
@@ -25,6 +32,19 @@ public enum LayoutType implements LayoutTypeBehavior {
             params.x = 0;
             return params;
         }
+
+        @Override
+        public WindowMenuView stuffMenuView(Context context, SparseArray<FloatingMenuItems> sparseArray) {
+            WindowMenuView windowMenuView = super.stuffMenuView(context, sparseArray);
+            windowMenuView.setType(WindowMenuView.MenuType.LEFT);
+            return windowMenuView;
+        }
+
+        @Override
+        public void stuffWindowContent(ViewGroup windowContent, ImageView logo, View menuView) {
+            windowContent.addView(logo);
+            windowContent.addView(menuView);
+        }
     },
 
     /**
@@ -37,7 +57,25 @@ public enum LayoutType implements LayoutTypeBehavior {
             params.x = (int) (Resources.getSystem().getDisplayMetrics().widthPixels - FwDrawUtil.LOGO_SIZE);
             return params;
         }
+
+        @Override
+        public WindowMenuView stuffMenuView(Context context, SparseArray<FloatingMenuItems> sparseArray) {
+            WindowMenuView windowMenuView = super.stuffMenuView(context, sparseArray);
+            windowMenuView.setType(WindowMenuView.MenuType.RIGHT);
+            return windowMenuView;
+        }
+
+        @Override
+        public void stuffWindowContent(ViewGroup windowContent, ImageView logo, View menuView) {
+            LinearLayout.LayoutParams menuLayoutParams = (LinearLayout.LayoutParams) menuView.getLayoutParams();
+            menuLayoutParams.leftMargin = (int) FwDrawUtil.MARGIN;
+            menuLayoutParams.rightMargin = (int) FwDrawUtil.MARGIN;
+            menuView.setLayoutParams(menuLayoutParams);
+            windowContent.addView(menuView);
+            windowContent.addView(logo);
+        }
     };
+
 
     @Override
     public void hideHalfSize() {
@@ -55,11 +93,18 @@ public enum LayoutType implements LayoutTypeBehavior {
         return layoutParams;
     }
 
+    @Override
+    public WindowMenuView stuffMenuView(Context context, SparseArray<FloatingMenuItems> sparseArray) {
+        WindowMenuView windowMenuView = new WindowMenuView(context, sparseArray);
+        windowMenuView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        return windowMenuView;
+    }
+
     /**
      * 提供一个动画用于logo释放时候回归到所属一侧
      *
-     * @param target 执行动画的对象
-     * @param startValue 动画起点
+     * @param target         执行动画的对象
+     * @param startValue     动画起点
      * @param floatingConfig 配置状态对象
      * @return 动画对象
      */
@@ -73,7 +118,7 @@ public enum LayoutType implements LayoutTypeBehavior {
                 new WindowLayoutEvaluator(),
                 startValue,
                 stopValue
-        ).setDuration(1000);
+        ).setDuration(300);
 
         animator.addListener(floatingConfig.getDisplayAnimAdapter());
         animator.addListener(floatingConfig.getTouchAnimAdapter());

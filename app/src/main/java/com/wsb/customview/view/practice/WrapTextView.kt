@@ -27,7 +27,7 @@ class WrapTextView @JvmOverloads constructor(
     private val imageWidth = DrawUtils.dp2px(150F)
     private val imageOffset = DrawUtils.dp2px(70F)
 
-    private var bitmap: Bitmap = DrawUtils.getAvatar(resources, imageWidth)
+    private var bitmap: Bitmap = DrawUtils.getBitmap(resources, imageWidth)
 
     private var cutArray = floatArrayOf(1F)
 

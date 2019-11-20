@@ -15,7 +15,7 @@ class FlodImageView @JvmOverloads constructor(
     private var IMAGE_WIDTH = DrawUtils.dp2px(200F)
     private var IMAGE_OFFSET = DrawUtils.dp2px(50F)
     private var CLIP_OFFSET = DrawUtils.dp2px(50F)
-    private val bitmap = DrawUtils.getAvatar(resources = resources, width = IMAGE_WIDTH)
+    private val bitmap = DrawUtils.getBitmap(resources = resources, width = IMAGE_WIDTH)
     private var centerX = IMAGE_OFFSET+bitmap.width/2
     private var centerY = IMAGE_OFFSET+bitmap.height/2
     var canvasDegress = 0F

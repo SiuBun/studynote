@@ -4,9 +4,12 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Paint
+import android.graphics.Rect
 import android.support.annotation.DrawableRes
 import android.util.TypedValue
 import com.wsb.customview.R
+import kotlin.math.abs
 
 object DrawUtils {
     @JvmStatic
@@ -17,6 +20,7 @@ object DrawUtils {
     }
 
     @JvmStatic
+    @Deprecated("新版本上因为上下文移除显得这个方法比较多余", ReplaceWith("fun dp2px(dipValue: Float): Float"), DeprecationLevel.WARNING)
     fun sp2px(context: Context, spValue: Float): Float {
         val fontScale = context.resources.displayMetrics.scaledDensity
         return spValue * fontScale + 0.5f
@@ -32,8 +36,11 @@ object DrawUtils {
     fun dp2px(dipValue: Float): Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipValue, Resources.getSystem().displayMetrics)
 
     @JvmStatic
+    fun sp2px(spValue: Float): Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, spValue, Resources.getSystem().displayMetrics)
+
+    @JvmStatic
     @JvmOverloads
-    fun getAvatar(resources: Resources, width: Float,@DrawableRes id:Int = R.drawable.batman): Bitmap {
+    fun getBitmap(resources: Resources, width: Float, @DrawableRes id: Int = R.drawable.batman): Bitmap {
         val options = BitmapFactory.Options().apply {
             inJustDecodeBounds = true
         }
@@ -61,5 +68,40 @@ object DrawUtils {
      * */
     fun narrowBitmap(bitmap: Bitmap): Boolean = bitmap.width < bitmap.height
 
+
+    /**
+     * 根据画笔参数和文字内容获取文字所占长度
+     *
+     * @param paint 画笔
+     * @param text 文字内容
+     * */
+    @JvmStatic
+    fun getTextWidthByPaint(paint: Paint, text: String): Float = paint.measureText(text) / 2
+
+    /**
+     * 根据画笔参数获取行高
+     *
+     * 适用于文字内容变化的情况
+     * @param paint 画笔
+     * */
+    @JvmStatic
+    fun getTextHalfHeightByPaint(paint: Paint): Float = paint.fontMetrics.let {
+        (it.descent + it.ascent)/2F
+    }
+
+    /**
+     * 根据画笔参数获取行高
+     *
+     * 适用于文字内容固定不变情况
+     * @param paint 画笔
+     * */
+    @JvmStatic
+    fun getFixedTextHeightByPaint(paint: Paint, text: String): Float {
+        val rect = Rect()
+        paint.getTextBounds(text, 0, text.length, rect)
+        return rect.let {
+            abs(it.bottom.toFloat() - it.top.toFloat())
+        }
+    }
 
 }

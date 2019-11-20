@@ -47,7 +47,7 @@ public class ScalableImageView extends View {
     public ScalableImageView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
-        bitmap = DrawUtils.getAvatar(getResources(), (int) IMAGE_WIDTH);
+        bitmap = DrawUtils.getBitmap(getResources(), (int) IMAGE_WIDTH);
         detector = new GestureDetectorCompat(context, henGestureListener);
         scroller = new OverScroller(context);
         scaleDetector = new ScaleGestureDetector(context, henScaleListener);

@@ -3,6 +3,8 @@ package com.wsb.customview.view.instantfloating;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
@@ -26,7 +28,7 @@ public class InstantFloatingWindow extends FrameLayout implements FloatingWindow
     /**
      * 菜单项容器
      */
-    private SparseArray<FloatingMenuItems> menuSparseArray;
+    private SparseArray<FloatingMenuItems> mMenuSparseArray;
 
     /**
      * 悬浮窗布局类型
@@ -67,7 +69,7 @@ public class InstantFloatingWindow extends FrameLayout implements FloatingWindow
     }
 
     private void initialFloatingData(Builder builder) {
-        menuSparseArray = builder.mMenuItems;
+        mMenuSparseArray = builder.mMenuItems;
         mLayoutType = builder.mLayoutType;
         mFloatingConfig = new FloatingConfig();
 
@@ -77,6 +79,8 @@ public class InstantFloatingWindow extends FrameLayout implements FloatingWindow
         mWindowContent = createWindowContent(builder);
         mDisplayAnimator = FwDrawUtil.getDisplayAlphaAnim(InstantFloatingWindow.this, mFloatingConfig);
         mWindowLayoutParams = mLayoutType.wrapperOriginLayoutParams(FwDrawUtil.createWindowLayoutParams());
+
+//        将自身作为容器,承载悬浮窗内容
         addView(mWindowContent);
     }
 
@@ -84,12 +88,15 @@ public class InstantFloatingWindow extends FrameLayout implements FloatingWindow
     private ViewGroup createWindowContent(Builder builder) {
         LinearLayout windowContent = FwDrawUtil.createWindowContent(getContext());
 
-        ImageView logo = FwDrawUtil.createLogo(getContext(), builder.mLogoDrawable);
-        WindowMenuView windowMenuView = new WindowMenuView(getContext());
+        ImageView logo = FwDrawUtil.createLogo(getContext(), BitmapFactory.decodeResource(getResources(),builder.mLogoDrawable));
+        WindowMenuView windowMenuView = mLayoutType.stuffMenuView(getContext(),mMenuSparseArray);
         logo.setOnClickListener((v) -> {
             LogUtils.d("logo被点击");
         });
-        windowContent.addView(logo);
+
+//        logo.setBackgroundColor(Color.BLUE);
+//        windowMenuView.setBackgroundColor(Color.YELLOW);
+        mLayoutType.stuffWindowContent(windowContent,logo,windowMenuView);
         return windowContent;
     }
 
@@ -171,7 +178,7 @@ public class InstantFloatingWindow extends FrameLayout implements FloatingWindow
 
     @Override
     public void onDestroy() {
-        getWindowService().removeViewImmediate(mWindowContent);
+        getWindowService().removeViewImmediate(InstantFloatingWindow.this);
     }
 
     /**

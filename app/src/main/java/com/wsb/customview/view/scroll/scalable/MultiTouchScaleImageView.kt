@@ -14,7 +14,6 @@ import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.OverScroller
 import com.wsb.customview.utils.DrawUtils
-import com.wsb.customview.utils.LogUtils
 import com.wsb.customview.view.scroll.scalable.state.ScaleStateManager
 import com.wsb.customview.view.scroll.scalable.state.ScrollCallback
 import java.util.concurrent.TimeUnit
@@ -38,7 +37,7 @@ class MultiTouchScaleImageView @JvmOverloads constructor(
     /**
      * 准备加载的图片
      * */
-    private var bitmap: Bitmap = DrawUtils.getAvatar(resources, DrawUtils.dp2px(150F))
+    private var bitmap: Bitmap = DrawUtils.getBitmap(resources, DrawUtils.dp2px(150F))
 
     /**
      * 画笔对象

@@ -3,9 +3,10 @@ package com.wsb.customview.view.instantfloating;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
-import android.support.annotation.NonNull;
 import android.view.Gravity;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -14,14 +15,16 @@ import android.widget.LinearLayout;
 import com.wsb.customview.R;
 import com.wsb.customview.utils.DrawUtils;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * 悬浮窗绘制工具
  *
  * @author wsb
  * */
 class FwDrawUtil {
+    /**
+     * icon和标题间隙
+     * */
+    static final float ICON_TITLE_SPACING = DrawUtils.dp2px(8F);
     /**
      * 图片宽高
      */
@@ -40,9 +43,17 @@ class FwDrawUtil {
     /**
      * 文字大小
      */
-    static final float TEXT_SIZE = DrawUtils.dp2px(10F);
+    static final float TEXT_SIZE = DrawUtils.sp2px(10F);
 
-    static final float SHAKE_VALE = DrawUtils.dp2px(4F);
+    /**
+     * 菜单项尺寸
+     * */
+    static final float ITEM_SIZE = DrawUtils.dp2px(45F);
+
+    /**
+     * 手抖阈值
+     * */
+    private static final float SHAKE_VALE = DrawUtils.dp2px(4F);
 
     /**
      * 初始化窗口管理器和窗口参数
@@ -71,7 +82,7 @@ class FwDrawUtil {
     static LinearLayout createWindowContent(Context context) {
         LinearLayout windowContent = new LinearLayout(context);
         windowContent.setOrientation(LinearLayout.HORIZONTAL);
-        windowContent.setGravity(Gravity.CENTER_VERTICAL);
+        windowContent.setGravity(Gravity.CENTER);
         // 设置背景图片
         windowContent.setBackgroundResource(R.drawable.floating_bg);
         windowContent.setPadding(0, 0, 0, 0);
@@ -83,10 +94,10 @@ class FwDrawUtil {
     /**
      * 创建logo控件
      * */
-    static ImageView createLogo(Context context, int logoDrawable) {
+    static ImageView createLogo(Context context, Bitmap logoBitmap) {
         ImageView imageView = new ImageView(context);
-        imageView.setLayoutParams(new FrameLayout.LayoutParams((int) LOGO_SIZE, (int) LOGO_SIZE));
-        imageView.setImageResource(logoDrawable);
+        imageView.setLayoutParams(new LinearLayout.LayoutParams((int) LOGO_SIZE, (int) LOGO_SIZE));
+        imageView.setImageBitmap(logoBitmap);
         return imageView;
     }
 
@@ -118,9 +129,16 @@ class FwDrawUtil {
         return locationX > (Resources.getSystem().getDisplayMetrics().widthPixels - LOGO_SIZE) / 2;
     }
 
-    static ObjectAnimator getDisplayAlphaAnim(InstantFloatingWindow target, FloatingConfig floatingConfig) {
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(target, "alpha", 0F, 1F).setDuration(300);
-        alpha.addListener(floatingConfig.getDisplayAnimAdapter());
-        return alpha;
+    /**
+     * 显示和隐藏悬浮窗动画
+     *
+     * @param target 执行动画的对象
+     * @param floatingConfig 状态对象
+     * @return 动画对象
+     * */
+    static ObjectAnimator getDisplayAlphaAnim(View target, FloatingConfig floatingConfig) {
+        ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(target, "alpha", 0F, 1F).setDuration(200);
+        alphaAnimator.addListener(floatingConfig.getDisplayAnimAdapter());
+        return alphaAnimator;
     }
 }
