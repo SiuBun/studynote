@@ -4,7 +4,6 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
@@ -14,8 +13,6 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
-import com.wsb.customview.utils.LogUtils;
 
 import java.lang.ref.WeakReference;
 
@@ -59,6 +56,7 @@ public class InstantFloatingWindow extends FrameLayout implements FloatingWindow
     private float mDownXInScreen, mDownYInScreen;
 
     private int xOriginalLayoutParams, yOriginalLayoutParams;
+    private boolean showed;
 
     InstantFloatingWindow(Builder builder) {
         super(builder.mReference.get());
@@ -87,15 +85,15 @@ public class InstantFloatingWindow extends FrameLayout implements FloatingWindow
 
     private ViewGroup createWindowContent(Builder builder) {
         LinearLayout windowContent = FwDrawUtil.createWindowContent(getContext());
-
         ImageView logo = FwDrawUtil.createLogo(getContext(), BitmapFactory.decodeResource(getResources(),builder.mLogoDrawable));
         WindowMenuView windowMenuView = mLayoutType.stuffMenuView(getContext(),mMenuSparseArray);
+        windowMenuView.setOnMenuClickListener(builder.mMenuItemsClickListener);
         logo.setOnClickListener((v) -> {
-            LogUtils.d("logo被点击");
+//            windowMenuView.setVisibility(showed?GONE:VISIBLE);
+//            windowMenuView.showOrHide(showed);
+            showed = !showed;
         });
 
-//        logo.setBackgroundColor(Color.BLUE);
-//        windowMenuView.setBackgroundColor(Color.YELLOW);
         mLayoutType.stuffWindowContent(windowContent,logo,windowMenuView);
         return windowContent;
     }
@@ -211,6 +209,8 @@ public class InstantFloatingWindow extends FrameLayout implements FloatingWindow
 
         private LayoutType mLayoutType;
 
+        private WindowMenuView.OnMenuClickListener mMenuItemsClickListener;
+
         Builder(@NonNull Activity activity) {
             mReference = new WeakReference<>(activity);
         }
@@ -222,6 +222,11 @@ public class InstantFloatingWindow extends FrameLayout implements FloatingWindow
 
         public Builder setMenuItems(@NonNull SparseArray<FloatingMenuItems> sparseArray) {
             mMenuItems = sparseArray;
+            return this;
+        }
+
+        public Builder setMenuItemsClickListener(@NonNull WindowMenuView.OnMenuClickListener itemsClick) {
+            mMenuItemsClickListener = itemsClick;
             return this;
         }
 

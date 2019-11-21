@@ -14,6 +14,7 @@ import com.wsb.customview.fragment.MultiTouchFragment;
 import com.wsb.customview.fragment.paint.PaintFragment;
 import com.wsb.customview.fragment.practice.PracticeFragment;
 import com.wsb.customview.fragment.practice.ScalaImageFragment;
+import com.wsb.customview.utils.LogUtils;
 import com.wsb.customview.view.instantfloating.LayoutType;
 import com.wsb.customview.view.instantfloating.FloatingMenuItems;
 import com.wsb.customview.view.instantfloating.InstantFloatingWindow;
@@ -108,8 +109,9 @@ public class MainActivity extends AppCompatActivity {
             mWindow = InstantFloatingWindow
                     .with(MainActivity.this)
                     .setLogo(R.drawable.floating_logo)
-                    .setLayoutType(LayoutType.RIGHT)
+                    .setLayoutType(LayoutType.LEFT)
                     .setMenuItems(sparseArray)
+                    .setMenuItemsClickListener((position, title) -> LogUtils.d("点击了菜单列表中第"+position+"个菜单项,标题为"+title))
                     .build();
         }
 

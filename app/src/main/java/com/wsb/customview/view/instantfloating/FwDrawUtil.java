@@ -8,7 +8,6 @@ import android.graphics.PixelFormat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -98,6 +97,8 @@ class FwDrawUtil {
         ImageView imageView = new ImageView(context);
         imageView.setLayoutParams(new LinearLayout.LayoutParams((int) LOGO_SIZE, (int) LOGO_SIZE));
         imageView.setImageBitmap(logoBitmap);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//        imageView.setBackgroundResource(R.drawable.floating_bg_round);
         return imageView;
     }
 

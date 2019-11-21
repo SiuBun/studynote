@@ -12,8 +12,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.wsb.customview.utils.DrawUtils;
-
 /**
  * 悬浮窗布局枚举
  * <p>
@@ -36,6 +34,10 @@ public enum LayoutType implements LayoutTypeBehavior {
         @Override
         public WindowMenuView stuffMenuView(Context context, SparseArray<FloatingMenuItems> sparseArray) {
             WindowMenuView windowMenuView = super.stuffMenuView(context, sparseArray);
+            LinearLayout.LayoutParams menuLayoutParams = (LinearLayout.LayoutParams) windowMenuView.getLayoutParams();
+            menuLayoutParams.rightMargin = (int) FwDrawUtil.MARGIN;
+
+            windowMenuView.setLayoutParams(menuLayoutParams);
             windowMenuView.setType(WindowMenuView.MenuType.LEFT);
             return windowMenuView;
         }
@@ -61,16 +63,16 @@ public enum LayoutType implements LayoutTypeBehavior {
         @Override
         public WindowMenuView stuffMenuView(Context context, SparseArray<FloatingMenuItems> sparseArray) {
             WindowMenuView windowMenuView = super.stuffMenuView(context, sparseArray);
+            LinearLayout.LayoutParams menuLayoutParams = (LinearLayout.LayoutParams) windowMenuView.getLayoutParams();
+            menuLayoutParams.leftMargin = (int) FwDrawUtil.MARGIN;
+
+            windowMenuView.setLayoutParams(menuLayoutParams);
             windowMenuView.setType(WindowMenuView.MenuType.RIGHT);
             return windowMenuView;
         }
 
         @Override
         public void stuffWindowContent(ViewGroup windowContent, ImageView logo, View menuView) {
-            LinearLayout.LayoutParams menuLayoutParams = (LinearLayout.LayoutParams) menuView.getLayoutParams();
-            menuLayoutParams.leftMargin = (int) FwDrawUtil.MARGIN;
-            menuLayoutParams.rightMargin = (int) FwDrawUtil.MARGIN;
-            menuView.setLayoutParams(menuLayoutParams);
             windowContent.addView(menuView);
             windowContent.addView(logo);
         }

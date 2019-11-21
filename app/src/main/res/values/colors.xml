@@ -14,4 +14,5 @@
     <color name="colorF">#FFFFFFFF</color>
     <color name="colorF0">#00FFFFFF</color>
     <color name="colorC">#CCCCCC</color>
+    <color name="floating_window_bg">#7F000000</color>
 </resources>
