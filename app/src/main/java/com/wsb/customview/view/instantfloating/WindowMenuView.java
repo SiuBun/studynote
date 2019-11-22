@@ -29,8 +29,20 @@ import java.util.ArrayList;
 class WindowMenuView extends View {
 
     private Paint mPaint;
+
+    /**
+     * 菜单控件的数据源
+     * */
     private SparseArray<FloatingMenuItems> mMenuItems;
+
+    /**
+     * 菜单所需要的icon图片对象
+     * */
     private ArrayList<Bitmap> mMenuBitmapList = new ArrayList<>();
+
+    /**
+     * 菜单绘制的空间
+     * */
     private ArrayList<RectF> mMenuRectFList = new ArrayList<>();
     /**
      * 默认左边布局
@@ -53,10 +65,10 @@ class WindowMenuView extends View {
         mAnimator = ObjectAnimator
                 .ofPropertyValuesHolder(
                         WindowMenuView.this,
-                        PropertyValuesHolder.ofFloat("alpha", 0F, 1F),
-                        PropertyValuesHolder.ofFloat("scaleX", 0F, 1F)
+                        PropertyValuesHolder.ofFloat("alpha", 0F, 1F)
+//                        ,PropertyValuesHolder.ofFloat("scaleX", 0F, 1F)
                 )
-                .setDuration(300L);
+                .setDuration(FwDrawUtil.ANIMATOR_DURATION);
         parseMenuItems(menuItems);
 
     }

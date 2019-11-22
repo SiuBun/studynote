@@ -35,13 +35,13 @@ class FloatingConfig {
         @Override
         public void onAnimationEnd(Animator animation) {
             super.onAnimationEnd(animation);
-            mDisplayState = mReadyState;
+            setReadyState();
         }
 
         @Override
         public void onAnimationStart(Animator animation) {
             super.onAnimationStart(animation);
-            mDisplayState = mAnimateState;
+            setAnimateState();
         }
     };
     private AnimatorListenerAdapter mTouchAnimAdapter = new AnimatorListenerAdapter() {
@@ -60,29 +60,29 @@ class FloatingConfig {
     }
 
 
-    public TouchMode getTouchMode() {
+    private TouchMode getTouchMode() {
         return mTouchMode;
     }
 
-    public void setPressMode() {
+    private void setPressMode() {
         this.mTouchMode = mPressMode;
     }
 
-    public void setDragMode() {
+    void setDragMode() {
         this.mTouchMode = mDragMode;
     }
 
 
 
-    public DisplayState getDisplayState() {
+    private DisplayState getDisplayState() {
         return mDisplayState;
     }
 
-    public void setAnimateState() {
+    private void setAnimateState() {
         this.mDisplayState = mAnimateState;
     }
 
-    public void setReadyState() {
+    private void setReadyState() {
         this.mDisplayState = mReadyState;
     }
 

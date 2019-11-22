@@ -8,8 +8,8 @@ import android.graphics.PixelFormat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.wsb.customview.R;
 import com.wsb.customview.utils.DrawUtils;
@@ -24,6 +24,12 @@ class FwDrawUtil {
      * icon和标题间隙
      * */
     static final float ICON_TITLE_SPACING = DrawUtils.dp2px(8F);
+
+    /**
+     * 动画时长
+     * */
+    static final long ANIMATOR_DURATION = 300L;
+
     /**
      * 图片宽高
      */
@@ -78,10 +84,8 @@ class FwDrawUtil {
     /**
      * 创建悬浮窗控件根容器
      */
-    static LinearLayout createWindowContent(Context context) {
-        LinearLayout windowContent = new LinearLayout(context);
-        windowContent.setOrientation(LinearLayout.HORIZONTAL);
-        windowContent.setGravity(Gravity.CENTER);
+    static FrameLayout createWindowContent(Context context) {
+        FrameLayout windowContent = new FrameLayout(context);
         // 设置背景图片
         windowContent.setBackgroundResource(R.drawable.floating_bg);
         windowContent.setPadding(0, 0, 0, 0);
@@ -95,8 +99,9 @@ class FwDrawUtil {
      * */
     static ImageView createLogo(Context context, Bitmap logoBitmap) {
         ImageView imageView = new ImageView(context);
-        imageView.setLayoutParams(new LinearLayout.LayoutParams((int) LOGO_SIZE, (int) LOGO_SIZE));
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams((int) FwDrawUtil.LOGO_SIZE, (int) FwDrawUtil.LOGO_SIZE);
         imageView.setImageBitmap(logoBitmap);
+        imageView.setLayoutParams(layoutParams);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 //        imageView.setBackgroundResource(R.drawable.floating_bg_round);
         return imageView;

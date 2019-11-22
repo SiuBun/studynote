@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             mWindow = InstantFloatingWindow
                     .with(MainActivity.this)
                     .setLogo(R.drawable.floating_logo)
-                    .setLayoutType(LayoutType.LEFT)
+                    .setLayoutType(LayoutType.RIGHT)
                     .setMenuItems(sparseArray)
                     .setMenuItemsClickListener((position, title) -> LogUtils.d("点击了菜单列表中第"+position+"个菜单项,标题为"+title))
                     .build();

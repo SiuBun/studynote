@@ -12,7 +12,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+
+import com.wsb.customview.utils.LogUtils;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
 
@@ -56,7 +59,9 @@ public class InstantFloatingWindow extends FrameLayout implements FloatingWindow
     private float mDownXInScreen, mDownYInScreen;
 
     private int xOriginalLayoutParams, yOriginalLayoutParams;
-    private boolean showed;
+    private boolean expanded;
+    private ImageView mLogoView;
+    private WindowMenuView mWindowMenuView;
 
     InstantFloatingWindow(Builder builder) {
         super(builder.mReference.get());
@@ -74,33 +79,56 @@ public class InstantFloatingWindow extends FrameLayout implements FloatingWindow
     }
 
     private void initialFloatingView(Builder builder) {
-        mWindowContent = createWindowContent(builder);
+        mWindowContent = buildWindowContent(builder);
         mDisplayAnimator = FwDrawUtil.getDisplayAlphaAnim(InstantFloatingWindow.this, mFloatingConfig);
-        mWindowLayoutParams = mLayoutType.wrapperOriginLayoutParams(FwDrawUtil.createWindowLayoutParams());
+        mWindowLayoutParams = mLayoutType.editWindowLayoutParams(FwDrawUtil.createWindowLayoutParams());
+
+        applyLayoutType();
 
 //        将自身作为容器,承载悬浮窗内容
         addView(mWindowContent);
     }
 
+    private void applyLayoutType() {
+        mLayoutType.editLogoView(mLogoView);
+        mLayoutType.editMenuView(mWindowMenuView);
+        mLayoutType.stuffWindowContent(mWindowContent, mLogoView, mWindowMenuView);
+    }
 
-    private ViewGroup createWindowContent(Builder builder) {
-        LinearLayout windowContent = FwDrawUtil.createWindowContent(getContext());
-        ImageView logo = FwDrawUtil.createLogo(getContext(), BitmapFactory.decodeResource(getResources(),builder.mLogoDrawable));
-        WindowMenuView windowMenuView = mLayoutType.stuffMenuView(getContext(),mMenuSparseArray);
+
+    /**
+     * 创建悬浮窗内容控件
+     *
+     * @param builder 创建参数
+     * @return 窗体内容
+     * */
+    private ViewGroup buildWindowContent(Builder builder) {
+        mLogoView = createLogoView(builder);
+
+        mWindowMenuView = createWindowMenuView(builder);
+
+        return FwDrawUtil.createWindowContent(getContext());
+    }
+
+    @NotNull
+    private WindowMenuView createWindowMenuView(Builder builder) {
+        WindowMenuView windowMenuView = new WindowMenuView(getContext(), mMenuSparseArray);
         windowMenuView.setOnMenuClickListener(builder.mMenuItemsClickListener);
-        logo.setOnClickListener((v) -> {
-//            windowMenuView.setVisibility(showed?GONE:VISIBLE);
-//            windowMenuView.showOrHide(showed);
-            showed = !showed;
-        });
+        return windowMenuView;
+    }
 
-        mLayoutType.stuffWindowContent(windowContent,logo,windowMenuView);
-        return windowContent;
+    private ImageView createLogoView(Builder builder) {
+        ImageView imageView = FwDrawUtil.createLogo(getContext(), BitmapFactory.decodeResource(getResources(), builder.mLogoDrawable));
+        imageView.setOnClickListener((v) -> {
+            LogUtils.d("logo被点击");
+        });
+        return imageView;
     }
 
     public void changeLayoutType(LayoutType layoutType) {
         if (layoutType != mLayoutType) {
             mLayoutType = layoutType;
+            applyLayoutType();
         }
     }
 
@@ -128,7 +156,7 @@ public class InstantFloatingWindow extends FrameLayout implements FloatingWindow
     }
 
     private void receiveMotionEvent(@NonNull MotionEvent ev) {
-        float xOffset,yOffset;
+        float xOffset, yOffset;
         float xRaw = ev.getRawX();
         float yRaw = ev.getRawY();
         switch (ev.getActionMasked()) {
@@ -142,7 +170,7 @@ public class InstantFloatingWindow extends FrameLayout implements FloatingWindow
             case MotionEvent.ACTION_MOVE:
                 xOffset = xRaw - mDownXInScreen;
                 yOffset = yRaw - mDownYInScreen;
-                if (!FwDrawUtil.shakeTouch(xOffset,yOffset)) {
+                if (!FwDrawUtil.shakeTouch(xOffset, yOffset)) {
                     mFloatingConfig.setDragMode();
                     mWindowLayoutParams.x = (int) (xOriginalLayoutParams + xOffset);
                     mWindowLayoutParams.y = (int) (yOriginalLayoutParams + yOffset);
@@ -152,7 +180,7 @@ public class InstantFloatingWindow extends FrameLayout implements FloatingWindow
             case MotionEvent.ACTION_UP:
                 xOffset = xRaw - mDownXInScreen;
                 yOffset = yRaw - mDownYInScreen;
-                if (!FwDrawUtil.shakeTouch(xOffset,yOffset)) {
+                if (!FwDrawUtil.shakeTouch(xOffset, yOffset)) {
                     changeLayoutType(FwDrawUtil.rightSiteOfScreen(mWindowLayoutParams.x) ? LayoutType.RIGHT : LayoutType.LEFT);
                     mLayoutType.getTransAnimation(InstantFloatingWindow.this, mWindowLayoutParams, mFloatingConfig).start();
                 }

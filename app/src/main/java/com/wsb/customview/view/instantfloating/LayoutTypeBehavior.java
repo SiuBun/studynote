@@ -36,16 +36,15 @@ public interface LayoutTypeBehavior {
      * @param layoutParams 准备修饰的窗口布局对象
      * @return 对应类型的窗口布局对象
      */
-    WindowManager.LayoutParams wrapperOriginLayoutParams(WindowManager.LayoutParams layoutParams);
+    WindowManager.LayoutParams editWindowLayoutParams(WindowManager.LayoutParams layoutParams);
 
     /**
-     * 填充数据到对应的菜单容器中并返回该菜单控件
+     * 对菜单控件进行对应布局编辑并返回该菜单控件
      *
-     * @param context     上下文
-     * @param sparseArray 数据内容
-     * @return 菜单控件
+     * @param menuView 待编辑的菜单控件
+     * @return 符合当前布局对象的菜单控件
      */
-    WindowMenuView stuffMenuView(Context context, SparseArray<FloatingMenuItems> sparseArray);
+    WindowMenuView editMenuView(WindowMenuView menuView);
 
     /**
      * 对应布局填充悬浮窗内容
@@ -55,4 +54,11 @@ public interface LayoutTypeBehavior {
      * @param menuView      菜单控件
      */
     void stuffWindowContent(ViewGroup windowContent, ImageView logo, View menuView);
+
+    /**
+     * 布局类型对logo控件有不同的包裹设置
+     *
+     * @param logo 等待设置的logo控件
+     * */
+    void editLogoView(ImageView logo);
 }

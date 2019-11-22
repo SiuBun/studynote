@@ -2,15 +2,14 @@ package com.wsb.customview.view.instantfloating;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.content.res.Resources;
-import android.util.SparseArray;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 /**
  * 悬浮窗布局枚举
@@ -25,27 +24,30 @@ public enum LayoutType implements LayoutTypeBehavior {
      */
     LEFT {
         @Override
-        public WindowManager.LayoutParams wrapperOriginLayoutParams(WindowManager.LayoutParams layoutParams) {
-            WindowManager.LayoutParams params = super.wrapperOriginLayoutParams(layoutParams);
+        public WindowManager.LayoutParams editWindowLayoutParams(WindowManager.LayoutParams layoutParams) {
+            WindowManager.LayoutParams params = super.editWindowLayoutParams(layoutParams);
             params.x = 0;
             return params;
         }
 
         @Override
-        public WindowMenuView stuffMenuView(Context context, SparseArray<FloatingMenuItems> sparseArray) {
-            WindowMenuView windowMenuView = super.stuffMenuView(context, sparseArray);
-            LinearLayout.LayoutParams menuLayoutParams = (LinearLayout.LayoutParams) windowMenuView.getLayoutParams();
+        public WindowMenuView editMenuView(WindowMenuView menuView) {
+            super.editMenuView(menuView);
+            FrameLayout.LayoutParams menuLayoutParams = (FrameLayout.LayoutParams) menuView.getLayoutParams();
             menuLayoutParams.rightMargin = (int) FwDrawUtil.MARGIN;
+            menuLayoutParams.leftMargin = (int) FwDrawUtil.LOGO_SIZE;
+            menuLayoutParams.gravity = Gravity.END;
 
-            windowMenuView.setLayoutParams(menuLayoutParams);
-            windowMenuView.setType(WindowMenuView.MenuType.LEFT);
-            return windowMenuView;
+            menuView.setLayoutParams(menuLayoutParams);
+            menuView.setType(WindowMenuView.MenuType.LEFT);
+            return menuView;
         }
 
         @Override
-        public void stuffWindowContent(ViewGroup windowContent, ImageView logo, View menuView) {
-            windowContent.addView(logo);
-            windowContent.addView(menuView);
+        public void editLogoView(ImageView logo) {
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams((int) FwDrawUtil.LOGO_SIZE, (int) FwDrawUtil.LOGO_SIZE);
+            params.gravity = Gravity.START;
+            logo.setLayoutParams(params);
         }
     },
 
@@ -54,27 +56,30 @@ public enum LayoutType implements LayoutTypeBehavior {
      */
     RIGHT {
         @Override
-        public WindowManager.LayoutParams wrapperOriginLayoutParams(WindowManager.LayoutParams layoutParams) {
-            WindowManager.LayoutParams params = super.wrapperOriginLayoutParams(layoutParams);
+        public WindowManager.LayoutParams editWindowLayoutParams(WindowManager.LayoutParams layoutParams) {
+            WindowManager.LayoutParams params = super.editWindowLayoutParams(layoutParams);
             params.x = (int) (Resources.getSystem().getDisplayMetrics().widthPixels - FwDrawUtil.LOGO_SIZE);
             return params;
         }
 
         @Override
-        public WindowMenuView stuffMenuView(Context context, SparseArray<FloatingMenuItems> sparseArray) {
-            WindowMenuView windowMenuView = super.stuffMenuView(context, sparseArray);
-            LinearLayout.LayoutParams menuLayoutParams = (LinearLayout.LayoutParams) windowMenuView.getLayoutParams();
+        public WindowMenuView editMenuView(WindowMenuView menuView) {
+            super.editMenuView(menuView);
+            FrameLayout.LayoutParams menuLayoutParams = (FrameLayout.LayoutParams) menuView.getLayoutParams();
             menuLayoutParams.leftMargin = (int) FwDrawUtil.MARGIN;
+            menuLayoutParams.rightMargin = (int) FwDrawUtil.LOGO_SIZE;
+            menuLayoutParams.gravity = Gravity.START;
 
-            windowMenuView.setLayoutParams(menuLayoutParams);
-            windowMenuView.setType(WindowMenuView.MenuType.RIGHT);
-            return windowMenuView;
+            menuView.setLayoutParams(menuLayoutParams);
+            menuView.setType(WindowMenuView.MenuType.RIGHT);
+            return menuView;
         }
 
         @Override
-        public void stuffWindowContent(ViewGroup windowContent, ImageView logo, View menuView) {
-            windowContent.addView(menuView);
-            windowContent.addView(logo);
+        public void editLogoView(ImageView logo) {
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams((int) FwDrawUtil.LOGO_SIZE, (int) FwDrawUtil.LOGO_SIZE);
+            params.gravity = Gravity.END;
+            logo.setLayoutParams(params);
         }
     };
 
@@ -90,16 +95,22 @@ public enum LayoutType implements LayoutTypeBehavior {
     }
 
     @Override
-    public WindowManager.LayoutParams wrapperOriginLayoutParams(WindowManager.LayoutParams layoutParams) {
+    public WindowManager.LayoutParams editWindowLayoutParams(WindowManager.LayoutParams layoutParams) {
         layoutParams.y = (int) ((Resources.getSystem().getDisplayMetrics().heightPixels - FwDrawUtil.LOGO_SIZE) / 2);
         return layoutParams;
     }
 
     @Override
-    public WindowMenuView stuffMenuView(Context context, SparseArray<FloatingMenuItems> sparseArray) {
-        WindowMenuView windowMenuView = new WindowMenuView(context, sparseArray);
-        windowMenuView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        return windowMenuView;
+    public WindowMenuView editMenuView(WindowMenuView menuView) {
+        menuView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+        return menuView;
+    }
+
+    @Override
+    public void stuffWindowContent(ViewGroup windowContent, ImageView logo, View menuView) {
+        windowContent.removeAllViews();
+        windowContent.addView(logo);
+        windowContent.addView(menuView);
     }
 
     /**
@@ -111,7 +122,7 @@ public enum LayoutType implements LayoutTypeBehavior {
      * @return 动画对象
      */
     public ValueAnimator getTransAnimation(Object target, WindowManager.LayoutParams startValue, FloatingConfig floatingConfig) {
-        WindowManager.LayoutParams stopValue = wrapperOriginLayoutParams(FwDrawUtil.createWindowLayoutParams());
+        WindowManager.LayoutParams stopValue = editWindowLayoutParams(FwDrawUtil.createWindowLayoutParams());
         stopValue.y = startValue.y;
 
         ObjectAnimator animator = ObjectAnimator.ofObject(
@@ -120,11 +131,12 @@ public enum LayoutType implements LayoutTypeBehavior {
                 new WindowLayoutEvaluator(),
                 startValue,
                 stopValue
-        ).setDuration(300);
+        ).setDuration(FwDrawUtil.ANIMATOR_DURATION);
 
         animator.addListener(floatingConfig.getDisplayAnimAdapter());
         animator.addListener(floatingConfig.getTouchAnimAdapter());
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         return animator;
     }
+
 }
