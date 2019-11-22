@@ -1,5 +1,6 @@
 package com.wsb.customview.view.instantfloating;
 
+import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
@@ -62,12 +63,16 @@ public class InstantFloatingWindow extends FrameLayout implements FloatingWindow
     private boolean expanded;
     private ImageView mLogoView;
     private WindowMenuView mWindowMenuView;
+    private ImageView mSingleLogo;
 
     InstantFloatingWindow(Builder builder) {
         super(builder.mReference.get());
         initialFloatingData(builder);
         initialFloatingView(builder);
 
+        LayoutTransition transition = new LayoutTransition();
+        transition.setDuration(10L);
+        setLayoutTransition(transition);
         getWindowService().addView(this, mWindowLayoutParams);
     }
 
@@ -85,10 +90,19 @@ public class InstantFloatingWindow extends FrameLayout implements FloatingWindow
 
         applyLayoutType();
 
+        mSingleLogo = FwDrawUtil.createLogo(getContext(), BitmapFactory.decodeResource(getResources(), builder.mLogoDrawable));
+        mSingleLogo.setOnClickListener(v -> {
+            removeAllViews();
+            addView(mWindowContent);
+        });
+
 //        将自身作为容器,承载悬浮窗内容
-        addView(mWindowContent);
+        addView(mSingleLogo);
     }
 
+    /**
+     * 由布局类型决定如何填充悬浮窗展示样式
+     * */
     private void applyLayoutType() {
         mLayoutType.editLogoView(mLogoView);
         mLayoutType.editMenuView(mWindowMenuView);
@@ -121,10 +135,15 @@ public class InstantFloatingWindow extends FrameLayout implements FloatingWindow
         ImageView imageView = FwDrawUtil.createLogo(getContext(), BitmapFactory.decodeResource(getResources(), builder.mLogoDrawable));
         imageView.setOnClickListener((v) -> {
             LogUtils.d("logo被点击");
+            removeAllViews();
+            addView(mSingleLogo);
         });
         return imageView;
     }
 
+    /**
+     * 对外方法允许修改布局类型
+     * */
     public void changeLayoutType(LayoutType layoutType) {
         if (layoutType != mLayoutType) {
             mLayoutType = layoutType;
