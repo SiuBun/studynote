@@ -1,9 +1,9 @@
 package com.wsb.customview.view.instantfloating;
 
+import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -11,6 +11,7 @@ import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.wsb.customview.utils.LogUtils;
@@ -24,8 +25,7 @@ import java.lang.ref.WeakReference;
  *
  * @author wsb
  */
-public class InstantFloatingWindow implements FloatingWindowBehavior {
-    private final WeakReference<Activity> mReference;
+public class InstantFloatingWindowWithWc extends FrameLayout implements FloatingWindowBehavior {
     /**
      * 菜单项容器
      */
@@ -64,14 +64,16 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
     private ImageView mLogoView;
     private WindowMenuView mWindowMenuView;
     private ImageView mSingleLogo;
-    private WindowManager.LayoutParams mSingleLogoParams;
 
-    InstantFloatingWindow(Builder builder) {
-        mReference = builder.mReference;
+    InstantFloatingWindowWithWc(Builder builder) {
+        super(builder.mReference.get());
         initialFloatingData(builder);
         initialFloatingView(builder);
 
-        getWindowService().addView(mSingleLogo, mSingleLogoParams);
+        LayoutTransition transition = new LayoutTransition();
+        transition.setDuration(10L);
+        setLayoutTransition(transition);
+        getWindowService().addView(this, mWindowLayoutParams);
     }
 
     private void initialFloatingData(Builder builder) {
@@ -83,31 +85,19 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
 
     private void initialFloatingView(Builder builder) {
         mWindowContent = buildWindowContent(builder);
-        mDisplayAnimator = FwDrawUtil.getDisplayAlphaAnim(mSingleLogo, mFloatingConfig);
+        mDisplayAnimator = FwDrawUtil.getDisplayAlphaAnim(InstantFloatingWindowWithWc.this, mFloatingConfig);
         mWindowLayoutParams = mLayoutType.editWindowLayoutParams(FwDrawUtil.createWindowLayoutParams());
 
         applyLayoutType();
 
-        mSingleLogo = FwDrawUtil.createSingleLogo(getContext(), BitmapFactory.decodeResource(getResources(), builder.mLogoDrawable));
-        mSingleLogoParams = mLayoutType.editWindowLayoutParams(FwDrawUtil.createSingleLogoLayoutParams());
-
+        mSingleLogo = FwDrawUtil.createLogo(getContext(), BitmapFactory.decodeResource(getResources(), builder.mLogoDrawable));
         mSingleLogo.setOnClickListener(v -> {
-            getWindowService().removeViewImmediate(v);
-            mWindowLayoutParams.x = mSingleLogoParams.x;
-            mWindowLayoutParams.y = mSingleLogoParams.y;
-            getWindowService().addView(mWindowContent,mWindowLayoutParams);
+            removeAllViews();
+            addView(mWindowContent);
         });
 
-        mSingleLogo.setOnTouchListener((v, event) -> onLogoTouchEvent(event));
-
-    }
-
-    private Resources getResources() {
-        return getContext().getResources();
-    }
-
-    private Context getContext() {
-        return mReference.get();
+//        将自身作为容器,承载悬浮窗内容
+        addView(mSingleLogo);
     }
 
     /**
@@ -145,8 +135,8 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
         ImageView imageView = FwDrawUtil.createLogo(getContext(), BitmapFactory.decodeResource(getResources(), builder.mLogoDrawable));
         imageView.setOnClickListener((v) -> {
             LogUtils.d("logo被点击");
-            getWindowService().removeViewImmediate(mWindowContent);
-            getWindowService().addView(mSingleLogo,mSingleLogoParams);
+            removeAllViews();
+            addView(mSingleLogo);
         });
         return imageView;
     }
@@ -162,16 +152,26 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
     }
 
     public void setWindowLayoutParams(WindowManager.LayoutParams layoutParams) {
-        this.mSingleLogoParams = layoutParams;
-        getWindowService().updateViewLayout(mSingleLogo, layoutParams);
+        this.mWindowLayoutParams = layoutParams;
+        getWindowService().updateViewLayout(InstantFloatingWindowWithWc.this, layoutParams);
     }
 
-    private boolean onLogoTouchEvent(MotionEvent ev) {
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (null != ev) {
+            receiveMotionEvent(ev);
+        }
+//        拦截后将不再回调该方法，所以后续事件需要在onTouchEvent中回调
+        return mFloatingConfig.onTouchResult() || super.onInterceptTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
         if (null != ev) {
             receiveMotionEvent(ev);
         }
 //        如果状态不进行消费,那么返回默认情况，防止影响子View事件的消费
-        return mFloatingConfig.onTouchResult();
+        return mFloatingConfig.onTouchResult() || super.onTouchEvent(ev);
     }
 
     private void receiveMotionEvent(@NonNull MotionEvent ev) {
@@ -183,25 +183,25 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
                 mDownXInScreen = xRaw;
                 mDownYInScreen = yRaw;
 
-                xOriginalLayoutParams = mSingleLogoParams.x;
-                yOriginalLayoutParams = mSingleLogoParams.y;
+                xOriginalLayoutParams = mWindowLayoutParams.x;
+                yOriginalLayoutParams = mWindowLayoutParams.y;
                 break;
             case MotionEvent.ACTION_MOVE:
                 xOffset = xRaw - mDownXInScreen;
                 yOffset = yRaw - mDownYInScreen;
                 if (!FwDrawUtil.shakeTouch(xOffset, yOffset)) {
                     mFloatingConfig.setDragMode();
-                    mSingleLogoParams.x = (int) (xOriginalLayoutParams + xOffset);
-                    mSingleLogoParams.y = (int) (yOriginalLayoutParams + yOffset);
-                    setWindowLayoutParams(mSingleLogoParams);
+                    mWindowLayoutParams.x = (int) (xOriginalLayoutParams + xOffset);
+                    mWindowLayoutParams.y = (int) (yOriginalLayoutParams + yOffset);
+                    setWindowLayoutParams(mWindowLayoutParams);
                 }
                 break;
             case MotionEvent.ACTION_UP:
                 xOffset = xRaw - mDownXInScreen;
                 yOffset = yRaw - mDownYInScreen;
                 if (!FwDrawUtil.shakeTouch(xOffset, yOffset)) {
-                    changeLayoutType(FwDrawUtil.rightSiteOfScreen(mSingleLogoParams.x) ? LayoutType.RIGHT : LayoutType.LEFT);
-                    mLayoutType.getTransAnimationWithWm(InstantFloatingWindow.this, mSingleLogoParams, mFloatingConfig).start();
+                    changeLayoutType(FwDrawUtil.rightSiteOfScreen(mWindowLayoutParams.x) ? LayoutType.RIGHT : LayoutType.LEFT);
+                    mLayoutType.getTransAnimationWithWc(InstantFloatingWindowWithWc.this, mWindowLayoutParams, mFloatingConfig).start();
                 }
 
                 break;
@@ -223,7 +223,7 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
 
     @Override
     public void onDestroy() {
-        getWindowService().removeViewImmediate(mSingleLogo);
+        getWindowService().removeViewImmediate(InstantFloatingWindowWithWc.this);
     }
 
     /**
@@ -282,8 +282,8 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
             return this;
         }
 
-        public InstantFloatingWindow build() {
-            return new InstantFloatingWindow(this);
+        public InstantFloatingWindowWithWc build() {
+            return new InstantFloatingWindowWithWc(this);
         }
 
     }

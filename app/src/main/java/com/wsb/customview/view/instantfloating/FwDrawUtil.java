@@ -73,9 +73,9 @@ class FwDrawUtil {
                 | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
         // 设置悬浮窗口长宽数据
+        layoutParams.gravity = Gravity.START | Gravity.TOP;
         layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        layoutParams.gravity = Gravity.START | Gravity.TOP;
 
         return layoutParams;
     }
@@ -86,16 +86,10 @@ class FwDrawUtil {
      * @return 图标专用布局参数
      * */
     static WindowManager.LayoutParams createSingleLogoLayoutParams() {
-        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
-        layoutParams.format = PixelFormat.RGBA_8888;
-        layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
+        WindowManager.LayoutParams layoutParams = createWindowLayoutParams();
         // 设置悬浮窗口长宽数据
         layoutParams.width = (int) FwDrawUtil.LOGO_SIZE;
         layoutParams.height = (int) FwDrawUtil.LOGO_SIZE;
-        layoutParams.gravity = Gravity.START | Gravity.TOP;
 
         return layoutParams;
     }
@@ -118,11 +112,8 @@ class FwDrawUtil {
      * 创建logo控件
      * */
     static ImageView createLogo(Context context, Bitmap logoBitmap) {
-        ImageView imageView = new ImageView(context);
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams((int) FwDrawUtil.LOGO_SIZE, (int) FwDrawUtil.LOGO_SIZE);
-        imageView.setImageBitmap(logoBitmap);
-        imageView.setLayoutParams(layoutParams);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        ImageView imageView = createSingleLogo(context, logoBitmap);
+        imageView.setLayoutParams(new FrameLayout.LayoutParams((int) FwDrawUtil.LOGO_SIZE, (int) FwDrawUtil.LOGO_SIZE));
         return imageView;
     }
 

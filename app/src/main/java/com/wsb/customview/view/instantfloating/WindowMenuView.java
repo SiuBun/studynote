@@ -88,7 +88,7 @@ class WindowMenuView extends View {
         mMenuItems = menuItems;
         mMenuBitmapList.clear();
         for (int index = 0; index < menuItems.size(); index++) {
-            mMenuBitmapList.add(DrawUtils.getBitmap(getResources(), DrawUtils.dp2px(16F), menuItems.get(index).getIcon()));
+            mMenuBitmapList.add(DrawUtils.getBitmap(getResources(), FwDrawUtil.ICON_SIZE, menuItems.get(index).getIcon()));
 
             float left = index * FwDrawUtil.ITEM_SIZE;
             float top = this.mFirstItemTop;
@@ -174,7 +174,7 @@ class WindowMenuView extends View {
         RectF rect = mMenuRectFList.get(rectfIndex);
         Bitmap bitmap = mMenuBitmapList.get(itemsIndex);
         float left = rect.centerX() - bitmap.getWidth() / 2F;
-        float top = rect.centerY() - bitmap.getHeight() / 2F - (FwDrawUtil.ICON_TITLE_SPACING);
+        float top = rect.centerY() - bitmap.getHeight() / 2F - (FwDrawUtil.ICON_TITLE_SPACING/2);
         canvas.drawBitmap(bitmap, left, top, mPaint);
     }
 
