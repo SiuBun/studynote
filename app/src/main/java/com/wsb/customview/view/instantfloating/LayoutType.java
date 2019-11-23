@@ -121,14 +121,32 @@ public enum LayoutType implements LayoutTypeBehavior {
      * @param floatingConfig 配置状态对象
      * @return 动画对象
      */
-    public ValueAnimator getTransAnimation(Object target, WindowManager.LayoutParams startValue, FloatingConfig floatingConfig) {
+    public ValueAnimator getTransAnimationWithWc(Object target, WindowManager.LayoutParams startValue, FloatingConfig floatingConfig) {
         WindowManager.LayoutParams stopValue = editWindowLayoutParams(FwDrawUtil.createWindowLayoutParams());
         stopValue.y = startValue.y;
 
         ObjectAnimator animator = ObjectAnimator.ofObject(
                 target,
                 "windowLayoutParams",
-                new WindowLayoutEvaluator(),
+                new WindowLayoutEvaluator(FwDrawUtil.createWindowLayoutParams()),
+                startValue,
+                stopValue
+        ).setDuration(FwDrawUtil.ANIMATOR_DURATION);
+
+        animator.addListener(floatingConfig.getDisplayAnimAdapter());
+        animator.addListener(floatingConfig.getTouchAnimAdapter());
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        return animator;
+    }
+
+    public ValueAnimator getTransAnimationWithWm(Object target, WindowManager.LayoutParams startValue, FloatingConfig floatingConfig) {
+        WindowManager.LayoutParams stopValue = editWindowLayoutParams(FwDrawUtil.createSingleLogoLayoutParams());
+        stopValue.y = startValue.y;
+
+        ObjectAnimator animator = ObjectAnimator.ofObject(
+                target,
+                "windowLayoutParams",
+                new WindowLayoutEvaluator(FwDrawUtil.createSingleLogoLayoutParams()),
                 startValue,
                 stopValue
         ).setDuration(FwDrawUtil.ANIMATOR_DURATION);

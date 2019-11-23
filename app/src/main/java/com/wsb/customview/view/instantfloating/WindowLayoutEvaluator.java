@@ -12,8 +12,8 @@ import android.view.WindowManager;
 public class WindowLayoutEvaluator implements TypeEvaluator<WindowManager.LayoutParams> {
     private WindowManager.LayoutParams mLayoutParams;
 
-    WindowLayoutEvaluator() {
-        mLayoutParams = FwDrawUtil.createWindowLayoutParams();
+    WindowLayoutEvaluator(WindowManager.LayoutParams layoutParams) {
+        mLayoutParams = layoutParams;
     }
 
     @Override

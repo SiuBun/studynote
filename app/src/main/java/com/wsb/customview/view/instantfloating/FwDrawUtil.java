@@ -80,6 +80,26 @@ class FwDrawUtil {
         return layoutParams;
     }
 
+    /**
+     * 创建单独图标的布局参数
+     *
+     * @return 图标专用布局参数
+     * */
+    static WindowManager.LayoutParams createSingleLogoLayoutParams() {
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
+        layoutParams.format = PixelFormat.RGBA_8888;
+        layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
+        // 设置悬浮窗口长宽数据
+        layoutParams.width = (int) FwDrawUtil.LOGO_SIZE;
+        layoutParams.height = (int) FwDrawUtil.LOGO_SIZE;
+        layoutParams.gravity = Gravity.START | Gravity.TOP;
+
+        return layoutParams;
+    }
+
 
     /**
      * 创建悬浮窗控件根容器
@@ -103,7 +123,16 @@ class FwDrawUtil {
         imageView.setImageBitmap(logoBitmap);
         imageView.setLayoutParams(layoutParams);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//        imageView.setBackgroundResource(R.drawable.floating_bg_round);
+        return imageView;
+    }
+
+    /**
+     * 创建独立的logo控件
+     * */
+    static ImageView createSingleLogo(Context context, Bitmap logoBitmap) {
+        ImageView imageView = new ImageView(context);
+        imageView.setImageBitmap(logoBitmap);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         return imageView;
     }
 
