@@ -3,8 +3,6 @@ package com.wsb.customview.view.instantfloating;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 
-import com.wsb.customview.utils.LogUtils;
-
 /**
  * 悬浮窗配置状态
  *
@@ -52,13 +50,10 @@ class FloatingConfig {
         }
     };
 
-
-
     FloatingConfig() {
         setPressMode();
         setReadyState();
     }
-
 
     private TouchMode getTouchMode() {
         return mTouchMode;
@@ -71,8 +66,6 @@ class FloatingConfig {
     void setDragMode() {
         this.mTouchMode = mDragMode;
     }
-
-
 
     private DisplayState getDisplayState() {
         return mDisplayState;

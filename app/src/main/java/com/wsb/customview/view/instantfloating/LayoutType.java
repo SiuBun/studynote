@@ -49,6 +49,15 @@ public enum LayoutType implements LayoutTypeBehavior {
             params.gravity = Gravity.START;
             logo.setLayoutParams(params);
         }
+
+        @Override
+        public WindowManager.LayoutParams getHideHalfSelfStopParams(WindowManager.LayoutParams startLogoParams) {
+            WindowManager.LayoutParams layoutParams = super.getHideHalfSelfStopParams(startLogoParams);
+            float margin = FwDrawUtil.LOGO_SIZE / 3 * 2;
+
+            layoutParams.x = (int) -margin;
+            return layoutParams;
+        }
     },
 
     /**
@@ -81,6 +90,14 @@ public enum LayoutType implements LayoutTypeBehavior {
             params.gravity = Gravity.END;
             logo.setLayoutParams(params);
         }
+
+        @Override
+        public WindowManager.LayoutParams getHideHalfSelfStopParams(WindowManager.LayoutParams startLogoParams) {
+            WindowManager.LayoutParams layoutParams = super.getHideHalfSelfStopParams(startLogoParams);
+            float margin = FwDrawUtil.LOGO_SIZE / 3 * 2;
+            layoutParams.x = (int) (Resources.getSystem().getDisplayMetrics().widthPixels-FwDrawUtil.LOGO_SIZE+margin);
+            return layoutParams;
+        }
     };
 
 
@@ -92,6 +109,14 @@ public enum LayoutType implements LayoutTypeBehavior {
     @Override
     public void restoreSize() {
 
+    }
+
+    @Override
+    public WindowManager.LayoutParams getHideHalfSelfStopParams(WindowManager.LayoutParams startLogoParams) {
+        WindowManager.LayoutParams layoutParams = FwDrawUtil.createSingleLogoLayoutParams();
+        layoutParams.alpha = 0.5F;
+        layoutParams.y = startLogoParams.y;
+        return layoutParams;
     }
 
     @Override
@@ -113,40 +138,46 @@ public enum LayoutType implements LayoutTypeBehavior {
         windowContent.addView(menuView);
     }
 
-    /**
-     * 提供一个动画用于logo释放时候回归到所属一侧
-     *
-     * @param target         执行动画的对象
-     * @param startValue     动画起点
-     * @param floatingConfig 配置状态对象
-     * @return 动画对象
-     */
+
     public ValueAnimator getTransAnimationWithWc(Object target, WindowManager.LayoutParams startValue, FloatingConfig floatingConfig) {
         WindowManager.LayoutParams stopValue = editWindowLayoutParams(FwDrawUtil.createWindowLayoutParams());
         stopValue.y = startValue.y;
 
-        ObjectAnimator animator = ObjectAnimator.ofObject(
+        return getTransAnimation(
                 target,
-                "windowLayoutParams",
                 new WindowLayoutEvaluator(FwDrawUtil.createWindowLayoutParams()),
                 startValue,
-                stopValue
-        ).setDuration(FwDrawUtil.ANIMATOR_DURATION);
-
-        animator.addListener(floatingConfig.getDisplayAnimAdapter());
-        animator.addListener(floatingConfig.getTouchAnimAdapter());
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        return animator;
+                stopValue,
+                floatingConfig);
     }
 
     public ValueAnimator getTransAnimationWithWm(Object target, WindowManager.LayoutParams startValue, FloatingConfig floatingConfig) {
         WindowManager.LayoutParams stopValue = editWindowLayoutParams(FwDrawUtil.createSingleLogoLayoutParams());
         stopValue.y = startValue.y;
 
+        return getTransAnimation(
+                target,
+                new WindowLayoutEvaluator(FwDrawUtil.createSingleLogoLayoutParams()),
+                startValue,
+                stopValue,
+                floatingConfig);
+    }
+
+    /**
+     * 提供一个动画用于logo释放时候回归到所属一侧
+     *
+     * @param target         执行动画的对象
+     * @param evaluator      动画估值器
+     * @param startValue     动画起点
+     * @param stopValue      动画终点
+     * @param floatingConfig 配置状态对象
+     * @return 动画对象
+     */
+    public ValueAnimator getTransAnimation(Object target, WindowLayoutEvaluator evaluator, WindowManager.LayoutParams startValue, WindowManager.LayoutParams stopValue, FloatingConfig floatingConfig) {
         ObjectAnimator animator = ObjectAnimator.ofObject(
                 target,
                 "windowLayoutParams",
-                new WindowLayoutEvaluator(FwDrawUtil.createSingleLogoLayoutParams()),
+                evaluator,
                 startValue,
                 stopValue
         ).setDuration(FwDrawUtil.ANIMATOR_DURATION);

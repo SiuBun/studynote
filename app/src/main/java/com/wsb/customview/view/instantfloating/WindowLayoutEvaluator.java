@@ -20,9 +20,11 @@ public class WindowLayoutEvaluator implements TypeEvaluator<WindowManager.Layout
     public WindowManager.LayoutParams evaluate(float fraction, WindowManager.LayoutParams startValue, WindowManager.LayoutParams endValue) {
         float x = startValue.x + (endValue.x - startValue.x) * fraction;
         float y = startValue.y + (endValue.y - startValue.y) * fraction;
+        float alpha = startValue.alpha + (endValue.alpha - startValue.alpha) * fraction;
 
         mLayoutParams.x = (int) x;
         mLayoutParams.y = (int) y;
+        mLayoutParams.alpha = alpha;
         return mLayoutParams;
     }
 }

@@ -18,6 +18,9 @@ import com.wsb.customview.utils.LogUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
+import java.util.TimerTask;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 支持订制内容的悬浮窗
@@ -65,8 +68,20 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
     private WindowMenuView mWindowMenuView;
     private ImageView mSingleLogo;
     private WindowManager.LayoutParams mSingleLogoParams;
+    /**
+     * 隐藏logo尺寸及修改透明度定时任务
+     * */
+    private TimerTask mHideHalfLogoTask;
 
-    InstantFloatingWindow(Builder builder) {
+
+    private WindowManager.LayoutParams mHideHalfSelfStopParams;
+
+    /**
+     * 执行定时任务的调度器
+     * */
+    private ScheduledThreadPoolExecutor mScheduledThreadPoolExecutor;
+
+    private InstantFloatingWindow(Builder builder) {
         mReference = builder.mReference;
         initialFloatingData(builder);
         initialFloatingView(builder);
@@ -79,6 +94,26 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
         mLayoutType = builder.mLayoutType;
         mFloatingConfig = new FloatingConfig();
 
+        mScheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(5, r -> {
+            Thread thread = new Thread(r);
+            thread.setPriority(Thread.NORM_PRIORITY);
+            return thread;
+        });
+
+        mHideHalfLogoTask = new TimerTask() {
+            @Override
+            public void run() {
+                LogUtils.d("倒计时时间到,执行任务");
+                mReference.get().runOnUiThread(() -> mLayoutType.getTransAnimation(
+                        InstantFloatingWindow.this,
+                        new WindowLayoutEvaluator(FwDrawUtil.createSingleLogoLayoutParams()),
+                        mSingleLogoParams,
+                        mHideHalfSelfStopParams,
+                        mFloatingConfig
+                ).start());
+            }
+        };
+
     }
 
     private void initialFloatingView(Builder builder) {
@@ -86,19 +121,31 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
         mDisplayAnimator = FwDrawUtil.getDisplayAlphaAnim(mSingleLogo, mFloatingConfig);
         mWindowLayoutParams = mLayoutType.editWindowLayoutParams(FwDrawUtil.createWindowLayoutParams());
 
-        applyLayoutType();
 
         mSingleLogo = FwDrawUtil.createSingleLogo(getContext(), BitmapFactory.decodeResource(getResources(), builder.mLogoDrawable));
         mSingleLogoParams = mLayoutType.editWindowLayoutParams(FwDrawUtil.createSingleLogoLayoutParams());
 
-        mSingleLogo.setOnClickListener(v -> {
-            getWindowService().removeViewImmediate(v);
-            mWindowLayoutParams.x = mSingleLogoParams.x;
-            mWindowLayoutParams.y = mSingleLogoParams.y;
-            getWindowService().addView(mWindowContent,mWindowLayoutParams);
-        });
-
+        mSingleLogo.setOnClickListener(v -> expandWindowMenu());
         mSingleLogo.setOnTouchListener((v, event) -> onLogoTouchEvent(event));
+
+        applyLayoutType();
+    }
+
+    private void expandWindowMenu() {
+        getWindowService().removeViewImmediate(mSingleLogo);
+        mWindowLayoutParams.x = mSingleLogoParams.x;
+        mWindowLayoutParams.y = mSingleLogoParams.y;
+        getWindowService().addView(mWindowContent, mWindowLayoutParams);
+    }
+
+    private void shrinkWindowMenu() {
+        getWindowService().removeViewImmediate(mWindowContent);
+        getWindowService().addView(mSingleLogo, mSingleLogoParams);
+
+    }
+
+    private void startTimerTask() {
+        mScheduledThreadPoolExecutor.schedule(mHideHalfLogoTask,5L,TimeUnit.SECONDS);
 
     }
 
@@ -112,11 +159,12 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
 
     /**
      * 由布局类型决定如何填充悬浮窗展示样式
-     * */
+     */
     private void applyLayoutType() {
         mLayoutType.editLogoView(mLogoView);
         mLayoutType.editMenuView(mWindowMenuView);
         mLayoutType.stuffWindowContent(mWindowContent, mLogoView, mWindowMenuView);
+        mHideHalfSelfStopParams = mLayoutType.getHideHalfSelfStopParams(mSingleLogoParams);
     }
 
 
@@ -125,7 +173,7 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
      *
      * @param builder 创建参数
      * @return 窗体内容
-     * */
+     */
     private ViewGroup buildWindowContent(Builder builder) {
         mLogoView = createLogoView(builder);
 
@@ -143,18 +191,15 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
 
     private ImageView createLogoView(Builder builder) {
         ImageView imageView = FwDrawUtil.createLogo(getContext(), BitmapFactory.decodeResource(getResources(), builder.mLogoDrawable));
-        imageView.setOnClickListener((v) -> {
-            LogUtils.d("logo被点击");
-            getWindowService().removeViewImmediate(mWindowContent);
-            getWindowService().addView(mSingleLogo,mSingleLogoParams);
-        });
+        imageView.setOnClickListener((v) -> shrinkWindowMenu());
         return imageView;
     }
 
+
     /**
-     * 对外方法允许修改布局类型
-     * */
-    public void changeLayoutType(LayoutType layoutType) {
+     * 允许修改布局类型
+     */
+    private void changeLayoutType(LayoutType layoutType) {
         if (layoutType != mLayoutType) {
             mLayoutType = layoutType;
             applyLayoutType();
@@ -180,6 +225,9 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
         float yRaw = ev.getRawY();
         switch (ev.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
+//                收起状态下,未隐藏状态下触摸应取消当前准备执行的任务.如果已经是隐藏一半的状态,那就恢复原先logo尺寸和透明度.再执行后续逻辑
+
+
                 mDownXInScreen = xRaw;
                 mDownYInScreen = yRaw;
 

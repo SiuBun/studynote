@@ -61,4 +61,6 @@ public interface LayoutTypeBehavior {
      * @param logo 等待设置的logo控件
      * */
     void editLogoView(ImageView logo);
+
+    WindowManager.LayoutParams getHideHalfSelfStopParams(WindowManager.LayoutParams startLogoParams);
 }
