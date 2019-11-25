@@ -1,13 +1,15 @@
 package com.wsb.customview.view.instantfloating;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
@@ -21,8 +23,6 @@ import com.wsb.customview.utils.LogUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
-import java.util.TimerTask;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author wsb
  */
-public class InstantFloatingWindow implements FloatingWindowBehavior {
+public class InstantFloatingWindow implements FloatingWindowBehavior, StateCallback {
     private final WeakReference<Activity> mReference;
     private final FwHandler mFwHandler;
     /**
@@ -59,7 +59,7 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
     private FloatingConfig mFloatingConfig;
 
 
-    private float mDownXInScreen, mDownYInScreen;
+    private float mDownxInScreen, mDownyInScreen;
 
     private int xOriginalLayoutParams, yOriginalLayoutParams;
     /**
@@ -93,11 +93,6 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
     private Runnable mHideHalfLogoTask;
 
 
-    /**
-     * 执行定时任务的调度器
-     */
-    private ScheduledThreadPoolExecutor mScheduledThreadPoolExecutor;
-
     private InstantFloatingWindow(Builder builder) {
         mReference = builder.mReference;
         mFwHandler = new FwHandler(Looper.getMainLooper());
@@ -106,13 +101,18 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
         initialFloatingView(builder);
 
         getWindowService().addView(mSingleLogo, mSingleLogoParams);
+
+        applyStretchState();
+    }
+
+    private void applyStretchState() {
+        mFloatingConfig.changeStretchState(false, this);
     }
 
     private void initialFloatingData(Builder builder) {
         mMenuSparseArray = builder.mMenuItems;
         mLayoutType = builder.mLayoutType;
         mFloatingConfig = new FloatingConfig();
-
     }
 
     private void initialFloatingView(Builder builder) {
@@ -130,29 +130,27 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
     private LogoView buildSingleLogo(Builder builder) {
         LogoView logoView = new LogoView(getContext());
         logoView.setDrawable(builder.mLogoDrawable);
-        logoView.setOnClickListener(v -> expandWindowMenu());
+        logoView.setOnClickListener(v -> mFloatingConfig.onLogoClick(true, this));
         logoView.setOnTouchListener((v, event) -> onLogoTouchEvent(event));
         return logoView;
     }
 
-    private void expandWindowMenu() {
-        stopTimerTask();
-
+    @Override
+    public void expandWindowMenu() {
         getWindowService().removeViewImmediate(mSingleLogo);
         mWindowLayoutParams.x = mSingleLogoParams.x;
         mWindowLayoutParams.y = mSingleLogoParams.y;
         getWindowService().addView(mWindowContent, mWindowLayoutParams);
     }
 
-    private void shrinkWindowMenu() {
+    @Override
+    public void shrinkWindowMenu() {
         getWindowService().removeViewImmediate(mWindowContent);
         getWindowService().addView(mSingleLogo, mSingleLogoParams);
-
-//        收起菜单以后需要设置定时任务,但是该定时任务会在特定时机被取消
-        startTimerTask();
     }
 
-    private void startTimerTask() {
+    @Override
+    public void startTimerTask() {
         LogUtils.d("开始定时任务");
         mHideHalfLogoTask = () -> {
             LogUtils.d("倒计时时间到,执行任务");
@@ -161,11 +159,17 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
         mFwHandler.postDelayed(mHideHalfLogoTask, TimeUnit.SECONDS.toMillis(5));
     }
 
-    private void stopTimerTask() {
+    @Override
+    public void stopTimerTask() {
         if (null != mHideHalfLogoTask) {
             LogUtils.d("取消定时任务");
             mFwHandler.removeCallbacks(mHideHalfLogoTask);
+            restoreSize();
         }
+    }
+
+    public void restoreSize() {
+        mLayoutType.restoreSize(mSingleLogo);
     }
 
     private Resources getResources() {
@@ -206,13 +210,14 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
         windowMenuView.setOnMenuClickListener((position, title) -> {
             builder.mMenuItemsClickListener.onItemClick(position, title);
             shrinkWindowMenu();
+            mFloatingConfig.changeStretchState(false,InstantFloatingWindow.this);
         });
         return windowMenuView;
     }
 
     private ImageView createWindowLogoView(Builder builder) {
         ImageView imageView = FwDrawUtil.createLogo(getContext(), BitmapFactory.decodeResource(getResources(), builder.mLogoDrawable));
-        imageView.setOnClickListener((v) -> shrinkWindowMenu());
+        imageView.setOnClickListener((v) -> mFloatingConfig.onLogoClick(false, this));
         return imageView;
     }
 
@@ -253,17 +258,17 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
         switch (ev.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
 //                收起状态下,未隐藏状态下触摸应取消当前准备执行的任务.如果已经是隐藏一半的状态,那就恢复原先logo尺寸和透明度.再执行后续逻辑
+                mFloatingConfig.getStretchState().onReceiveTouch(this);
 
-
-                mDownXInScreen = xRaw;
-                mDownYInScreen = yRaw;
+                mDownxInScreen = xRaw;
+                mDownyInScreen = yRaw;
 
                 xOriginalLayoutParams = mSingleLogoParams.x;
                 yOriginalLayoutParams = mSingleLogoParams.y;
                 break;
             case MotionEvent.ACTION_MOVE:
-                xOffset = xRaw - mDownXInScreen;
-                yOffset = yRaw - mDownYInScreen;
+                xOffset = xRaw - mDownxInScreen;
+                yOffset = yRaw - mDownyInScreen;
                 if (!FwDrawUtil.shakeTouch(xOffset, yOffset)) {
                     mFloatingConfig.setDragMode();
                     mSingleLogoParams.x = (int) (xOriginalLayoutParams + xOffset);
@@ -272,11 +277,18 @@ public class InstantFloatingWindow implements FloatingWindowBehavior {
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                xOffset = xRaw - mDownXInScreen;
-                yOffset = yRaw - mDownYInScreen;
+                xOffset = xRaw - mDownxInScreen;
+                yOffset = yRaw - mDownyInScreen;
                 if (!FwDrawUtil.shakeTouch(xOffset, yOffset)) {
                     changeLayoutType(FwDrawUtil.rightSiteOfScreen(mSingleLogoParams.x) ? LayoutType.RIGHT : LayoutType.LEFT);
-                    mLayoutType.getTransAnimationWithWm(InstantFloatingWindow.this, mSingleLogoParams, mFloatingConfig).start();
+                    ValueAnimator transAnimationWithWm = mLayoutType.getTransAnimationWithWm(InstantFloatingWindow.this, mSingleLogoParams, mFloatingConfig);
+                    transAnimationWithWm.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mFloatingConfig.getStretchState().executeStateTask(InstantFloatingWindow.this);
+                        }
+                    });
+                    transAnimationWithWm.start();
                 }
 
                 break;

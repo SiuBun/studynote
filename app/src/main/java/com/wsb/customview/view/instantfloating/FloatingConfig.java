@@ -16,6 +16,8 @@ class FloatingConfig {
     private AnimateState mAnimateState = new AnimateState();
     private ReadyState mReadyState = new ReadyState();
 
+    private ShrinkState mShrinkState = new ShrinkState();
+    private ExpandedState mExpandedState = new ExpandedState();
 
     /**
      * 当前触摸处理模式
@@ -24,9 +26,14 @@ class FloatingConfig {
 
 
     /**
-     * 当前控件状态
+     * 当前控件展示状态
      */
     private DisplayState mDisplayState;
+
+    /**
+     * 当前控件伸缩状态
+     */
+    private StretchState mStretchState;
 
 
     private AnimatorListenerAdapter mDisplayAnimAdapter = new AnimatorListenerAdapter() {
@@ -79,6 +86,18 @@ class FloatingConfig {
         this.mDisplayState = mReadyState;
     }
 
+    private void setExpandedState() {
+        this.mStretchState = mExpandedState;
+    }
+
+    private void setShrinkState() {
+        this.mStretchState = mShrinkState;
+    }
+
+    public StretchState getStretchState() {
+        return mStretchState;
+    }
+
     /**
      * 动画监听对象
      * <p>
@@ -92,7 +111,7 @@ class FloatingConfig {
 
     /**
      * 触摸状态切换
-     * */
+     */
     AnimatorListenerAdapter getTouchAnimAdapter() {
         return mTouchAnimAdapter;
     }
@@ -103,4 +122,30 @@ class FloatingConfig {
     boolean onTouchResult() {
         return getDisplayState().touchResult() || getTouchMode().onTouchResult();
     }
+
+    /**
+     * 当悬浮窗菜单log被点击时候调用
+     *
+     * @param expandMenu see {@link #changeStretchState(boolean, StateCallback)}
+     * @param stateCallback see {@link #changeStretchState(boolean, StateCallback)}
+     * */
+    public void onLogoClick(boolean expandMenu, StateCallback stateCallback) {
+        getStretchState().onLogoClick(stateCallback);
+//        执行完现有状态任务后切换状态
+        changeStretchState(expandMenu, stateCallback);
+    }
+
+    /**
+     * 改变伸缩状态
+     * <p>
+     * 改变的时候会执行新状态的状态任务
+     *
+     * @param expandMenu    true代表展开
+     * @param stateCallback 状态回调
+     */
+    public void changeStretchState(boolean expandMenu, StateCallback stateCallback) {
+        mStretchState = expandMenu ? mExpandedState: mShrinkState ;
+        getStretchState().executeStateTask(stateCallback);
+    }
+
 }

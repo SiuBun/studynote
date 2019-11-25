@@ -53,8 +53,6 @@ public class LogoView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawColor(Color.parseColor("#33FF0000"));
-
         canvas.save();
         switch (mState) {
             case LEFT_SHADING:
