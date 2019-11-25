@@ -1,11 +1,11 @@
-package com.wsb.customview.view.instantfloating;
+package com.wsb.customview.view.instantfloating.behavior;
 
 /**
  * 悬浮窗对外行为
  *
  * @author wsb
  * */
-interface FloatingWindowBehavior {
+public interface FloatingWindowBehavior {
     /**
      * 展示悬浮窗
      * */

@@ -1,4 +1,4 @@
-package com.wsb.customview.view.instantfloating;
+package com.wsb.customview.view.instantfloating.strategy;
 
 /**
  * 触摸事件分发接口

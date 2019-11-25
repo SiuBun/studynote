@@ -1,4 +1,4 @@
-package com.wsb.customview.view.instantfloating;
+package com.wsb.customview.view.instantfloating.widget;
 
 import android.animation.TypeEvaluator;
 import android.view.WindowManager;
@@ -12,7 +12,7 @@ import android.view.WindowManager;
 public class WindowLayoutEvaluator implements TypeEvaluator<WindowManager.LayoutParams> {
     private WindowManager.LayoutParams mLayoutParams;
 
-    WindowLayoutEvaluator(WindowManager.LayoutParams layoutParams) {
+    public WindowLayoutEvaluator(WindowManager.LayoutParams layoutParams) {
         mLayoutParams = layoutParams;
     }
 

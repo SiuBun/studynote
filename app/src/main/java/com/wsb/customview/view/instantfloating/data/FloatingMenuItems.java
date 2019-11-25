@@ -1,4 +1,4 @@
-package com.wsb.customview.view.instantfloating;
+package com.wsb.customview.view.instantfloating.data;
 
 /**
  * 悬浮窗菜单实体

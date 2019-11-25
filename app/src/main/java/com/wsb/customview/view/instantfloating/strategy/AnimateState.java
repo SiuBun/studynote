@@ -1,11 +1,11 @@
-package com.wsb.customview.view.instantfloating;
+package com.wsb.customview.view.instantfloating.strategy;
 
 /**
  * 当前控件正在动画状态
  *
  * @author wsb
  * */
-class AnimateState extends ConsumeTouchMode implements DisplayState {
+public class AnimateState extends ConsumeTouchMode implements DisplayState {
 
     @Override
     public boolean touchResult() {

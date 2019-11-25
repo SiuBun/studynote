@@ -1,4 +1,4 @@
-package com.wsb.customview.view.instantfloating;
+package com.wsb.customview.view.instantfloating.strategy;
 
 /**
  * 悬浮窗菜单状态控制

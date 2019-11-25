@@ -1,13 +1,13 @@
-package com.wsb.customview.view.instantfloating;
+package com.wsb.customview.view.instantfloating.strategy;
 
 import android.view.MotionEvent;
 
 /**
- * 点击模式
+ * 拖拽模式
  *
  * @author wsb
  * */
-class PressMode extends UnConsumeTouchMode implements TouchMode {
+public class DragMode extends ConsumeTouchMode implements TouchMode{
     @Override
     public boolean onTouchResult() {
         return consumeTouch();

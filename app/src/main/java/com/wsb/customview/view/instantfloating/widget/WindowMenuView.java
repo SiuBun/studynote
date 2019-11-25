@@ -1,4 +1,4 @@
-package com.wsb.customview.view.instantfloating;
+package com.wsb.customview.view.instantfloating.widget;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
@@ -16,6 +16,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.wsb.customview.utils.DrawUtils;
+import com.wsb.customview.view.instantfloating.data.FloatingMenuItems;
+import com.wsb.customview.view.instantfloating.utils.FwDrawUtil;
 
 import java.util.ArrayList;
 
@@ -26,7 +28,7 @@ import java.util.ArrayList;
  *
  * @author wsb
  */
-class WindowMenuView extends View {
+public class WindowMenuView extends View {
 
     private Paint mPaint;
 
@@ -218,7 +220,7 @@ class WindowMenuView extends View {
      *
      * @author wsb
      */
-    enum MenuType implements MenuTypeBehavior {
+    public enum MenuType implements MenuTypeBehavior {
         /**
          * 菜单顺序从左到右
          */

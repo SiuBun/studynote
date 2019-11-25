@@ -1,4 +1,4 @@
-package com.wsb.customview.view.instantfloating;
+package com.wsb.customview.view.instantfloating.widget;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -19,6 +19,12 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.wsb.customview.utils.LogUtils;
+import com.wsb.customview.view.instantfloating.behavior.FloatingWindowBehavior;
+import com.wsb.customview.view.instantfloating.data.FloatingConfig;
+import com.wsb.customview.view.instantfloating.data.FloatingMenuItems;
+import com.wsb.customview.view.instantfloating.strategy.LayoutType;
+import com.wsb.customview.view.instantfloating.strategy.StateCallback;
+import com.wsb.customview.view.instantfloating.utils.FwDrawUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -285,7 +291,7 @@ public class InstantFloatingWindow implements FloatingWindowBehavior, StateCallb
                     transAnimationWithWm.addListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            mFloatingConfig.getStretchState().executeStateTask(InstantFloatingWindow.this);
+                            mFloatingConfig.executeStateTask(InstantFloatingWindow.this);
                         }
                     });
                     transAnimationWithWm.start();

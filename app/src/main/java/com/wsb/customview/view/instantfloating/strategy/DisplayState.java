@@ -1,4 +1,4 @@
-package com.wsb.customview.view.instantfloating;
+package com.wsb.customview.view.instantfloating.strategy;
 
 /**
  * 悬浮窗的展示状态
@@ -7,7 +7,7 @@ package com.wsb.customview.view.instantfloating;
  *
  * @author wsb
  */
-interface DisplayState {
+public interface DisplayState {
     /**
      * 接收到触摸事件时候的反馈
      *

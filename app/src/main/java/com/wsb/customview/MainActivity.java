@@ -15,10 +15,9 @@ import com.wsb.customview.fragment.paint.PaintFragment;
 import com.wsb.customview.fragment.practice.PracticeFragment;
 import com.wsb.customview.fragment.practice.ScalaImageFragment;
 import com.wsb.customview.utils.LogUtils;
-import com.wsb.customview.view.instantfloating.InstantFloatingWindow;
-import com.wsb.customview.view.instantfloating.LayoutType;
-import com.wsb.customview.view.instantfloating.FloatingMenuItems;
-import com.wsb.customview.view.instantfloating.InstantFloatingWindowWithWc;
+import com.wsb.customview.view.instantfloating.widget.InstantFloatingWindow;
+import com.wsb.customview.view.instantfloating.strategy.LayoutType;
+import com.wsb.customview.view.instantfloating.data.FloatingMenuItems;
 
 import java.util.ArrayList;
 

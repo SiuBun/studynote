@@ -1,4 +1,4 @@
-package com.wsb.customview.view.instantfloating;
+package com.wsb.customview.view.instantfloating.widget;
 
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
@@ -15,6 +15,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.wsb.customview.utils.LogUtils;
+import com.wsb.customview.view.instantfloating.behavior.FloatingWindowBehavior;
+import com.wsb.customview.view.instantfloating.data.FloatingConfig;
+import com.wsb.customview.view.instantfloating.data.FloatingMenuItems;
+import com.wsb.customview.view.instantfloating.strategy.LayoutType;
+import com.wsb.customview.view.instantfloating.utils.FwDrawUtil;
 
 import org.jetbrains.annotations.NotNull;
 

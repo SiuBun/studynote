@@ -1,4 +1,4 @@
-package com.wsb.customview.view.instantfloating;
+package com.wsb.customview.view.instantfloating.strategy;
 
 import android.view.MotionEvent;
 
@@ -7,7 +7,7 @@ import android.view.MotionEvent;
  *
  * @author wsb
  * */
-interface TouchMode {
+public interface TouchMode {
     /**
      * touch返回结果
      *

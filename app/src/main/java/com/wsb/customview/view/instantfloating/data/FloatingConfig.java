@@ -1,14 +1,25 @@
-package com.wsb.customview.view.instantfloating;
+package com.wsb.customview.view.instantfloating.data;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+
+import com.wsb.customview.view.instantfloating.strategy.AnimateState;
+import com.wsb.customview.view.instantfloating.strategy.DisplayState;
+import com.wsb.customview.view.instantfloating.strategy.DragMode;
+import com.wsb.customview.view.instantfloating.strategy.ExpandedState;
+import com.wsb.customview.view.instantfloating.strategy.PressMode;
+import com.wsb.customview.view.instantfloating.strategy.ReadyState;
+import com.wsb.customview.view.instantfloating.strategy.ShrinkState;
+import com.wsb.customview.view.instantfloating.strategy.StateCallback;
+import com.wsb.customview.view.instantfloating.strategy.StretchState;
+import com.wsb.customview.view.instantfloating.strategy.TouchMode;
 
 /**
  * 悬浮窗配置状态
  *
  * @author wsb
  */
-class FloatingConfig {
+public class FloatingConfig {
 
     private PressMode mPressMode = new PressMode();
     private DragMode mDragMode = new DragMode();
@@ -57,7 +68,7 @@ class FloatingConfig {
         }
     };
 
-    FloatingConfig() {
+    public FloatingConfig() {
         setPressMode();
         setReadyState();
     }
@@ -70,7 +81,7 @@ class FloatingConfig {
         this.mTouchMode = mPressMode;
     }
 
-    void setDragMode() {
+    public void setDragMode() {
         this.mTouchMode = mDragMode;
     }
 
@@ -86,14 +97,6 @@ class FloatingConfig {
         this.mDisplayState = mReadyState;
     }
 
-    private void setExpandedState() {
-        this.mStretchState = mExpandedState;
-    }
-
-    private void setShrinkState() {
-        this.mStretchState = mShrinkState;
-    }
-
     public StretchState getStretchState() {
         return mStretchState;
     }
@@ -105,21 +108,21 @@ class FloatingConfig {
      *
      * @return 动画监听
      */
-    AnimatorListenerAdapter getDisplayAnimAdapter() {
+    public AnimatorListenerAdapter getDisplayAnimAdapter() {
         return mDisplayAnimAdapter;
     }
 
     /**
      * 触摸状态切换
      */
-    AnimatorListenerAdapter getTouchAnimAdapter() {
+    public AnimatorListenerAdapter getTouchAnimAdapter() {
         return mTouchAnimAdapter;
     }
 
     /**
      * 动画过程消费事件,不做响应.拖拽过程也要消费事件
      */
-    boolean onTouchResult() {
+    public boolean onTouchResult() {
         return getDisplayState().touchResult() || getTouchMode().onTouchResult();
     }
 
@@ -148,4 +151,7 @@ class FloatingConfig {
         getStretchState().executeStateTask(stateCallback);
     }
 
+    public void executeStateTask(StateCallback stateCallback) {
+        getStretchState().executeStateTask(stateCallback);
+    }
 }

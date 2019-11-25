@@ -1,4 +1,4 @@
-package com.wsb.customview.view.instantfloating;
+package com.wsb.customview.view.instantfloating.strategy;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -10,6 +10,13 @@ import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
+import com.wsb.customview.view.instantfloating.behavior.LayoutTypeBehavior;
+import com.wsb.customview.view.instantfloating.data.FloatingConfig;
+import com.wsb.customview.view.instantfloating.utils.FwDrawUtil;
+import com.wsb.customview.view.instantfloating.widget.LogoView;
+import com.wsb.customview.view.instantfloating.widget.WindowLayoutEvaluator;
+import com.wsb.customview.view.instantfloating.widget.WindowMenuView;
 
 /**
  * 悬浮窗布局枚举
