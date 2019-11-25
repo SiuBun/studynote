@@ -51,12 +51,8 @@ public enum LayoutType implements LayoutTypeBehavior {
         }
 
         @Override
-        public WindowManager.LayoutParams getHideHalfSelfStopParams(WindowManager.LayoutParams startLogoParams) {
-            WindowManager.LayoutParams layoutParams = super.getHideHalfSelfStopParams(startLogoParams);
-            float margin = FwDrawUtil.LOGO_SIZE / 3 * 2;
-
-            layoutParams.x = (int) -margin;
-            return layoutParams;
+        public void hideHalfSize(LogoView singleLogo) {
+            singleLogo.setState(LogoView.State.LEFT_SHADING);
         }
     },
 
@@ -92,31 +88,15 @@ public enum LayoutType implements LayoutTypeBehavior {
         }
 
         @Override
-        public WindowManager.LayoutParams getHideHalfSelfStopParams(WindowManager.LayoutParams startLogoParams) {
-            WindowManager.LayoutParams layoutParams = super.getHideHalfSelfStopParams(startLogoParams);
-            float margin = FwDrawUtil.LOGO_SIZE / 3 * 2;
-            layoutParams.x = (int) (Resources.getSystem().getDisplayMetrics().widthPixels-FwDrawUtil.LOGO_SIZE+margin);
-            return layoutParams;
+        public void hideHalfSize(LogoView singleLogo) {
+            singleLogo.setState(LogoView.State.RIGHT_SHADING);
         }
     };
 
 
     @Override
-    public void hideHalfSize() {
-
-    }
-
-    @Override
-    public void restoreSize() {
-
-    }
-
-    @Override
-    public WindowManager.LayoutParams getHideHalfSelfStopParams(WindowManager.LayoutParams startLogoParams) {
-        WindowManager.LayoutParams layoutParams = FwDrawUtil.createSingleLogoLayoutParams();
-        layoutParams.alpha = 0.5F;
-        layoutParams.y = startLogoParams.y;
-        return layoutParams;
+    public void restoreSize(LogoView singleLogo) {
+        singleLogo.setState(LogoView.State.NORMAL);
     }
 
     @Override

@@ -7,10 +7,10 @@ import android.view.MotionEvent;
  *
  * @author wsb
  * */
-public class PressMode implements TouchMode {
+class PressMode extends UnConsumeTouchMode implements TouchMode {
     @Override
     public boolean onTouchResult() {
-        return false;
+        return consumeTouch();
     }
 
     @Override

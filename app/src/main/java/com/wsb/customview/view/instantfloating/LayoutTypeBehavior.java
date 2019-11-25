@@ -1,12 +1,9 @@
 package com.wsb.customview.view.instantfloating;
 
-import android.content.Context;
-import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 /**
  * 布局类型操作行为
@@ -17,16 +14,17 @@ public interface LayoutTypeBehavior {
     /**
      * 隐藏悬浮窗控件
      * <p>
-     * 相对{@link #restoreSize()}方法的恢复尺寸,此处需要将当前布局隐入一半
+     * 相对{@link #restoreSize(LogoView)}方法的恢复尺寸,此处需要将当前布局隐入一半
+     * @param singleLogo
      */
-    void hideHalfSize();
+    void hideHalfSize(LogoView singleLogo);
 
     /**
      * 恢复原先布局
      * <p>
-     * 相对{@link #hideHalfSize()}方法的隐藏一半,此处需要恢复原先展示尺寸样式
+     * 相对{@link #hideHalfSize(LogoView)}方法的隐藏一半,此处需要恢复原先展示尺寸样式
      */
-    void restoreSize();
+    void restoreSize(LogoView singleLogo);
 
     /**
      * 对初始的窗口布局对象进行修饰,使之适合当前布局
@@ -62,5 +60,4 @@ public interface LayoutTypeBehavior {
      * */
     void editLogoView(ImageView logo);
 
-    WindowManager.LayoutParams getHideHalfSelfStopParams(WindowManager.LayoutParams startLogoParams);
 }

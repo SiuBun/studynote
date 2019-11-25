@@ -5,9 +5,9 @@ package com.wsb.customview.view.instantfloating;
  *
  * @author wsb
  * */
-public class ReadyState implements DisplayState{
+class ReadyState extends UnConsumeTouchMode implements DisplayState{
     @Override
     public boolean touchResult() {
-        return false;
+        return consumeTouch();
     }
 }

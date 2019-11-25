@@ -5,10 +5,10 @@ package com.wsb.customview.view.instantfloating;
  *
  * @author wsb
  * */
-class AnimateState implements DisplayState {
+class AnimateState extends ConsumeTouchMode implements DisplayState {
 
     @Override
     public boolean touchResult() {
-        return true;
+        return consumeTouch();
     }
 }

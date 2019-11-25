@@ -7,10 +7,10 @@ import android.view.MotionEvent;
  *
  * @author wsb
  * */
-public class DragMode implements TouchMode{
+class DragMode extends ConsumeTouchMode implements TouchMode{
     @Override
     public boolean onTouchResult() {
-        return true;
+        return consumeTouch();
     }
 
     @Override
