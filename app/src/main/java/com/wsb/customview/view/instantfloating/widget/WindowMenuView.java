@@ -10,10 +10,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
-import android.support.annotation.NonNull;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 import com.wsb.customview.utils.DrawUtils;
 import com.wsb.customview.view.instantfloating.data.FloatingMenuItems;

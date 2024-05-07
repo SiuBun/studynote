@@ -6,7 +6,7 @@ import android.view.View
 import com.wsb.customview.R
 
 class XfermodeView(context: Context?) : View(context) {
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas?.run {
 

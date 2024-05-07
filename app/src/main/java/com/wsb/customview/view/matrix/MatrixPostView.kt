@@ -11,7 +11,7 @@ import com.wsb.customview.R
 
 class MatrixPostView @JvmOverloads constructor(context: Context, attributeSet: AttributeSet, defStyleAttr: Int = 0) : View(context, attributeSet, defStyleAttr) {
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.maps)
         val left = ((width - bitmap.width) / 2).toFloat()

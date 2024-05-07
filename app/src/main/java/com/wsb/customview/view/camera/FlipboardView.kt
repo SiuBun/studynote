@@ -39,7 +39,7 @@ class FlipboardView @JvmOverloads constructor(
         animator.end()
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas?.run {
 

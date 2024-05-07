@@ -5,7 +5,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.support.v7.widget.AppCompatEditText
+import androidx.appcompat.widget.AppCompatEditText
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -14,7 +14,7 @@ import android.view.animation.AnticipateInterpolator
 import com.wsb.customview.utils.DrawUtils
 import java.util.concurrent.TimeUnit
 
-class MaterialEditText(context: Context?, attrs: AttributeSet?) : AppCompatEditText(context, attrs) {
+class MaterialEditText(context: Context, attrs: AttributeSet?) : AppCompatEditText(context, attrs) {
 
     private val textSizeValue = DrawUtils.dp2px(14F)
     private val textMarginValue = DrawUtils.dp2px(8F)
@@ -80,7 +80,7 @@ class MaterialEditText(context: Context?, attrs: AttributeSet?) : AppCompatEditT
         addTextChangedListener(textChangeListener)
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
 
         canvas?.run {
 //            drawColor(Color.parseColor("#e7e7e7"))

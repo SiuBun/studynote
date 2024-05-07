@@ -5,8 +5,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.support.v4.view.GestureDetectorCompat
-import android.support.v4.view.ViewCompat
+import androidx.core.view.GestureDetectorCompat
+import androidx.core.view.ViewCompat
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -138,7 +138,7 @@ class ScaleImageView @JvmOverloads constructor(
         maxScrollOffsetY = (bitmap.height * scaleAmountMax - height) / 2
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas?.run {
             save()
@@ -151,33 +151,33 @@ class ScaleImageView @JvmOverloads constructor(
         }
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
+    override fun onTouchEvent(event: MotionEvent): Boolean {
         return gestureDetectorCompat.onTouchEvent(event)
     }
 
-    override fun onShowPress(e: MotionEvent?) {
+    override fun onShowPress(e: MotionEvent) {
     }
 
-    override fun onSingleTapUp(e: MotionEvent?): Boolean {
+    override fun onSingleTapUp(e: MotionEvent): Boolean {
         return false
     }
 
-    override fun onDown(e: MotionEvent?): Boolean = true
+    override fun onDown(e: MotionEvent): Boolean = true
 
-    override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
+    override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
         scaleStateManager.onViewFling(velocityX, velocityY)
         return false
     }
 
-    override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
+    override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
         scaleStateManager.onScroll(distanceX, distanceY)
         return false
     }
 
-    override fun onLongPress(e: MotionEvent?) {
+    override fun onLongPress(e: MotionEvent) {
     }
 
-    override fun onDoubleTap(e: MotionEvent?): Boolean {
+    override fun onDoubleTap(e: MotionEvent): Boolean {
         e?.run {
             scaleStateManager.onViewDoubleTap(scaleAnimator, this)
             scaleStateManager.changeState()
@@ -185,11 +185,11 @@ class ScaleImageView @JvmOverloads constructor(
         return false
     }
 
-    override fun onDoubleTapEvent(e: MotionEvent?): Boolean {
+    override fun onDoubleTapEvent(e: MotionEvent): Boolean {
         return false
     }
 
-    override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
+    override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
         return false
     }
 

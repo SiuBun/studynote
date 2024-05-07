@@ -2,8 +2,8 @@ package com.wsb.customview.fragment.practice
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.support.v4.view.animation.FastOutSlowInInterpolator
-import android.support.v4.view.animation.LinearOutSlowInInterpolator
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import android.view.View
 import android.widget.Button
 import android.widget.EditText

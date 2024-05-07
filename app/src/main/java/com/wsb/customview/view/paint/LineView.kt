@@ -5,7 +5,7 @@ import android.graphics.*
 import android.view.View
 
 class LineView(context: Context?) : View(context) {
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas?.also {
             val paint = Paint().apply {

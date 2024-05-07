@@ -1,7 +1,8 @@
 package com.wsb.customview.utils;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 
 /**

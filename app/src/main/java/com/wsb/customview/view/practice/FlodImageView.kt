@@ -37,7 +37,7 @@ class FlodImageView @JvmOverloads constructor(
         canmera.setLocation(0F,0F, DrawUtils.getZForCamara())
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas?.run {
             drawColor(Color.parseColor("#e7e7e7"))

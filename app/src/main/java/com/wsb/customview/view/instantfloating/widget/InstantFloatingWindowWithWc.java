@@ -5,14 +5,15 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 
 import com.wsb.customview.utils.LogUtils;
 import com.wsb.customview.view.instantfloating.behavior.FloatingWindowBehavior;

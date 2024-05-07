@@ -37,7 +37,7 @@ class CircleProgress @JvmOverloads constructor(
     private var radius = 0F
 
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         centerX = (width / 2).toFloat()
         centerY = (height / 2).toFloat()

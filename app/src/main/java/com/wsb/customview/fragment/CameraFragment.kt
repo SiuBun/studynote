@@ -1,10 +1,10 @@
 package com.wsb.customview.fragment
 
 import android.graphics.Color
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.ViewPager
+import com.google.android.material.tabs.TabLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.ViewPager
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
@@ -19,8 +19,8 @@ class CameraFragment :BaseFragment(){
         add(PageModel(R.layout.flipboard,"flipboard",R.layout.initial))
     }
 
-    private lateinit var tabLayout:TabLayout
-    private lateinit var vp:ViewPager
+    private lateinit var tabLayout: TabLayout
+    private lateinit var vp: androidx.viewpager.widget.ViewPager
 
 
     override fun getFragmentLayout(): Int {
@@ -32,8 +32,8 @@ class CameraFragment :BaseFragment(){
             tabLayout = findViewById(R.id.tab_main)
             vp = findViewById(R.id.vp)
 
-            vp.adapter = object :FragmentPagerAdapter(childFragmentManager){
-                override fun getItem(p0: Int): Fragment {
+            vp.adapter = object : androidx.fragment.app.FragmentPagerAdapter(childFragmentManager){
+                override fun getItem(p0: Int): androidx.fragment.app.Fragment {
                     return PageFragment.newFragment(pageList[p0].practiceLayoutRes,pageList[p0].sampleLayoutRes)
                 }
 

@@ -38,7 +38,7 @@ class RotateXFixView @JvmOverloads constructor(context: Context, attributeSet: A
         animator.repeatCount = ValueAnimator.INFINITE
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
         val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.maps)

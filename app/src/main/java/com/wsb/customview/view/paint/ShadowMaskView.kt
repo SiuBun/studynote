@@ -10,7 +10,7 @@ class ShadowMaskView(context: Context?) : View(context) {
         setLayerType(LAYER_TYPE_SOFTWARE, null)
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas?.run {
             val paint = Paint().apply {

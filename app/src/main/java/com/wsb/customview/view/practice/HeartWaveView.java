@@ -11,15 +11,16 @@ import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.support.annotation.Nullable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
-import com.wsb.customview.utils.DrawUtils;
+import androidx.annotation.Nullable;
+
 import com.wsb.customview.R;
+import com.wsb.customview.utils.DrawUtils;
 
 import java.util.ArrayList;
 import java.util.List;
