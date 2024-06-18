@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.wsb.customview.trans;
+package com.wsb.customview.shareelement;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;

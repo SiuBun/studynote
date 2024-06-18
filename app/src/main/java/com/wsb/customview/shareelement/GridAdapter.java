@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.wsb.customview.trans;
+package com.wsb.customview.shareelement;
 
-import static com.wsb.customview.trans.ImageData.IMAGE_DRAWABLES;
+import static com.wsb.customview.shareelement.ImageData.IMAGE_DRAWABLES;
 
 import android.graphics.drawable.Drawable;
 
@@ -100,7 +100,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolde
     @Override
     public void onLoadCompleted(ImageView view, int position) {
       // Call startPostponedEnterTransition only when the 'selected' image loading is completed.
-      if (MainActivity.currentPosition != position) {
+      if (ShareElementActivity.currentPosition != position) {
         return;
       }
       if (enterTransitionStarted.getAndSet(true)) {
@@ -120,7 +120,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolde
     @Override
     public void onItemClicked(View view, int position) {
       // Update the position.
-      MainActivity.currentPosition = position;
+      ShareElementActivity.currentPosition = position;
 
       // Exclude the clicked card from the exit transition (e.g. the card will disappear immediately
       // instead of fading out with the rest to prevent an overlapping animation of fade and move).

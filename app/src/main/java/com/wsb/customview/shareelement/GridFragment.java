@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.wsb.customview.trans;
+package com.wsb.customview.shareelement;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -77,12 +77,12 @@ public class GridFragment extends Fragment {
           int oldBottom) {
         recyclerView.removeOnLayoutChangeListener(this);
         final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        View viewAtPosition = layoutManager.findViewByPosition(MainActivity.currentPosition);
+        View viewAtPosition = layoutManager.findViewByPosition(ShareElementActivity.currentPosition);
         // Scroll to position if the view for the current position is null (not currently part of
         // layout manager children), or it's not completely visible.
         if (viewAtPosition == null || layoutManager
             .isViewPartiallyVisible(viewAtPosition, false, true)) {
-          recyclerView.post(() -> layoutManager.scrollToPosition(MainActivity.currentPosition));
+          recyclerView.post(() -> layoutManager.scrollToPosition(ShareElementActivity.currentPosition));
         }
       }
     });
@@ -103,7 +103,7 @@ public class GridFragment extends Fragment {
           public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
             // Locate the ViewHolder for the clicked position.
             RecyclerView.ViewHolder selectedViewHolder = recyclerView
-                .findViewHolderForAdapterPosition(MainActivity.currentPosition);
+                .findViewHolderForAdapterPosition(ShareElementActivity.currentPosition);
             if (selectedViewHolder == null) {
               return;
             }

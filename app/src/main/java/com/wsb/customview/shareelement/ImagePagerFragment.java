@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.wsb.customview.trans;
+package com.wsb.customview.shareelement;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -47,11 +47,11 @@ public class ImagePagerFragment extends Fragment {
     viewPager.setAdapter(new ImagePagerAdapter(this));
     // Set the current position and add a listener that will update the selection coordinator when
     // paging the images.
-    viewPager.setCurrentItem(MainActivity.currentPosition);
+    viewPager.setCurrentItem(ShareElementActivity.currentPosition);
     viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
       @Override
       public void onPageSelected(int position) {
-        MainActivity.currentPosition = position;
+        ShareElementActivity.currentPosition = position;
       }
     });
 
@@ -84,7 +84,7 @@ public class ImagePagerFragment extends Fragment {
             // At this stage, the method will simply return the fragment at the position and will
             // not create a new one.
             Fragment currentFragment = (Fragment) viewPager.getAdapter()
-                .instantiateItem(viewPager, MainActivity.currentPosition);
+                .instantiateItem(viewPager, ShareElementActivity.currentPosition);
             View view = currentFragment.getView();
             if (view == null) {
               return;

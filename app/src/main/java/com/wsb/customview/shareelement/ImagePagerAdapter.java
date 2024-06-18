@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.wsb.customview.trans;
+package com.wsb.customview.shareelement;
 
 
-import static com.wsb.customview.trans.ImageData.IMAGE_DRAWABLES;
+import static com.wsb.customview.shareelement.ImageData.IMAGE_DRAWABLES;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

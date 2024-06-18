@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.wsb.customview.trans;
+package com.wsb.customview.shareelement;
 
 import androidx.annotation.DrawableRes;
 

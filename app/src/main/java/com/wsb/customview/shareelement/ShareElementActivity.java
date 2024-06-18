@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wsb.customview.trans;
+package com.wsb.customview.shareelement;
 
 import android.os.Bundle;
 
@@ -26,7 +26,7 @@ import com.wsb.customview.R;
 /**
  * Grid to pager app's main activity.
  */
-public class MainActivity extends AppCompatActivity {
+public class ShareElementActivity extends AppCompatActivity {
 
   /**
    * Holds the current image position to be shared between the grid and the pager fragments. This

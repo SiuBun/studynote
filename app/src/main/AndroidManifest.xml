@@ -19,8 +19,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".NavigateActivity"/>
-        <activity android:name=".trans.MainActivity"/>
+        <activity android:name=".shareelement.ShareElementActivity"/>
     </application>
 
 </manifest>

@@ -16,6 +16,7 @@ import com.wsb.customview.fragment.MultiTouchFragment;
 import com.wsb.customview.fragment.paint.PaintFragment;
 import com.wsb.customview.fragment.practice.PracticeFragment;
 import com.wsb.customview.fragment.practice.ScalaImageFragment;
+import com.wsb.customview.shareelement.ShareElementActivity;
 import com.wsb.customview.utils.LogUtils;
 import com.wsb.customview.view.instantfloating.data.FloatingMenuItems;
 import com.wsb.customview.view.instantfloating.strategy.LayoutType;
@@ -132,6 +133,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void navigate(View view) {
-        startActivity(new Intent(this, com.wsb.customview.trans.MainActivity.class));
+        startActivity(new Intent(this, ShareElementActivity.class));
+    }
+
+    public void motion(View view) {
+        startActivity(new Intent(this, ShareElementActivity.class));
     }
 }
