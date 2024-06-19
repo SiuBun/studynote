@@ -29,6 +29,7 @@
     <!-- constraintSetStart 动画开始状态的布局文件引用 -->
     <!-- constraintSetEnd 动画结束状态的布局文件引用 -->
     <Transition
+        motion:autoTransition="animateToEnd"
         motion:constraintSetEnd="@id/end"
         motion:constraintSetStart="@id/start"
         motion:duration="2000">

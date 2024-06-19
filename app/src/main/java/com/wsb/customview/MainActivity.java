@@ -17,6 +17,7 @@ import com.wsb.customview.fragment.paint.PaintFragment;
 import com.wsb.customview.fragment.practice.PracticeFragment;
 import com.wsb.customview.fragment.practice.ScalaImageFragment;
 import com.wsb.customview.motionlayout.MotionLayoutActivity;
+import com.wsb.customview.motionlayout.MotionSearchActivity;
 import com.wsb.customview.shareelement.ShareElementActivity;
 import com.wsb.customview.utils.LogUtils;
 import com.wsb.customview.view.instantfloating.data.FloatingMenuItems;
@@ -139,5 +140,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void motion(View view) {
         startActivity(new Intent(this, MotionLayoutActivity.class));
+    }
+
+    public void motionSearch(View view) {
+        startActivity(new Intent(this, MotionSearchActivity.class));
     }
 }

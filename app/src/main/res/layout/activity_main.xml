@@ -113,6 +113,17 @@
             android:text="motionlayout"
             android:textAllCaps="false" />
 
+        <Button
+            android:id="@+id/btn_motion_search"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:minWidth="80dp"
+            android:onClick="motionSearch"
+            android:text="motionSearch"
+            android:textAllCaps="false" />
+
 
     </LinearLayout>
 
