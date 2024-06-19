@@ -20,7 +20,7 @@
             android:layout_width="70dp"
             android:layout_height="38dp"
             android:alpha="0.1"
-            android:translationX="100dp"
+            android:translationX="50dp"
             android:background="#CAA872"
             app:layout_constraintBottom_toBottomOf="@id/iv_search"
             app:layout_constraintEnd_toEndOf="parent"
@@ -82,9 +82,9 @@
     </ConstraintSet>
 
     <Transition
-        app:autoTransition="animateToEnd"
+        app:duration="800"
         app:constraintSetEnd="@id/end"
-        app:constraintSetStart="@id/start"
-        app:duration="800" />
+        app:constraintSetStart="@id/start">
+    </Transition>
 
 </MotionScene>
