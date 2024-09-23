@@ -32,7 +32,7 @@ class WrapTextView @JvmOverloads constructor(
     private var cutArray = floatArrayOf(1F)
 
     var textContent: String = "fadsgvfzvf iuh i n  i m nmizsjo jsndsju  uiwen944cxm  yhasbndjask dfsaisd woxj owj zpzlaj sif sfhidoa asdf dsfsa as fidhfoa iashdfud ao dfhas aoekn wi s aso fas  sjff d aad fj fd laksfda dfaldfkd fjndsah ja ase sjk aksdf e ks fei ws wi fadsgvfzvf iuh i n  i m nmizsjo jsndsju  uiwen944cxm  yhasbndjask dfsaisd woxj owj zpzlaj sif sfhidoa asdf dsfsa as fidhfoa iashdfud ao dfhas aoekn wi s aso fas  sjff d aad fj fd laksfda dfaldfkd fjndsah ja ase sjk aksdf e ks fei ws wi"
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
         canvas?.run {

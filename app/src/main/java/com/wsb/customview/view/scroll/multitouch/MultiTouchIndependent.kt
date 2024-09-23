@@ -23,7 +23,7 @@ class MultiTouchIndependent @JvmOverloads constructor(
 
 //    private var path: Path = Path()
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas?.run {
             for (index in 0 until pathArray.size()) {

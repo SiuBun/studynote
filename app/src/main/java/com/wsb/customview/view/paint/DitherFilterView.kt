@@ -16,7 +16,7 @@ class DitherFilterView : View {
 
     constructor(context: Context?, attr: AttributeSet, defStyleAttr: Int) : super(context, attr, defStyleAttr)
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas?.run {
             val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {

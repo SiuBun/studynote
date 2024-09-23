@@ -1,16 +1,16 @@
 package com.wsb.customview.fragment.practice
 
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.ViewPager
+import com.google.android.material.tabs.TabLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.ViewPager
 import android.view.View
 import com.wsb.customview.R
 import com.wsb.customview.fragment.BaseFragment
 
 class PracticeFragment : BaseFragment(){
 
-    private var pageList: MutableList<Fragment> = mutableListOf<Fragment>().apply {
+    private var pageList: MutableList<androidx.fragment.app.Fragment> = mutableListOf<androidx.fragment.app.Fragment>().apply {
         add(CameraIntensifyFragment())
         add(TextMeasureFragment())
         add(ProgressFragment())
@@ -30,8 +30,8 @@ class PracticeFragment : BaseFragment(){
             "heart"
     )
 
-    private lateinit var tabLayout:TabLayout
-    private lateinit var vp:ViewPager
+    private lateinit var tabLayout: TabLayout
+    private lateinit var vp: androidx.viewpager.widget.ViewPager
 
 
 
@@ -45,8 +45,8 @@ class PracticeFragment : BaseFragment(){
             vp = findViewById(R.id.vp)
 
 
-            vp.adapter = object :FragmentPagerAdapter(childFragmentManager){
-                override fun getItem(p0: Int): Fragment {
+            vp.adapter = object : androidx.fragment.app.FragmentPagerAdapter(childFragmentManager){
+                override fun getItem(p0: Int): androidx.fragment.app.Fragment {
                     return pageList[p0]
                 }
 

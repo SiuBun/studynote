@@ -12,7 +12,7 @@ class TranslateView @JvmOverloads constructor(context: Context, attributeSet: At
 //        setLayerType(LAYER_TYPE_SOFTWARE,null)
 //    }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.maps)
         val left = ((width - bitmap.width) / 2).toFloat()

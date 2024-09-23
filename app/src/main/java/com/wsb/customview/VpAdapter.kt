@@ -1,10 +1,10 @@
 package com.wsb.customview
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 
-class VpAdapter(childFragmentManager: FragmentManager, private val fragmentList: MutableList<Fragment>, private val titles: Array<String>) : FragmentPagerAdapter(childFragmentManager) {
+class VpAdapter(childFragmentManager: androidx.fragment.app.FragmentManager, private val fragmentList: MutableList<androidx.fragment.app.Fragment>, private val titles: Array<String>) : androidx.fragment.app.FragmentPagerAdapter(childFragmentManager) {
 
     override fun getPageTitle(position: Int): CharSequence? {
         return if (position<titles.size) titles[position] else ""
@@ -14,7 +14,7 @@ class VpAdapter(childFragmentManager: FragmentManager, private val fragmentList:
         return titles.size
     }
 
-    override fun getItem(p0: Int): Fragment {
+    override fun getItem(p0: Int): androidx.fragment.app.Fragment {
         return fragmentList[p0]
     }
 

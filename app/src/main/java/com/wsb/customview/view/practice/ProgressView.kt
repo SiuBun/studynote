@@ -6,7 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.SweepGradient
-import android.support.v4.view.animation.LinearOutSlowInInterpolator
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
@@ -76,7 +76,7 @@ class ProgressView @JvmOverloads constructor(context: Context, attributeSet: Att
     }
 
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas?.run {
             drawColor(Color.parseColor("#e7e7e7"))

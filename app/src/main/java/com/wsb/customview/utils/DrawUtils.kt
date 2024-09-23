@@ -6,8 +6,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Paint
 import android.graphics.Rect
-import android.support.annotation.DrawableRes
 import android.util.TypedValue
+import androidx.annotation.DrawableRes
 import com.wsb.customview.R
 import kotlin.math.abs
 

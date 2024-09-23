@@ -31,7 +31,7 @@ class MultiTouchMoveRelay @JvmOverloads constructor(
 
     private var executePointerId: Int = 0
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas?.run {
             drawBitmap(bitmap, imageOffsetX, imageOffsetY, paint)

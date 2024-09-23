@@ -7,7 +7,7 @@ import android.graphics.Paint
 import android.view.View
 
 class SecorView(context: Context?) : View(context) {
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas?.apply {
             val paint = Paint().apply {

@@ -14,7 +14,7 @@ class ClipRectView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.maps)
         val left = ((width - bitmap.width) / 2).toFloat().also { Log.d(MainActivity.TAG, "当前view宽度为$width ,图片宽度为${bitmap.width},绘图x轴上起始点为$it") }

@@ -5,8 +5,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.support.v4.view.GestureDetectorCompat
-import android.support.v4.view.ViewCompat
+import androidx.core.view.GestureDetectorCompat
+import androidx.core.view.ViewCompat
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -84,16 +84,16 @@ class MultiTouchScaleImageView @JvmOverloads constructor(
     private var initialCurrentScale: Float = 0F
     private var onScaleGestureDetectorListener: ScaleGestureDetector.OnScaleGestureListener = object : ScaleGestureDetector.OnScaleGestureListener {
 
-        override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
+        override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
             initialCurrentScale = curScaleFactor
             return true
         }
 
-        override fun onScaleEnd(detector: ScaleGestureDetector?) {
+        override fun onScaleEnd(detector: ScaleGestureDetector) {
 
         }
 
-        override fun onScale(detector: ScaleGestureDetector?): Boolean {
+        override fun onScale(detector: ScaleGestureDetector): Boolean {
 //            获取当前倍数
             detector?.run {
                 curScaleFactor = scaleFactor * initialCurrentScale
@@ -177,7 +177,7 @@ class MultiTouchScaleImageView @JvmOverloads constructor(
         curScaleFactor = scaleAmountMin
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas?.run {
             save()
@@ -191,7 +191,7 @@ class MultiTouchScaleImageView @JvmOverloads constructor(
         }
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
+    override fun onTouchEvent(event: MotionEvent): Boolean {
         var result = scaleDetector.onTouchEvent(event)
         if (!scaleDetector.isInProgress) {
             result = gestureDetectorCompat.onTouchEvent(event)
@@ -199,29 +199,29 @@ class MultiTouchScaleImageView @JvmOverloads constructor(
         return result
     }
 
-    override fun onShowPress(e: MotionEvent?) {
+    override fun onShowPress(e: MotionEvent) {
     }
 
-    override fun onSingleTapUp(e: MotionEvent?): Boolean {
+    override fun onSingleTapUp(e: MotionEvent): Boolean {
         return false
     }
 
-    override fun onDown(e: MotionEvent?): Boolean = true
+    override fun onDown(e: MotionEvent): Boolean = true
 
-    override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
+    override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
         scaleStateManager.onViewFling(velocityX, velocityY)
         return false
     }
 
-    override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
+    override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
         scaleStateManager.onScroll(distanceX, distanceY)
         return false
     }
 
-    override fun onLongPress(e: MotionEvent?) {
+    override fun onLongPress(e: MotionEvent) {
     }
 
-    override fun onDoubleTap(e: MotionEvent?): Boolean {
+    override fun onDoubleTap(e: MotionEvent): Boolean {
         e?.run {
             scaleStateManager.onViewDoubleTap(scaleAnimator, this)
             scaleStateManager.changeState()
@@ -229,11 +229,11 @@ class MultiTouchScaleImageView @JvmOverloads constructor(
         return false
     }
 
-    override fun onDoubleTapEvent(e: MotionEvent?): Boolean {
+    override fun onDoubleTapEvent(e: MotionEvent): Boolean {
         return false
     }
 
-    override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
+    override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
         return false
     }
 

@@ -10,7 +10,7 @@ class ComposeView(context: Context?) : View(context) {
         //硬件加速下是不支持两个相同类型的 Shader 的，所以这里也需要关闭硬件加速才能看到效果
         setLayerType(LAYER_TYPE_SOFTWARE,null)
     }
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas?.apply {
             val paint = Paint(Paint.ANTI_ALIAS_FLAG)

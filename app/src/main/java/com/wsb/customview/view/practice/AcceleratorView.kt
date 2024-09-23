@@ -11,7 +11,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.wsb.customview.utils.DrawUtils
 import android.animation.Keyframe
-import android.support.v4.view.animation.FastOutSlowInInterpolator
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import java.util.concurrent.TimeUnit
 
 
@@ -73,7 +73,7 @@ class AcceleratorView @JvmOverloads constructor(context: Context, attributeSet: 
         color = Color.RED
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas?.run {
             drawColor(Color.parseColor("#e7e7e7"))

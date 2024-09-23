@@ -2,9 +2,9 @@ package com.wsb.customview.fragment.paint
 
 import android.graphics.Color
 import android.os.Bundle
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.view.ViewPager
+import com.google.android.material.tabs.TabLayout
+import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -14,13 +14,13 @@ import com.wsb.customview.R
 import com.wsb.customview.VpAdapter
 
 
-class PaintFragment : Fragment() {
+class PaintFragment : androidx.fragment.app.Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private var fragmentList = mutableListOf<Fragment>()
+    private var fragmentList = mutableListOf<androidx.fragment.app.Fragment>()
     private lateinit var tabLayout: TabLayout
-    private lateinit var vp: ViewPager
+    private lateinit var vp: androidx.viewpager.widget.ViewPager
     private var titles: Array<String> = arrayOf("画圆画方带渐变", "画线画弧", "扇形图饼图","混合着色","Xfermode","抖动过滤","轮廓","阴影模糊")
 
     override fun onCreate(savedInstanceState: Bundle?) {

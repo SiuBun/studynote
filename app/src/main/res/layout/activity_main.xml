@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/llt_container"
     android:layout_width="match_parent"
@@ -9,9 +8,10 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/btn_paint"
@@ -22,107 +22,108 @@
             android:minWidth="80dp"
             android:onClick="paintPage"
             android:text="paint"
-            android:textAllCaps="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/btn_canvas"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.4" />
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_canvas"
             android:layout_width="wrap_content"
-            android:minWidth="80dp"
             android:layout_height="40dp"
             android:clickable="true"
             android:focusable="true"
+            android:minWidth="80dp"
             android:onClick="canvasPage"
             android:text="canvas"
-            android:textAllCaps="false"
-            app:layout_constraintLeft_toRightOf="@id/btn_paint"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btn_paint" />
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_matrix"
             android:layout_width="wrap_content"
-            android:minWidth="80dp"
             android:layout_height="40dp"
             android:clickable="true"
             android:focusable="true"
+            android:minWidth="80dp"
             android:onClick="matrixPage"
             android:text="matrix"
-            android:textAllCaps="false"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/btn_camera"
-            app:layout_constraintTop_toBottomOf="@id/btn_paint" />
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_camera"
             android:layout_width="wrap_content"
-            android:minWidth="80dp"
             android:layout_height="40dp"
             android:clickable="true"
             android:focusable="true"
+            android:minWidth="80dp"
             android:onClick="cameraPage"
             android:text="camera"
-            android:textAllCaps="false"
-            app:layout_constraintLeft_toRightOf="@id/btn_matrix"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btn_matrix" />
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_practice"
             android:layout_width="wrap_content"
-            android:minWidth="80dp"
             android:layout_height="40dp"
             android:clickable="true"
             android:focusable="true"
+            android:minWidth="80dp"
             android:onClick="practicePage"
             android:text="practice"
-            android:textAllCaps="false"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/btn_scroll_demo"
-            app:layout_constraintTop_toBottomOf="@id/btn_matrix" />
+            android:textAllCaps="false" />
 
 
         <Button
             android:id="@+id/btn_scroll_demo"
             android:layout_width="wrap_content"
-            android:minWidth="80dp"
             android:layout_height="40dp"
             android:clickable="true"
             android:focusable="true"
+            android:minWidth="80dp"
             android:onClick="scrollPage"
             android:text="scroll"
-            android:textAllCaps="false"
-            app:layout_constraintLeft_toRightOf="@id/btn_practice"
-            app:layout_constraintRight_toLeftOf="@id/btn_homework"
-            app:layout_constraintTop_toTopOf="@id/btn_practice"
-            />
+            android:textAllCaps="false" />
+
         <Button
             android:id="@+id/btn_homework"
             android:layout_width="wrap_content"
-            android:minWidth="80dp"
             android:layout_height="40dp"
             android:clickable="true"
             android:focusable="true"
+            android:minWidth="80dp"
             android:onClick="multitouch"
             android:text="multitouch"
-            android:textAllCaps="false"
-            app:layout_constraintLeft_toRightOf="@id/btn_scroll_demo"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btn_practice" />
+            android:textAllCaps="false" />
 
-        <android.support.design.widget.FloatingActionButton
+        <Button
+            android:id="@+id/btn_navigate"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/batman_logo"
-            android:tooltipText="悬浮窗展示"
-            android:onClick="floatingShow"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:layout_height="40dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:minWidth="80dp"
+            android:onClick="navigate"
+            android:text="navigate"
+            android:textAllCaps="false" />
 
-    </android.support.constraint.ConstraintLayout>
-</FrameLayout>
+        <Button
+            android:id="@+id/btn_motion"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:minWidth="80dp"
+            android:onClick="motion"
+            android:text="motionlayout"
+            android:textAllCaps="false" />
+
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:contentDescription="悬浮窗展示"
+        android:onClick="floatingShow"
+        android:src="@drawable/batman_logo"
+        android:tooltipText="悬浮窗展示" />
+
+</RelativeLayout>

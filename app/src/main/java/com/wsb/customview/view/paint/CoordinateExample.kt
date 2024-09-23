@@ -54,7 +54,7 @@ class CoordinateExample @JvmOverloads constructor(
         centerY = (h / 2).toFloat()
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
         canvas?.run {

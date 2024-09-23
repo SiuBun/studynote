@@ -105,7 +105,7 @@ class RadarView @JvmOverloads constructor(context: Context, attributeSet: Attrib
 //        cos(Math.PI / 18 * 5).also { Log.d(MainActivity.TAG, "cos50为$it") }
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         if (validData()) {
             canvas?.run {
