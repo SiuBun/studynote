@@ -1,33 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:orientation="horizontal"
         android:gravity="center"
-        >
+        android:orientation="horizontal">
+
         <Button
             android:id="@+id/btn_color"
-            android:text="改变底色"
             android:layout_width="120dp"
-            android:layout_height="60dp"/>
+            android:layout_height="60dp"
+            android:text="改变底色" />
+
         <Button
             android:id="@+id/btn_dimension"
-            android:text="改变维度"
             android:layout_width="120dp"
-            android:layout_height="60dp"/>
+            android:layout_height="60dp"
+            android:text="改变维度" />
+
         <Button
             android:id="@+id/btn_data"
-            android:text="改变数据"
             android:layout_width="120dp"
-            android:layout_height="60dp"/>
+            android:layout_height="60dp"
+            android:text="改变数据" />
     </LinearLayout>
+
+    <com.wsb.customview.view.practice.PolygonView
+        android:id="@+id/radar_chart"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"/>
+
     <com.wsb.customview.view.practice.RadarView
         android:id="@+id/radar"
-        android:layout_gravity="center"
         android:layout_width="300dp"
-        android:layout_height="300dp"/>
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 </FrameLayout>
