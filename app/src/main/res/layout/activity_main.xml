@@ -131,10 +131,11 @@
 
 
         </com.wsb.customview.view.flowlayout.FlowLayout>
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="30dp"
-            android:background="#aaaaaa"
-            android:layout_height="30dp"/>
+        <com.wsb.customview.view.WaveView
+            android:id="@+id/wave_view"
+            android:layout_width="300dp"
+            android:background="#0aff0000"
+            android:layout_height="300dp"/>
 
     </LinearLayout>
 

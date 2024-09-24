@@ -20,6 +20,7 @@ import com.wsb.customview.motionlayout.MotionLayoutActivity;
 import com.wsb.customview.motionlayout.MotionSearchActivity;
 import com.wsb.customview.shareelement.ShareElementActivity;
 import com.wsb.customview.utils.LogUtils;
+import com.wsb.customview.view.WaveView;
 import com.wsb.customview.view.instantfloating.data.FloatingMenuItems;
 import com.wsb.customview.view.instantfloating.strategy.LayoutType;
 import com.wsb.customview.view.instantfloating.widget.InstantFloatingWindow;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         ArrayList<String> menuNameList = new ArrayList<>();
         int[] icons = new int[]{R.drawable.floating_account, R.drawable.floating_msg, R.drawable.floating_hide};
@@ -65,6 +67,21 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         new Timer().schedule(timerTask, 1000);*/
+
+        WaveView viewById = findViewById(R.id.wave_view);
+        viewById.setWaveHeight(300F);
+        viewById.setWaveFrequency(0.5F);
+        viewById.setWaveSpeed(2F);
+        viewById.setWavePhase(0);
+        viewById.setSecondWavePhaseOffset(90F);
+        viewById.startWaveAnimation();
+        viewById.setOnClickListener(v -> {
+            if (viewById.isWaveAnimating()) {
+                viewById.stopWaveAnimation();
+            }else{
+                viewById.startWaveAnimation();
+            }
+        });
     }
 
     public void paintPage(View view) {
