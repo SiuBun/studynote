@@ -7,125 +7,136 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
-
-    <com.wsb.customview.view.flowlayout.FlowLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
+        <com.wsb.customview.view.flowlayout.FlowLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#5aff0000"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_paint"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:minWidth="80dp"
-            android:onClick="paintPage"
-            android:text="paint"
-            android:textAllCaps="false" />
+            <Button
+                android:id="@+id/btn_paint"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:minWidth="80dp"
+                android:onClick="paintPage"
+                android:text="paint"
+                android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btn_canvas"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:minWidth="80dp"
-            android:onClick="canvasPage"
-            android:text="canvas"
-            android:textAllCaps="false" />
+            <Button
+                android:id="@+id/btn_canvas"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:minWidth="80dp"
+                android:onClick="canvasPage"
+                android:text="canvas"
+                android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btn_matrix"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:minWidth="80dp"
-            android:onClick="matrixPage"
-            android:text="matrix"
-            android:textAllCaps="false" />
+            <Button
+                android:id="@+id/btn_matrix"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:minWidth="80dp"
+                android:onClick="matrixPage"
+                android:text="matrix"
+                android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btn_camera"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:minWidth="80dp"
-            android:onClick="cameraPage"
-            android:text="camera"
-            android:textAllCaps="false" />
+            <Button
+                android:id="@+id/btn_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:minWidth="80dp"
+                android:onClick="cameraPage"
+                android:text="camera"
+                android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btn_practice"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:minWidth="80dp"
-            android:onClick="practicePage"
-            android:text="practice"
-            android:textAllCaps="false" />
-
-
-        <Button
-            android:id="@+id/btn_scroll_demo"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:minWidth="80dp"
-            android:onClick="scrollPage"
-            android:text="scroll"
-            android:textAllCaps="false" />
-
-        <Button
-            android:id="@+id/btn_homework"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:minWidth="80dp"
-            android:onClick="multitouch"
-            android:text="multitouch"
-            android:textAllCaps="false" />
-
-        <Button
-            android:id="@+id/btn_navigate"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:minWidth="80dp"
-            android:onClick="navigate"
-            android:text="navigate"
-            android:textAllCaps="false" />
-
-        <Button
-            android:id="@+id/btn_motion"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:minWidth="80dp"
-            android:onClick="motion"
-            android:text="motionlayout"
-            android:textAllCaps="false" />
-
-        <Button
-            android:id="@+id/btn_motion_search"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:minWidth="80dp"
-            android:onClick="motionSearch"
-            android:text="motionSearch"
-            android:textAllCaps="false" />
+            <Button
+                android:id="@+id/btn_practice"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:minWidth="80dp"
+                android:onClick="practicePage"
+                android:text="practice"
+                android:textAllCaps="false" />
 
 
-    </com.wsb.customview.view.flowlayout.FlowLayout>
+            <Button
+                android:id="@+id/btn_scroll_demo"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:minWidth="80dp"
+                android:onClick="scrollPage"
+                android:text="scroll"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btn_homework"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:minWidth="80dp"
+                android:onClick="multitouch"
+                android:text="multitouch"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btn_navigate"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:minWidth="80dp"
+                android:onClick="navigate"
+                android:text="navigate"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btn_motion"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:minWidth="80dp"
+                android:onClick="motion"
+                android:text="motionlayout"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btn_motion_search"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:minWidth="80dp"
+                android:onClick="motionSearch"
+                android:text="motionSearch"
+                android:textAllCaps="false" />
+
+
+        </com.wsb.customview.view.flowlayout.FlowLayout>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="30dp"
+            android:background="#aaaaaa"
+            android:layout_height="30dp"/>
+
+    </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
