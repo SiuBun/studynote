@@ -1,25 +1,27 @@
 package com.wsb.customview.view
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
+import android.view.animation.DecelerateInterpolator
 import androidx.core.content.ContextCompat
+import kotlin.math.abs
 import kotlin.math.sin
 
 /**
- * WaveView是一个自定义View类，用于绘制波浪动画效果。
- * 该类允许外部指定宽高，并提供开始和结束方法来控制动画。
- * 支持外部传参更新波浪的高度和频率。
+ * WaveView 是一个自定义 View，用于绘制可交互的波浪动画效果。
+ * 支持点击切换动画状态、拖拽调整波浪位置，以及惯性滑动效果。
  */
-
 class WaveView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    // 波浪的高度
+    // 波浪参数
     private var waveHeight: Float = 100f
     // 波浪的频率
     private var waveFrequency: Float = 1f
@@ -27,14 +29,14 @@ class WaveView @JvmOverloads constructor(
     private var wavePhase: Float = 0f
     // 第二条波浪的相位
     private var secondWavePhase: Float = 0f
-    // 动画是否正在进行
-    private var isAnimating: Boolean = false
-    // 动画速度
     private var waveSpeed: Float = 0.1f
     // 第二条波浪的相位偏移
     private var secondWavePhaseOffset: Float = 45f
 
-    // 用于绘制波浪的画笔
+    // 动画状态
+    private var isAnimating: Boolean = false
+
+    // 画笔和路径
     private val wavePaint: Paint = Paint().apply {
         color = ContextCompat.getColor(context, android.R.color.holo_blue_light)
         style = Paint.Style.FILL
@@ -52,11 +54,22 @@ class WaveView @JvmOverloads constructor(
     // 用于裁剪画布的圆形路径
     private val circlePath: Path = Path()
 
-    // 预计算的常量
+    // 触摸事件相关参数
+    private var lastTouchX: Float = 0f
+    private var lastTouchY: Float = 0f
+    private var lastTouchTime: Long = 0
+    private var isDragging: Boolean = false
+    private val CLICK_THRESHOLD = 10 // 点击判定阈值，单位为像素
+
+    // 惯性动画相关参数
+    private var velocityX: Float = 0f
+    private var inertiaAnimator: ValueAnimator? = null
+
+    // 常量
     private val DEG_TO_RAD = Math.PI / 180
 
     init {
-        // 初始化代码
+        isClickable = true
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -87,11 +100,86 @@ class WaveView @JvmOverloads constructor(
     }
 
     /**
-     * 绘制波浪的方法
-     * @param canvas 画布
-     * @param path 波浪路径
-     * @param paint 波浪画笔
-     * @param phase 波浪相位
+     * 处理触摸事件，实现点击切换动画状态、拖拽调整波浪位置和惯性滑动效果
+     */
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                // 停止正在进行的惯性动画
+                inertiaAnimator?.cancel()
+
+                lastTouchX = event.x
+                lastTouchY = event.y
+                lastTouchTime = System.currentTimeMillis()
+                isDragging = false
+                return true
+            }
+            MotionEvent.ACTION_MOVE -> {
+                val deltaX = event.x - lastTouchX
+                val deltaY = event.y - lastTouchY
+                val currentTime = System.currentTimeMillis()
+                val deltaTime = currentTime - lastTouchTime
+
+                if (!isDragging && (abs(deltaX) > CLICK_THRESHOLD || abs(deltaY) > CLICK_THRESHOLD)) {
+                    isDragging = true
+                }
+
+                if (isDragging) {
+                    updateWavePhase(deltaX)
+                    // 计算速度
+                    if (deltaTime > 0) {
+                        velocityX = deltaX / deltaTime * 1000 // 转换为像素/秒
+                    }
+                    lastTouchX = event.x
+                    lastTouchY = event.y
+                    lastTouchTime = currentTime
+                }
+                return true
+            }
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                if (!isDragging) {
+                    toggleAnimation()
+                } else {
+                    // 开始惯性动画
+                    startInertiaAnimation()
+                }
+                performClick()
+                return true
+            }
+        }
+        return super.onTouchEvent(event)
+    }
+
+    /**
+     * 开始惯性动画
+     */
+    private fun startInertiaAnimation() {
+        inertiaAnimator?.cancel()
+
+        inertiaAnimator = ValueAnimator.ofFloat(velocityX, 0f).apply {
+            duration = 1500 // 动画持续时间，可以根据需要调整
+            interpolator = DecelerateInterpolator()
+            addUpdateListener { animation ->
+                val velocity = animation.animatedValue as Float
+                val deltaX = velocity * 16 / 1000 // 假设 16ms 每帧，将速度转换为位移
+                updateWavePhase(deltaX)
+            }
+            start()
+        }
+    }
+
+    /**
+     * 更新波浪相位
+     */
+    private fun updateWavePhase(deltaX: Float) {
+        val phaseShift = deltaX * 0.1f
+        wavePhase -= phaseShift
+        secondWavePhase -= phaseShift
+        invalidate()
+    }
+
+    /**
+     * 绘制单个波浪
      */
     private fun drawWave(canvas: Canvas, path: Path, paint: Paint, phase: Float) {
         path.reset()
@@ -114,6 +202,14 @@ class WaveView @JvmOverloads constructor(
         path.close()
 
         canvas.drawPath(path, paint)
+    }
+
+    /**
+     * 切换动画状态
+     */
+    private fun toggleAnimation() {
+        isAnimating = !isAnimating
+        invalidate()
     }
 
     /**
@@ -155,6 +251,7 @@ class WaveView @JvmOverloads constructor(
      */
     fun setWavePhase(phase: Float) {
         wavePhase = phase
+        secondWavePhase = phase
         invalidate()
     }
 
@@ -183,46 +280,19 @@ class WaveView @JvmOverloads constructor(
     fun isWaveAnimating(): Boolean {
         return isAnimating
     }
-}
 
-// 在Activity中使用WaveView的示例代码
-/*
-class MainActivity : AppCompatActivity() {
+    /**
+     * 获取当前波浪相位
+     */
+    fun getWavePhase(): Float {
+        return wavePhase
+    }
 
-    private lateinit var waveView: WaveView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // 初始化WaveView
-        waveView = findViewById(R.id.waveView)
-
-        // 开始波浪动画
-        waveView.startWaveAnimation()
-
-        // 设置波浪高度
-        waveView.setWaveHeight(150f)
-
-        // 设置波浪频率
-        waveView.setWaveFrequency(2f)
-
-        // 设置波浪相位
-        waveView.setWavePhase(0.5f)
-
-        // 设置动画速度
-        waveView.setWaveSpeed(0.2f)
-
-        // 设置第二条波浪的相位偏移
-        waveView.setSecondWavePhaseOffset(45f)
-
-        // 判断当前是否在进行波浪动画
-        val isAnimating = waveView.isWaveAnimating()
-        println("当前是否在进行波浪动画: $isAnimating")
-
-        // 停止波浪动画
-        // waveView.stopWaveAnimation()
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        inertiaAnimator?.cancel()
     }
 }
-*/
+
+
 

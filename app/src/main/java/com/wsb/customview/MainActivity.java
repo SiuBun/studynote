@@ -69,19 +69,12 @@ public class MainActivity extends AppCompatActivity {
         new Timer().schedule(timerTask, 1000);*/
 
         WaveView viewById = findViewById(R.id.wave_view);
-        viewById.setWaveHeight(300F);
-        viewById.setWaveFrequency(0.5F);
-        viewById.setWaveSpeed(2F);
+        viewById.setWaveHeight(100);
+        viewById.setWaveFrequency(0.1F);
+        viewById.setWaveSpeed(6F);
         viewById.setWavePhase(0);
         viewById.setSecondWavePhaseOffset(90F);
         viewById.startWaveAnimation();
-        viewById.setOnClickListener(v -> {
-            if (viewById.isWaveAnimating()) {
-                viewById.stopWaveAnimation();
-            }else{
-                viewById.startWaveAnimation();
-            }
-        });
     }
 
     public void paintPage(View view) {
