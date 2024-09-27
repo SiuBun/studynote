@@ -1,17 +1,19 @@
 package com.wsb.customview.fragment
 
 import android.graphics.Color
-import com.google.android.material.tabs.TabLayout
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager.widget.ViewPager
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.wsb.customview.PageModel
 import com.wsb.customview.R
+import com.wsb.customview.VpAdapter
+import com.wsb.customview.databinding.FragmentBinding
 
 class CanvasFragment :BaseFragment(){
+    private lateinit var binding: FragmentBinding
 
     private var pageList: MutableList<PageModel> = mutableListOf<PageModel>().apply {
         add(PageModel(R.layout.clip_rect,"clipRect",R.layout.initial))
@@ -33,24 +35,23 @@ class CanvasFragment :BaseFragment(){
 
     override fun initView(v: View?) {
         v?.run {
-            tabLayout = findViewById(R.id.tab_main)
-            vp = findViewById(R.id.vp)
-            vp.offscreenPageLimit = 2
-            vp.adapter = object : androidx.fragment.app.FragmentPagerAdapter(childFragmentManager){
-                override fun getItem(p0: Int): androidx.fragment.app.Fragment {
-                    return PageFragment.newFragment(pageList[p0].practiceLayoutRes,pageList[p0].sampleLayoutRes)
-                }
+            binding = FragmentBinding.bind(this)
 
-                override fun getCount(): Int {
-                    return pageList.size
-                }
+            binding.vp.adapter = VpAdapter(this@CanvasFragment, pageList)
 
-                override fun getPageTitle(position: Int): CharSequence? {
-                    return pageList[position].title
-                }
-            }
+            // 将 TabLayout 和 ViewPager2 关联起来
+            TabLayoutMediator(binding.tabMain, binding.vp) { tab, position ->
+                // 设置每个标签的标题
+                tab.text = pageList[position].title
+            }.attach()
 
-            tabLayout.setupWithViewPager(vp,false)
+            // 可选：设置页面切换监听器
+            binding.vp.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    // 在这里处理页面切换事件
+                }
+            })
 
 //            for (i in 0 until tabLayout.tabCount) {
 //                val tab = tabLayout.getTabAt(i)

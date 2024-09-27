@@ -8,19 +8,22 @@ import androidx.viewpager.widget.ViewPager
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayoutMediator
+import com.wsb.customview.MultiPagerAdapter
 import com.wsb.customview.PageModel
 import com.wsb.customview.R
+import com.wsb.customview.VpAdapter
+import com.wsb.customview.databinding.FragmentBinding
 
 class MatrixFragment :BaseFragment(){
+
+    private lateinit var binding: FragmentBinding
 
     private var pageList: MutableList<PageModel> = mutableListOf<PageModel>().apply {
         add(PageModel(R.layout.matrix_post,"matrix_post",R.layout.initial))
         add(PageModel(R.layout.matrix_poly,"matrix_poly",R.layout.initial))
     }
-
-    private lateinit var tabLayout: TabLayout
-    private lateinit var vp: androidx.viewpager.widget.ViewPager
-
 
 
     override fun getFragmentLayout(): Int {
@@ -29,26 +32,23 @@ class MatrixFragment :BaseFragment(){
 
     override fun initView(v: View?) {
         v?.run {
-            tabLayout = findViewById(R.id.tab_main)
-            vp = findViewById(R.id.vp)
+            binding = FragmentBinding.bind(this)
 
+            binding.vp.adapter = VpAdapter(this@MatrixFragment, pageList)
 
-            vp.adapter = object : androidx.fragment.app.FragmentPagerAdapter(childFragmentManager){
-                override fun getItem(p0: Int): androidx.fragment.app.Fragment {
-                    return PageFragment.newFragment(pageList[p0].practiceLayoutRes,pageList[p0].sampleLayoutRes)
+            // 将 TabLayout 和 ViewPager2 关联起来
+            TabLayoutMediator(binding.tabMain, binding.vp) { tab, position ->
+                // 设置每个标签的标题
+                tab.text = pageList[position].title
+            }.attach()
+
+            // 可选：设置页面切换监听器
+            binding.vp.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    // 在这里处理页面切换事件
                 }
-
-                override fun getCount(): Int {
-                    return pageList.size
-                }
-
-                override fun getPageTitle(position: Int): CharSequence? {
-                    return pageList[position].title
-                }
-            }
-
-            tabLayout.setupWithViewPager(vp,false)
-
+            })
         }
     }
 
