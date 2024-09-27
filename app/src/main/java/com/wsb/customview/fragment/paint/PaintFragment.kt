@@ -1,27 +1,25 @@
 package com.wsb.customview.fragment.paint
 
-import android.graphics.Color
 import android.os.Bundle
-import com.google.android.material.tabs.TabLayout
-import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.ViewPager
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayoutMediator
+import com.wsb.customview.MultiPagerAdapter
 import com.wsb.customview.R
-import com.wsb.customview.VpAdapter
+import com.wsb.customview.databinding.FragmentBinding
 
 
-class PaintFragment : androidx.fragment.app.Fragment() {
+class PaintFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private var fragmentList = mutableListOf<androidx.fragment.app.Fragment>()
-    private lateinit var tabLayout: TabLayout
-    private lateinit var vp: androidx.viewpager.widget.ViewPager
-    private var titles: Array<String> = arrayOf("画圆画方带渐变", "画线画弧", "扇形图饼图","混合着色","Xfermode","抖动过滤","轮廓","阴影模糊")
+    private lateinit var binding: FragmentBinding
+    private var fragmentList = mutableListOf<Fragment>()
+    private var titles: Array<String> =
+        arrayOf("画圆画方带渐变", "画线画弧", "扇形图饼图", "混合着色", "Xfermode", "抖动过滤", "轮廓", "阴影模糊")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,10 +29,14 @@ class PaintFragment : androidx.fragment.app.Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment, container, false)
-        return view.also { initView(it) }
+        return view.also {
+            binding = FragmentBinding.bind(it)
+            initView(it) }
     }
 
     private fun initView(view: View) {
@@ -47,39 +49,28 @@ class PaintFragment : androidx.fragment.app.Fragment() {
         fragmentList.add(PathEffectFragment.getInstance())
         fragmentList.add(ShadowMaskFragment.getInstance())
 
-        tabLayout = view.findViewById(R.id.tab_main)
-
 //        for (value in titles) {
 //            tabLayout.addTab(tabLayout.run { newTab().setText(value) })
 //        }
 
 
-        vp = view.findViewById(R.id.vp)
-        vp.offscreenPageLimit = 2
-        vp.adapter = VpAdapter(childFragmentManager, fragmentList, titles)
+        binding.vp.adapter = MultiPagerAdapter(this, fragmentList)
 
-        tabLayout.setupWithViewPager(vp, false)
+        // 将 TabLayout 和 ViewPager2 关联起来
+        TabLayoutMediator(binding.tabMain, binding.vp) { tab, position ->
+            // 设置每个标签的标题
+            tab.text = titles[position]
+        }.attach()
 
-        for (i in 0 until tabLayout.tabCount) {
-            val tab = tabLayout.getTabAt(i)
-                tab?.apply {
-                    customView = getTabView(i)
-                }
-        }
+        // 可选：设置页面切换监听器
+        binding.vp.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                // 在这里处理页面切换事件
+            }
+        })
 
-        vp.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
 
-
-    }
-
-    private fun getTabView(i: Int): View {
-        val textView = TextView(context).apply {
-            text = titles[i]
-            textSize = 14F
-            gravity = Gravity.CENTER
-        }
-        textView.setTextColor(Color.parseColor("#303F9F"))
-        return textView
     }
 
     companion object {
@@ -97,13 +88,15 @@ class PaintFragment : androidx.fragment.app.Fragment() {
         @JvmStatic
         @JvmOverloads
         fun newInstance(param1: String = "", param2: String = "") =
-                PaintFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
+            PaintFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
                 }
+            }
     }
+
+
 
 
 }

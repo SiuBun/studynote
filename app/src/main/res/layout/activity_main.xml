@@ -18,114 +18,84 @@
             android:background="#5aff0000"
             android:orientation="vertical">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_paint"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:clickable="true"
-                android:focusable="true"
                 android:minWidth="80dp"
-                android:onClick="paintPage"
                 android:text="paint"
                 android:textAllCaps="false" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_canvas"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:clickable="true"
-                android:focusable="true"
                 android:minWidth="80dp"
-                android:onClick="canvasPage"
                 android:text="canvas"
                 android:textAllCaps="false" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_matrix"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:clickable="true"
-                android:focusable="true"
                 android:minWidth="80dp"
-                android:onClick="matrixPage"
                 android:text="matrix"
                 android:textAllCaps="false" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_camera"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:clickable="true"
-                android:focusable="true"
                 android:minWidth="80dp"
-                android:onClick="cameraPage"
                 android:text="camera"
                 android:textAllCaps="false" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_practice"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:clickable="true"
-                android:focusable="true"
                 android:minWidth="80dp"
-                android:onClick="practicePage"
                 android:text="practice"
                 android:textAllCaps="false" />
 
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_scroll_demo"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:clickable="true"
-                android:focusable="true"
                 android:minWidth="80dp"
-                android:onClick="scrollPage"
                 android:text="scroll"
                 android:textAllCaps="false" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_homework"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:clickable="true"
-                android:focusable="true"
                 android:minWidth="80dp"
-                android:onClick="multitouch"
                 android:text="multitouch"
                 android:textAllCaps="false" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_navigate"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:clickable="true"
-                android:focusable="true"
                 android:minWidth="80dp"
-                android:onClick="navigate"
                 android:text="navigate"
                 android:textAllCaps="false" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_motion"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:clickable="true"
-                android:focusable="true"
                 android:minWidth="80dp"
-                android:onClick="motion"
                 android:text="motionlayout"
                 android:textAllCaps="false" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_motion_search"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:clickable="true"
-                android:focusable="true"
                 android:minWidth="80dp"
-                android:onClick="motionSearch"
                 android:text="motionSearch"
                 android:textAllCaps="false" />
 
@@ -140,12 +110,12 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_float_action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:contentDescription="悬浮窗展示"
-        android:onClick="floatingShow"
         android:src="@drawable/batman_logo"
         android:tooltipText="悬浮窗展示" />
 

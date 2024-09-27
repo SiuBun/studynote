@@ -1,21 +1,23 @@
 package com.wsb.customview
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.wsb.customview.fragment.PageFragment
 
-class VpAdapter(childFragmentManager: androidx.fragment.app.FragmentManager, private val fragmentList: MutableList<androidx.fragment.app.Fragment>, private val titles: Array<String>) : androidx.fragment.app.FragmentPagerAdapter(childFragmentManager) {
-
-    override fun getPageTitle(position: Int): CharSequence? {
-        return if (position<titles.size) titles[position] else ""
+class VpAdapter : FragmentStateAdapter {
+    constructor(activity: FragmentActivity, pageList: MutableList<PageModel>): super(activity){
+        this.pageList = pageList
+    }
+    constructor(fragment: Fragment, pageList: MutableList<PageModel>): super(fragment){
+        this.pageList = pageList
     }
 
-    override fun getCount(): Int {
-        return titles.size
-    }
+    private val pageList: MutableList<PageModel>
 
-    override fun getItem(p0: Int): androidx.fragment.app.Fragment {
-        return fragmentList[p0]
-    }
+    override fun getItemCount(): Int = pageList.size
+
+    override fun createFragment(position: Int): Fragment =
+        PageFragment.newFragment(pageList[position].practiceLayoutRes, pageList[position].sampleLayoutRes)
 
 }

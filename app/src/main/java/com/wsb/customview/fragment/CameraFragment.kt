@@ -1,15 +1,13 @@
 package com.wsb.customview.fragment
 
-import android.graphics.Color
-import com.google.android.material.tabs.TabLayout
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager.widget.ViewPager
-import android.view.Gravity
 import android.view.View
-import android.widget.TextView
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayoutMediator
 import com.wsb.customview.PageModel
+import com.wsb.customview.MultiPagerAdapter
 import com.wsb.customview.R
+import com.wsb.customview.VpAdapter
+import com.wsb.customview.databinding.FragmentBinding
 
 class CameraFragment :BaseFragment(){
 
@@ -19,8 +17,7 @@ class CameraFragment :BaseFragment(){
         add(PageModel(R.layout.flipboard,"flipboard",R.layout.initial))
     }
 
-    private lateinit var tabLayout: TabLayout
-    private lateinit var vp: androidx.viewpager.widget.ViewPager
+    private lateinit var binding: FragmentBinding
 
 
     override fun getFragmentLayout(): Int {
@@ -29,24 +26,25 @@ class CameraFragment :BaseFragment(){
 
     override fun initView(v: View?) {
         v?.run {
-            tabLayout = findViewById(R.id.tab_main)
-            vp = findViewById(R.id.vp)
+            binding = FragmentBinding.bind(this)
 
-            vp.adapter = object : androidx.fragment.app.FragmentPagerAdapter(childFragmentManager){
-                override fun getItem(p0: Int): androidx.fragment.app.Fragment {
-                    return PageFragment.newFragment(pageList[p0].practiceLayoutRes,pageList[p0].sampleLayoutRes)
+            binding.vp.adapter = VpAdapter(this@CameraFragment,pageList)
+
+            // 将 TabLayout 和 ViewPager2 关联起来
+            TabLayoutMediator(binding.tabMain, binding.vp) { tab, position ->
+                // 设置每个标签的标题
+                tab.text = "标签 $position"
+            }.attach()
+
+            // 可选：设置页面切换监听器
+            binding.vp.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    // 在这里处理页面切换事件
                 }
+            })
 
-                override fun getCount(): Int {
-                    return pageList.size
-                }
 
-                override fun getPageTitle(position: Int): CharSequence? {
-                    return pageList[position].title
-                }
-            }
-
-            tabLayout.setupWithViewPager(vp,false)
 
 //            for (i in 0 until tabLayout.tabCount) {
 //                val tab = tabLayout.getTabAt(i)
@@ -59,21 +57,11 @@ class CameraFragment :BaseFragment(){
         }
     }
 
-    private fun getTabView(i: Int): View {
-        val textView = TextView(context).apply {
-            text = pageList[i].title
-            textSize = 14F
-            gravity = Gravity.CENTER
-        }
-        return textView.apply {
-            setTextColor(Color.parseColor("#303F9F"))
-        }
-    }
-
     companion object{
         @JvmStatic
         fun newInstance():CameraFragment = CameraFragment()
     }
+
 
 
 }

@@ -1,158 +1,164 @@
-package com.wsb.customview;
+package com.wsb.customview
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.util.SparseArray;
-import android.view.View;
+import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+import android.util.SparseArray
+import android.view.View
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
+import com.wsb.customview.databinding.ActivityMainBinding
+import com.wsb.customview.fragment.CameraFragment
+import com.wsb.customview.fragment.CanvasFragment
+import com.wsb.customview.fragment.MatrixFragment
+import com.wsb.customview.fragment.MultiTouchFragment
+import com.wsb.customview.fragment.paint.PaintFragment
+import com.wsb.customview.fragment.practice.PracticeFragment
+import com.wsb.customview.fragment.practice.ScalaImageFragment
+import com.wsb.customview.motionlayout.MotionLayoutActivity
+import com.wsb.customview.motionlayout.MotionSearchActivity
+import com.wsb.customview.shareelement.ShareElementActivity
+import com.wsb.customview.utils.LogUtils
+import com.wsb.customview.view.WaveView
+import com.wsb.customview.view.instantfloating.data.FloatingMenuItems
+import com.wsb.customview.view.instantfloating.strategy.LayoutType
+import com.wsb.customview.view.instantfloating.widget.InstantFloatingWindow
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
+class MainActivity : AppCompatActivity() {
+    companion object {
+        const val TAG = "MainActivity"
+    }
 
-import com.wsb.customview.fragment.CameraFragment;
-import com.wsb.customview.fragment.CanvasFragment;
-import com.wsb.customview.fragment.MatrixFragment;
-import com.wsb.customview.fragment.MultiTouchFragment;
-import com.wsb.customview.fragment.paint.PaintFragment;
-import com.wsb.customview.fragment.practice.PracticeFragment;
-import com.wsb.customview.fragment.practice.ScalaImageFragment;
-import com.wsb.customview.motionlayout.MotionLayoutActivity;
-import com.wsb.customview.motionlayout.MotionSearchActivity;
-import com.wsb.customview.shareelement.ShareElementActivity;
-import com.wsb.customview.utils.LogUtils;
-import com.wsb.customview.view.WaveView;
-import com.wsb.customview.view.instantfloating.data.FloatingMenuItems;
-import com.wsb.customview.view.instantfloating.strategy.LayoutType;
-import com.wsb.customview.view.instantfloating.widget.InstantFloatingWindow;
+    private var mWindow: InstantFloatingWindow? = null
+    private lateinit var mBinding: ActivityMainBinding
 
-import java.util.ArrayList;
+    private var sparseArray: SparseArray<FloatingMenuItems> = SparseArray()
+    private var showing = false
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        mBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
 
-public class MainActivity extends AppCompatActivity {
-
-    public static final String TAG = "custom";
-    private InstantFloatingWindow mWindow;
-    SparseArray<FloatingMenuItems> sparseArray = new SparseArray<>();
-    private boolean showing;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-
-        ArrayList<String> menuNameList = new ArrayList<>();
-        int[] icons = new int[]{R.drawable.floating_account, R.drawable.floating_msg, R.drawable.floating_hide};
-        menuNameList.add("account");
-        menuNameList.add("msg");
-        menuNameList.add("hide");
-        for (int i = 0; i < menuNameList.size(); i++) {
-            sparseArray.append(i, new FloatingMenuItems(menuNameList.get(i), icons[i]));
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.llt_container)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
         }
 
+        initListener()
+        
+        val menuNameList = ArrayList<String>()
+        val icons = intArrayOf(R.drawable.floating_account, R.drawable.floating_msg, R.drawable.floating_hide)
+        menuNameList.add("account")
+        menuNameList.add("msg")
+        menuNameList.add("hide")
+        for (i in menuNameList.indices) {
+            sparseArray.append(i, FloatingMenuItems(menuNameList[i], icons[i]))
+        }
 
-        /*TimerTask timerTask = new TimerTask() {
+        mBinding.waveView.apply {
+            setWaveHeight(100f)
+            setWaveFrequency(0.1f)
+            setWaveSpeed(6f)
+            setWavePhase(0f)
+            setSecondWavePhaseOffset(90f)
+            startWaveAnimation()
+        }
 
-            @Override
-            public void run() {
-                runOnUiThread(
-                        () -> FloatButton
-                                .attach(MainActivity.this, code -> {
-                                })
-                                .setMsgVisible(true)
-                                .setCommunityVisible(true)
-                                .setCustomerVisible(false)
-                                .setAnnouncementVisible(false)
-                                .show()
-                );
+    }
+
+    private fun initListener() {
+        mBinding.apply {
+            btnPaint.setOnClickListener {
+                Log.d(TAG, "paintPage")
+                getCommit(PaintFragment.newInstance())
             }
-        };
-        new Timer().schedule(timerTask, 1000);*/
 
-        WaveView viewById = findViewById(R.id.wave_view);
-        viewById.setWaveHeight(100);
-        viewById.setWaveFrequency(0.1F);
-        viewById.setWaveSpeed(6F);
-        viewById.setWavePhase(0);
-        viewById.setSecondWavePhaseOffset(90F);
-        viewById.startWaveAnimation();
+            btnCanvas.setOnClickListener {
+                Log.d(TAG, "canvasPage")
+                getCommit(CanvasFragment.newInstance())
+            }
+            btnCamera.setOnClickListener {
+                Log.d(TAG, "cameraPage")
+                getCommit(CameraFragment.newInstance())
+            }
+
+            btnMatrix.setOnClickListener {
+                Log.d(TAG, "matrixPage")
+                getCommit(MatrixFragment.newInstance())
+            }
+
+            btnPractice.setOnClickListener {
+                Log.d(TAG, "practicePage")
+                getCommit(PracticeFragment.newInstance())
+            }
+
+            btnScrollDemo.setOnClickListener {
+                Log.d(TAG, "scrollPage")
+                getCommit(ScalaImageFragment.newInstance())
+            }
+
+            btnHomework.setOnClickListener {
+                Log.d(TAG, "homeworkPage")
+                getCommit(MultiTouchFragment.newInstance())
+            }
+
+            btnNavigate.setOnClickListener {
+                Log.d(TAG, "navigate")
+                startActivity(Intent(this@MainActivity, ShareElementActivity::class.java))
+            }
+
+            btnMotion.setOnClickListener {
+                Log.d(TAG, "motion")
+                startActivity(Intent(this@MainActivity, MotionLayoutActivity::class.java))
+            }
+
+            btnMotionSearch.setOnClickListener {
+                Log.d(TAG, "motionSearch")
+                startActivity(Intent(this@MainActivity, MotionSearchActivity::class.java))
+            }
+
+            btnFloatAction.setOnClickListener {
+                floatingShow()
+            }
+        }
     }
 
-    public void paintPage(View view) {
-        Log.d(TAG, "paintPage");
-        getCommit(PaintFragment.newInstance());
+    private fun getCommit(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.llt_container, fragment).addToBackStack(null).commit()
     }
 
-    private void getCommit(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.llt_container, fragment).addToBackStack(null).commit();
-    }
-
-    public void canvasPage(View view) {
-        Log.d("custom", "canvasPage");
-        getCommit(CanvasFragment.newInstance());
-    }
-
-    public void cameraPage(View view) {
-        Log.d("custom", "cameraPage");
-        getCommit(CameraFragment.newInstance());
-    }
-
-    public void matrixPage(View view) {
-        Log.d("custom", "matrixPage");
-        getCommit(MatrixFragment.newInstance());
-    }
-
-    public void practicePage(View view) {
-        Log.d("custom", "matrixPage");
-        getCommit(PracticeFragment.newInstance());
-    }
-
-    public void multitouch(View view) {
-        Log.d("custom", "multitouch");
-        getCommit(MultiTouchFragment.newInstance());
-    }
-
-    public void scrollPage(View view) {
-        Log.d("custom", "scrollPage");
-        getCommit(ScalaImageFragment.newInstance());
-    }
-
-    public void floatingShow(View view) {
-        Log.d("custom", "floatingShow:" + showing);
+    private fun floatingShow() {
+        Log.d("custom", "floatingShow:$showing")
 
 
         if (mWindow == null) {
             mWindow = InstantFloatingWindow
-                    .with(MainActivity.this)
-                    .setLogo(R.drawable.floating_logo)
-                    .setLayoutType(LayoutType.LEFT)
-                    .setMenuItems(sparseArray)
-                    .setMenuItemsClickListener((position, title) -> LogUtils.d("点击了菜单列表中第" + position + "个菜单项,标题为" + title))
-                    .build();
+                .with(this@MainActivity)
+                .setLogo(R.drawable.floating_logo)
+                .setLayoutType(LayoutType.LEFT)
+                .setMenuItems(sparseArray)
+                .setMenuItemsClickListener { position: Int, title: String -> LogUtils.d("点击了菜单列表中第" + position + "个菜单项,标题为" + title) }
+                .build()
         }
 
         if (showing) {
-            mWindow.hide();
+            mWindow?.hide()
         } else {
-            mWindow.show();
+            mWindow?.show()
         }
-        showing = !showing;
+        showing = !showing
     }
 
-    @Override
-    protected void onDestroy() {
-        mWindow.onDestroy();
-        super.onDestroy();
+    override fun onDestroy() {
+        mWindow?.onDestroy()
+        super.onDestroy()
     }
 
-    public void navigate(View view) {
-        startActivity(new Intent(this, ShareElementActivity.class));
-    }
 
-    public void motion(View view) {
-        startActivity(new Intent(this, MotionLayoutActivity.class));
-    }
-
-    public void motionSearch(View view) {
-        startActivity(new Intent(this, MotionSearchActivity.class));
-    }
 }

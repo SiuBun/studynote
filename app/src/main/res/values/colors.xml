@@ -4,6 +4,9 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
     <color name="aoyun_blue">#0193DE</color>
     <color name="heart_red_src">#FF7777</color>
     <color name="aoyun_black">#201A1A</color>
