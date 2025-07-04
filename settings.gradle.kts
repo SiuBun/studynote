@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "StudyNote"
 include(":app")
+include(":lib-compose")
  

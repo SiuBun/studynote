@@ -26,6 +26,7 @@
         <activity android:name=".shareelement.ShareElementActivity"/>
         <activity android:name=".motionlayout.MotionLayoutActivity"/>
         <activity android:name=".motionlayout.MotionSearchActivity"/>
+        <activity android:name=".ComposeActivity"/>
     </application>
 
 </manifest>

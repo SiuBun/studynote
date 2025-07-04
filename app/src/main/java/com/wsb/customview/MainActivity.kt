@@ -126,6 +126,11 @@ class MainActivity : AppCompatActivity() {
             btnFloatAction.setOnClickListener {
                 floatingShow()
             }
+
+            btnCompose.setOnClickListener {
+                Log.d(TAG, "compose")
+                startActivity(Intent(this@MainActivity, ComposeActivity::class.java))
+            }
         }
     }
 
