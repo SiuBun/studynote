@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+/lib-compose/build/*
+/.idea/inspectionProfiles/Project_Default.xml
