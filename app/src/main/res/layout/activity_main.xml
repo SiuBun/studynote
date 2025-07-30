@@ -107,6 +107,14 @@
                 android:text="compose"
                 android:textAllCaps="false" />
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_recycler_view"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:minWidth="80dp"
+                android:text="RecyclerView"
+                android:textAllCaps="false" />
+
 
         </com.wsb.customview.view.flowlayout.FlowLayout>
         <com.wsb.customview.view.WaveView

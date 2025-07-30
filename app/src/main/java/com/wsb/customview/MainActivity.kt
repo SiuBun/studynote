@@ -131,6 +131,11 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "compose")
                 startActivity(Intent(this@MainActivity, ComposeActivity::class.java))
             }
+
+            btnRecyclerView.setOnClickListener {
+                Log.d(TAG, "recyclerView")
+                startActivity(Intent(this@MainActivity, RecyclerViewActivity::class.java))
+            }
         }
     }
 
