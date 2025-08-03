@@ -136,6 +136,20 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "recyclerView")
                 startActivity(Intent(this@MainActivity, RecyclerViewActivity::class.java))
             }
+
+            // 新增按钮，跳转到MultiViewActivity
+            val btnMultiView = androidx.appcompat.widget.AppCompatButton(this@MainActivity).apply {
+                id = View.generateViewId()
+                text = "MultiView"
+                layoutParams = android.widget.LinearLayout.LayoutParams(
+                    android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
+                    120
+                )
+            }
+            (btnRecyclerView.parent as android.view.ViewGroup).addView(btnMultiView)
+            btnMultiView.setOnClickListener {
+                startActivity(Intent(this@MainActivity, MultiViewActivity::class.java))
+            }
         }
     }
 
