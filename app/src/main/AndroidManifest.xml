@@ -11,8 +11,7 @@
         android:name=".App"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.StudyNote"
-        tools:targetApi="31">
+        android:theme="@style/Theme.StudyNote">
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -28,6 +27,7 @@
         <activity android:name=".motionlayout.MotionSearchActivity"/>
         <activity android:name=".ComposeActivity"/>
         <activity android:name=".RecyclerViewActivity"/>
+        <activity android:name=".MultiViewActivity"/>
     </application>
 
 </manifest>
