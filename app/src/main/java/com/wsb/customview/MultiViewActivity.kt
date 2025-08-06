@@ -28,8 +28,11 @@ class MultiViewActivity() : AppCompatActivity() {
         binding.recyclerView.adapter = MyAdapter(data)
 
         setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(android.R.drawable.ic_menu_info_details)
+        binding.toolbar.setNavigationOnClickListener {
+            Toast.makeText(this, "Navigation clicked", Toast.LENGTH_SHORT).show()
+        }
+//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//        supportActionBar?.setHomeAsUpIndicator(android.R.drawable.ic_menu_info_details)
 
         binding.toolbar.title = "Multi View Example"
 
@@ -51,10 +54,11 @@ class MultiViewActivity() : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: android.view.MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            Toast.makeText(this, "Navigation clicked", Toast.LENGTH_SHORT).show()
-            return true
-        }
+        // setNavigationOnClickListener会处理返回键点击事件,所以这里再写不会触发
+//        if (item.itemId == android.R.id.home) {
+//            Toast.makeText(this, "on Options Item home Selected", Toast.LENGTH_SHORT).show()
+//            return true
+//        }
         return super.onOptionsItemSelected(item)
     }
 
