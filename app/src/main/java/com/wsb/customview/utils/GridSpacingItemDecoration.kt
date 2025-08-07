@@ -1,4 +1,4 @@
-package com.wsb.studynote.util
+package com.wsb.customview.utils
 
 import android.graphics.Rect
 import android.view.View

@@ -52,7 +52,12 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.bumptech.glide)
-    
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.fragment.ktx)
+    implementation(libs.androidx.swiperefreshlayout)
+
+
     // Compose模块依赖
     implementation(project(":lib-compose"))
     

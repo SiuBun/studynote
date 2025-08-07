@@ -18,11 +18,11 @@ import com.wsb.customview.fragment.MultiTouchFragment
 import com.wsb.customview.fragment.paint.PaintFragment
 import com.wsb.customview.fragment.practice.PracticeFragment
 import com.wsb.customview.fragment.practice.ScalaImageFragment
+import com.wsb.customview.list.ListFragment
 import com.wsb.customview.motionlayout.MotionLayoutActivity
 import com.wsb.customview.motionlayout.MotionSearchActivity
 import com.wsb.customview.shareelement.ShareElementActivity
 import com.wsb.customview.utils.LogUtils
-import com.wsb.customview.view.WaveView
 import com.wsb.customview.view.instantfloating.data.FloatingMenuItems
 import com.wsb.customview.view.instantfloating.strategy.LayoutType
 import com.wsb.customview.view.instantfloating.widget.InstantFloatingWindow
@@ -135,6 +135,22 @@ class MainActivity : AppCompatActivity() {
             btnRecyclerView.setOnClickListener {
                 Log.d(TAG, "recyclerView")
                 startActivity(Intent(this@MainActivity, RecyclerViewActivity::class.java))
+            }
+
+            val btnList = androidx.appcompat.widget.AppCompatButton(this@MainActivity).apply {
+                id = View.generateViewId()
+                text = "List Demo"
+                layoutParams = android.widget.LinearLayout.LayoutParams(
+                    android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
+                    120
+                )
+            }
+            (btnRecyclerView.parent as android.view.ViewGroup).addView(btnList)
+            btnList.setOnClickListener {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.llt_container, ListFragment())
+                    .addToBackStack(null)
+                    .commit()
             }
 
             // 新增按钮，跳转到MultiViewActivity
